@@ -59,7 +59,7 @@ class KBS_Welcome {
 		$this->article_plural   = kbs_get_article_label_plural();
 
 		add_action( 'admin_menu', array( $this, 'admin_menus') );
-		//add_action( 'admin_head', array( $this, 'admin_head' ) );
+		add_action( 'admin_head', array( $this, 'admin_head' ) );
 		add_action( 'admin_init', array( $this, 'welcome'    ) );
 	} // __construct
 
@@ -97,12 +97,7 @@ class KBS_Welcome {
 			$this->minimum_capability,
 			'kbs-getting-started',
 			array( $this, 'getting_started_screen' )
-		);
-
-		// Now remove them from the menus so plugins that allow customizing the admin menu don't show them
-		remove_submenu_page( 'index.php', 'kbs-about' );
-		remove_submenu_page( 'index.php', 'kbs-changelog' );
-		remove_submenu_page( 'index.php', 'kbs-getting-started' );
+		);		
 
 	} // admin_menus
 
@@ -114,73 +109,10 @@ class KBS_Welcome {
 	 * @return	void
 	 */
 	public function admin_head() {
-		?>
-		<style type="text/css" media="screen">
-			/*<![CDATA[*/
-			.kbs-about-wrap .kbs-badge { float: right; border-radius: 4px; margin: 0 0 15px 15px; max-width: 200px; position: absolute; top: 0px; right: 0px; text-align: right; }
-			.kbs-about-wrap .kbs-badge img { border: none; }
-			.kbs-about-wrap .kbs-badge .kbs-version { font-size: 14px; }
-			.kbs-about-wrap #kbs-header { margin-bottom: 15px; }
-			.kbs-about-wrap #kbs-header h1 { margin-bottom: 15px !important; }
-			.kbs-about-wrap .about-text { margin: 0 0 15px; max-width: 670px; }
-			.kbs-about-wrap .feature-section { margin-top: 5px; }
-			.kbs-about-wrap .feature-section-content,
-			.kbs-about-wrap .feature-section-media { width: 50%; box-sizing: border-box; }
-			.kbs-about-wrap .feature-section-content { float: left; padding-right: 50px; }
-			.kbs-about-wrap .feature-section-content h4 { margin: 0 0 1em; }
-			.kbs-about-wrap .feature-section-media { float: right; text-align: right; margin-bottom: 5px; }
-			.kbs-about-wrap .feature-section-media img { border: 1px solid #ddd; }
-			.kbs-about-wrap .feature-section:not(.under-the-hood) .col { margin-top: 0; }
-			.kbs-about-wrap ul { list-style-type: disc; padding-left: 20px; }
-			/* responsive */
-			@media all and ( max-width: 782px ) {
-				.kbs-about-wrap .feature-section-content,
-				.kbs-about-wrap .feature-section-media { float: none; padding-right: 0; width: 100%; text-align: left; }
-				.kbs-about-wrap .feature-section-media img { float: none; margin: 0 0 20px; }
-			}
-			/*]]>*/
-		</style>
-		<?php
+		remove_submenu_page( 'index.php', 'kbs-about' );
+		remove_submenu_page( 'index.php', 'kbs-changelog' );
+		remove_submenu_page( 'index.php', 'kbs-getting-started' );
 	} // admin_head
-
-	/**
-	 * Welcome message
-	 *
-	 * @access	public
-	 * @since	1.0
-	 * @return	void
-	 */
-	public function welcome_message() {
-		list( $display_version ) = explode( '-', KBS_VERSION );
-
-		$page = isset( $_GET['page'] ) ? $_GET['page'] : 'kbs-about';
-
-		?>
-        <h1><?php _e( 'Welcome to KB Support!', 'kb-support' ); ?></h1>
-		<div class="kbs-badge"><img src="<?php echo KBS_PLUGIN_URL; ?>assets/images/kbs-logo.png" height="75" width="393" />
-			<span class="kbs-version"><?php printf( __( 'Version %s', 'kb-support' ), $display_version ); ?></span>
-        </div>
-        <p class="about-text">
-            <?php
-            switch ( $page )	{
-                case 'kbs-getting-started':
-                    _e( 'Thank you for installing KB Support!', 'kb-support' );
-					echo '<br />';
-					_e( "You are now equipped with the best tool to provide your customers with an exceptional support experience.", 'kb-support' );
-                    break;
-
-                default:
-                    _e( 'Thank you for updating to the latest version!', 'kb-support' );
-                    echo '<br />';
-                    printf(
-                        __( 'KB Support %s is ready to make support business even more efficient.', 'kb-support' ),
-                        $display_version
-                    );
-            }
-            ?>
-        </p>
-		<?php
-	} // welcome_message
 
 	/**
 	 * Navigation tabs
@@ -193,6 +125,7 @@ class KBS_Welcome {
 		$selected        = isset( $_GET['page'] ) ? $_GET['page'] : 'kbs-getting-started';
 		$about_url       = esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-about' ), 'index.php' ) ) );
 		$get_started_url = esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-getting-started' ), 'index.php' ) ) );
+        $extensions_url  = esc_url( admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-extensions' ) );
 		?>
 
 		<h2 class="nav-tab-wrapper wp-clearfix">			
@@ -201,6 +134,9 @@ class KBS_Welcome {
 			</a>
 			<a href="<?php echo $get_started_url; ?>" class="nav-tab <?php echo $selected == 'kbs-getting-started' ? 'nav-tab-active' : ''; ?>">
 				<?php _e( 'Getting Started', 'kb-support' ); ?>
+			</a>
+			<a href="<?php echo $extensions_url; ?>" class="nav-tab <?php echo $selected == 'kbs-extensions' ? 'nav-tab-active' : ''; ?>">
+				<?php _e( 'Extensions', 'kb-support' ); ?>
 			</a>
 		</h2>
 
@@ -215,147 +151,72 @@ class KBS_Welcome {
 	 * @return	void
 	 */
 	public function about_screen() {
-		?>
-		<div class="wrap about-wrap kbs-about-wrap">
-			<?php
-				// Load welcome message and content tabs
-				$this->welcome_message();
-				$this->tabs();
-			?>
+		list( $display_version ) = explode( '-', KBS_VERSION );
+        ?>
+		<div class="wrap about-wrap">
 
-			<div>
-            	<p><?php _e( "With the release of KB Support version 1.0 we're not only adding even more functionality, we're also officially out of beta testing!", 'kb-support' ); ?></p>
-                <p><?php _e( "Let's take a look at what KB Support version 1.0 has to offer...", 'kb-support' ); ?></p>
+			<?php $this->get_welcome_header() ?>
+			<p class="about-text"><?php
+				printf(
+				/* translators: %s: https://kb-support.com/support/ */
+					__( 'Thanks for activating or updating to the latest version of KB Support! If you\'re a first time user, welcome! You\'re well on your way to making your support business even more efficient. We encourage you to check out the <a href="%s" target="_blank">plugin documentation</a> and getting started guide below.', 'kb-support' ),
+					esc_url( 'https://kb-support.com/support/' )
+				);
+				?></p>
+
+			<?php kbs_get_newsletter(); ?>
+
+			<?php $this->tabs(); ?>
+
+            <div class="feature-section clearfix introduction">
+
+                <div class="video feature-section-item">
+                    <img src="<?php echo KBS_PLUGIN_URL . '/assets/images/kbs-logo.png' ?>" alt="<?php esc_attr_e( 'KB Support', 'kb-support' ); ?>">
+                </div>
+
+                <div class="content feature-section-item last-feature">
+
+                    <h3><?php esc_html_e( 'KB Support - Democratizing Generosity', 'kb-support' ); ?></h3>
+
+                    <p><?php esc_html_e( 'Give empowers you to easily accept donations and setup fundraising campaigns, directly within WordPress. We created Give to provide a better donation experience for you and your users. Robust, flexible, and intuitive, the plugin is built from the ground up to be the goto donation solution for WordPress. Create powerful donation forms, embed them throughout your website, start a campaign, and exceed your fundraising goals with Give. This plugin is actively developed and proudly supported by folks who are dedicated to helping you and your cause.', 'kb-support' ); ?></p>
+                    <a href="https://kb-support.com/" target="_blank" class="button-secondary">
+						<?php esc_html_e( 'Learn More', 'kb-support' ); ?>
+                        <span class="dashicons dashicons-external"></span>
+                    </a>
+
+                </div>
+
             </div>
+            <!-- /.intro-section -->
 
-			<div class="feature-section two-col">
-            	<h2><?php _e( 'Service Level Tracking', 'kb-support' ); ?></h2>
-                <div class="col">
-                	<p><?php printf( __( 'A company who takes support seriously not only provides customers with targetted response and resolution times for support %s, but also measures their performance against these targets.', 'kb-support' ), strtolower( $this->ticket_plural ) ); ?></p>
-                    <p><?php printf( __( 'KB Support now allows you to specify the targeted response and resolution time for %s that are logged.', 'kb-support' ), strtolower( $this->ticket_plural ) ); ?></p>
-                    <p><?php printf( __( 'When viewing %1$s, visual indicators will now display the status of these service level targets enabling you to quickly identify any %1$s that are approaching, or have already exceeded, the defined SLA.', 'kb-support' ), strtolower( $this->ticket_plural ) ); ?></p>
-                    <div class="return-to-dashboard">
-                        <a href="<?php echo add_query_arg( array(
-							'post_type' => 'kbs_ticket',
-							'page'      => 'kbs-settings',
-							'tab'       => 'tickets',
-							'section'   => 'sla'
-							),
-							admin_url( 'edit.php' )
-						); ?>">
-                            &rarr; <?php _e( 'Enable SLA Tracking and Define Targets', 'kb-support' ); ?>
-                        </a>
-                    </div>
-                </div>
-                <div class="col">
-                	<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/10-sla-settings.jpg'; ?>" style="border: none;" />
-                </div>
-			</div>
+            <div class="feature-section clearfix">
 
-			<hr />
+                <div class="content feature-section-item">
 
-			<div class="feature-section two-col">
-            	<h2><?php _e( 'Information at your Fingertips', 'kb-support' ); ?></h2>
-                <div class="col">
-                	<p><?php printf( __( 'The new KB Support %1$s Summary dashboard widget provides you with an overview of open and closed %2$s over varying periods of time.', 'kb-support' ), $this->ticket_singular, strtolower( $this->ticket_plural ) ); ?></p>
-                    <p><?php printf( __( 'Easily identify the number of %1$s that have been opened and closed on the current day, month, and previous month. Additionally, you can see the current total number of open %1$s and how many of your Support Workers are currently available.', 'kb-support' ), strtolower( $this->ticket_plural ) ); ?></p>
-                </div>
-                <div class="col">
-					<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/10-kbs-summary-dashboard.jpg'; ?>" style="border: none;" />
-                </div>
-			</div>
+                    <h3><?php esc_html_e( 'Getting to Know KB Support', 'kb-support' ); ?></h3>
 
-			<hr />
+                    <p><?php esc_html_e( 'Before you get started with Give we suggest you take a look at the online documentation. There you will find the getting started guide which will help you get up and running quickly. If you have a question, issue or bug with the Core plugin please submit an issue on the Give website. We also welcome your feedback and feature requests. Welcome to Give. We hope you much success with your cause.', 'kb-support' ); ?></p>
 
-			<div class="feature-section two-col">
-            	<h2><?php _e( 'Companies', 'kb-support' ); ?></h2>
-                <div class="col">
-                	<p><?php printf( __( "Create companies and add your customers to the companies to enable grouping of %s and restrictions to %s for specific companies.", 'kb-support' ), strtolower( $this->ticket_plural ), $this->article_plural ); ?></p>
-                    <p><?php _e( 'Additional email tags have also been added to enable you to easily insert company specific information into emails', 'kb-support' ); ?>
-                        <ul>
-                            <li><?php _e( '<code>{company}</code> - The name of the company', 'kb-support' ); ?></li>
-                            <li><?php _e( '<code>{company_contact}</code> - The contact name of the company', 'kb-support' ); ?></li>
-                            <li><?php _e( '<code>{company_email}</code> - The email address of the company', 'kb-support' ); ?></li>
-                            <li><?php _e( '<code>{company_phone}</code> - The phone number of the company', 'kb-support' ); ?></li>
-                            <li><?php _e( '<code>{company_website}</code> - The website URL of the company', 'kb-support' ); ?></li>
-                            <li><?php _e( '<code>{company_logo}</code> - Inserts the logo of the company', 'kb-support' ); ?></li>
-                        </ul>
-                    </p>
-                    <div class="return-to-dashboard">
-                        <a href="<?php echo admin_url( 'edit.php?post_type=kbs_company' ); ?>">
-                            &rarr; <?php _e( 'Create a Company', 'kb-support' ); ?>
-                        </a>
-                    </div>
-                </div>
-                <div class="col">
-                	<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/10-company-list.jpg'; ?>" style="border: none;" />
-                </div>
-			</div>
+                    <h4>Find Out More:</h4>
+                    <ul class="ul-disc">
+                        <li><a href="https://kb-support.com/" target="_blank"><?php esc_html_e( 'Visit the KB Support Website', 'kb-support' ); ?></a></li>
+                        <li><a href="https://kb-support.com/features/" target="_blank"><?php esc_html_e( 'View the KB Support Features', 'kb-support' ); ?></a></li>
+                        <li><a href="https://kb-support.com/support/" target="_blank"><?php esc_html_e( 'Read the Documentation', 'kb-support' ); ?></a></li>
+                    </ul>
 
-			<hr />
-
-			<div class="changelog">
-				<h2><?php _e( 'What else has changed?', 'kb-support' ); ?></h2>
-				<div class="under-the-hood two-col">
-                    <div class="col">
-                        <h3><?php _e( 'Tweaks', 'kb-support' ); ?></h3>
-                        <ul>
-							<li><?php _e( "Removed all SLA related meta keys from the Database as SLA's were not tracked until this version", 'kb-support' ); ?></li>
-							<li><?php _e( 'Log the current KBS version number at the time each ticket was logged', 'kb-support' ); ?></li>
-                            <li><?php _e( 'Ensure that the last modified date is updated for a ticket when a reply or note is added', 'kb-support' ); ?></li>
-                            <li><?php _e( 'Add log entries when notes are added to tickets', 'kb-support' ); ?></li>
-                            <li><?php _e( 'When a ticket is deleted, make sure to delete all associated replies and log entries from the <em>posts</em> and <em>postmeta</em> database tables', 'kb-support' ); ?></li>
-                            <li><?php _e( 'Added ticket and article count to the At a Glance dashboard widget', 'kb-support' ); ?></li>
-                        </ul>
-                    </div>
-                    <div class="col">
-                        <h3><?php _e( 'Bug Fixes', 'kb-support' ); ?></h3>
-                        <ul>
-							<li><?php _e( 'Corrected descriptions for email headers in settings', 'kb-support' ); ?></li>
-                            <li><?php _e( 'Make sure <code>$current_meta</code> array exists to avoid potential PHP notices', 'kb-support' ); ?></li>
-                            <li><?php _e( '<code>kbs_agent_ticket_count()</code> was not always returning the correct totalss', 'kb-support' ); ?></li>
-                        </ul>
-                    </div>
                 </div>
+
+                <div class="content  feature-section-item last-feature">
+                    <img src="<?php echo KBS_PLUGIN_URL . '/assets/images/kbs-logo.png' ?>"
+                         alt="<?php esc_attr_e( 'A Give donation form', 'kb-support' ); ?>">
+                </div>
+
             </div>
+            <!-- /.feature-section -->
+        </div>
 
-			<div class="return-to-dashboard">
-				<a href="<?php echo esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-settings' ), 'admin.php' ) ) ); ?>"><?php _e( 'Go to KB Support Settings', 'kb-support' ); ?></a> &middot;
-				<a href="<?php echo esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-changelog' ), 'index.php' ) ) ); ?>"><?php _e( 'View the Full Changelog', 'kb-support' ); ?></a>
-			</div>
-		</div>
 		<?php
 	} // about_screen
-
-	/**
-	 * Render Changelog Screen
-	 *
-	 * @access	public
-	 * @since	1.0
-	 * @return	void
-	 */
-	public function changelog_screen() {
-		?>
-		<div class="wrap about-wrap kbs-about-wrap">
-			<?php
-				// load welcome message and content tabs
-				$this->welcome_message();
-				$this->tabs();
-			?>
-			<div class="changelog">
-				<h3><?php _e( 'Full Changelog', 'kb-support' );?></h3>
-
-				<div class="feature-section">
-					<?php echo $this->parse_readme(); ?>
-				</div>
-			</div>
-
-			<div class="return-to-dashboard">
-				<a href="<?php echo esc_url( admin_url( add_query_arg( array( 'post_type' => 'kbs_ticket', 'page' => 'kbs-settings' ), 'edit.php' ) ) ); ?>"><?php _e( 'Go to KB Support Settings', 'kb-support' ); ?></a>
-			</div>
-		</div>
-		<?php
-	} // changelog_screen
 
 	/**
 	 * Render Getting Started Screen
@@ -365,7 +226,9 @@ class KBS_Welcome {
 	 * @return	void
 	 */
 	public function getting_started_screen()	{
-		$default_form = get_option( 'kbs_default_submission_form_created' );
+
+        list( $display_version ) = explode( '-', KBS_VERSION );
+        $default_form = get_option( 'kbs_default_submission_form_created' );
 		$form_url     = '#';
 
 		if ( $default_form && 'publish' == get_post_status( $default_form ) )	{
@@ -373,93 +236,86 @@ class KBS_Welcome {
 		}
 
 		?>
-		<div class="wrap about-wrap kbs-about-wrap">
-			<?php
-				// Load welcome message and content tabs
-				$this->welcome_message();
-				$this->tabs();
-			?>
-            <div class="feature-section two-col">
-                <h2><?php printf( __( 'Start Receiving &amp; Managing Support %s', 'kb-support' ), $this->ticket_plural ); ?></h2>
-                <div class="col">
-                    <img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-email.png'; ?>" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 781px) calc((100vw - 70px) * .466), (max-width: 959px) calc((100vw - 116px) * .469), (max-width: 1290px) calc((100vw - 240px) * .472), 496px" />
-                    <h3><?php _e( 'Optimise Settings', 'kb-support' ); ?></h3>
-                    <p><?php _e( "KB Support will work as soon as installed and activated as we've set the default settings for you, however you should review the options and ensure they're fully optimised for your support business.", 'kb-support' ); ?></p>
-                    <p><?php printf( __( "These settings define the communication flow and content between your business and your customers, as well as determine who can submit a %s, how %s are assigned to support workers, what tasks support workers can undertake, plus much more.", 'kb-support' ), strtolower( $this->ticket_singular ), strtolower( $this->ticket_plural ) ); ?></p>
-                    <div class="return-to-dashboard">
-                    	<a href="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-settings' ); ?>"><?php printf( __( '%s &rarr; Settings', 'kb-support' ), $this->ticket_plural ); ?></a>
-                    </div>
+        <div class="wrap about-wrap get-started">
+
+			<?php $this->get_welcome_header() ?>
+
+            <p class="about-text"><?php esc_html_e( 'Welcome to the getting started guide.', 'kb-support' ); ?></p>
+
+			<?php kbs_get_newsletter(); ?>
+
+			<?php $this->tabs(); ?>
+
+            <p class="about-text"><?php _e( 'Getting started with KB Support is easy! It works right from installation but we\'ve put together this quick start guide to help first time users customise the plugin to meet the individual needs of their business. We\'ll have you up and running in no time. Let\'s begin!', 'kb-support' ); ?></p>
+
+            <div class="feature-section clearfix">
+
+                <div class="content feature-section-item">
+                    <h3><?php _e( 'STEP 1: Customise Settings', 'kb-support' ); ?></h3>
+
+                    <p><?php printf(
+                        __('KB Support settings enable you to define the communication flow and content between your support business and your customers, as well as determine who can submit a %1$s, how %2$s are assigned to support workers, what tasks support workers can undertake, plus much more...', 'kb-support' ),
+                        strtolower( $this->ticket_singular ),
+                        strtolower( $this->ticket_plural )
+                    ); ?></p>
+
+                    <p><?php esc_html_e( 'All of these features begin by simply going to the menu and choosing "Donations > Add Form".', 'kb-support' ); ?></p>
                 </div>
-                <div class="col">
-                    <img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-form.png'; ?>" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 781px) calc((100vw - 70px) * .466), (max-width: 959px) calc((100vw - 116px) * .469), (max-width: 1290px) calc((100vw - 240px) * .472), 496px" />
-                    <h3><?php _e( 'Customise your Submission Form(s)', 'kb-support' ); ?></h3>
-                    <p><?php printf( __( 'The %s submission forms are the first point at which your customers can provide you with details regarding the issues they are experiencing.', 'kb-support' ), strtolower( $this->ticket_singular ) ); ?></p>
-					<p><?php printf( __( 'We created a <a href="%s">default form</a> for you during install, but it is fully customisable and you should ensure it has all the fields you need to maximise the opportunity of obtaining all information you need from your customers in order to efficiently address their issue.', 'kb-support' ), $form_url ); ?></p>
-                    <div class="return-to-dashboard">
-                    	<a href="<?php echo admin_url( 'edit.php?post_type=kbs_form' ); ?>"><?php printf( __( '%s &rarr; Submission Forms', 'kb-support' ), $this->ticket_plural ); ?></a>
-                    </div>
+
+                <div class="content feature-section-item last-feature">
+                    <img src="<?php echo KBS_PLUGIN_URL; ?>assets/images/kbs-logo.png">
                 </div>
+
             </div>
+            <!-- /.feature-section -->
 
-            <hr />
+            <div class="feature-section clearfix">
 
-			<div class="feature-section one-col">
-                <h2><?php printf( __( 'Create %s', 'kb-support' ), $this->article_plural ); ?></h2>
-                <p><?php printf( __( '%1$s provide a single document repository for your products and/or services that is readily available to support customers assisting them in resolving any issues they may be experiencing.', 'kb-support' ), $this->article_plural ); ?></p>
-                <p><?php printf( __( 'Support Workers are provided with a number of prompts to quickly and easily publish new %1$s during the management of a %3$s and as soon as it is published, the %2$s is available to any customer via a general search, post listing, and whilst they are in the process of logging a new %3$s.', 'kb-support' ), $this->article_plural, $this->article_singular, strtolower( $this->ticket_singular ), strtolower( $this->ticket_plural ) ); ?></p>
-                <p><?php printf( __( 'Furthermore, individual %1$s can be restricted so that only customers with an active account on your website are able to view their content.', 'kb-support' ), $this->article_plural, $this->article_singular ); ?></p>
-                </p>
-                <img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-kb-articles.png'; ?>" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 782px) calc(100vw - 70px), (max-width: 959px) calc(100vw - 116px), (max-width: 1290px) calc(100vw - 240px), 1050px" style="border: none;" />
-                <div class="return-to-dashboard">
-                	<a href="<?php echo admin_url( 'post-new.php?post_type=' . KBS()->KB->post_type ); ?>"><?php printf( __( '%1$s &rarr; New %2$s', 'kb-support' ), $this->article_plural, $this->article_singular ); ?></a>
+                <div class="content feature-section-item multi-level-gif">
+                    <img src="<?php echo KBS_PLUGIN_URL; ?>assets/images/kbs-logo.png">
                 </div>
+
+                <div class="content feature-section-item last-feature">
+                    <h3><?php esc_html_e( 'STEP 2: Customize Your Donation Forms', 'kb-support' ); ?></h3>
+
+                    <p><?php esc_html_e( 'Each donation form you create can be customized to receive either a pre-determined set donation amount or have multiple suggested levels of giving. Choosing "Multi-level Donation" opens up the donation levels view where you can add as many levels as you\'d like with your own custom names and suggested amounts. As well, you can allow donors to give a custom amount and even set up donation goals.', 'kb-support' ); ?></p>
+                </div>
+
             </div>
+            <!-- /.feature-section -->
 
-			<hr />
+            <div class="feature-section clearfix">
 
-            <div class="changelog">
-				<h2><?php _e( "We're Here to Help", 'kb-support' ); ?></h2>
-				<div class="under-the-hood two-col">
-                    <div class="col">
-                        <h3><?php _e( 'Documentation', 'kb-support' ); ?></h3>
-                        <p><?php _e( 'We have a growing library of <a href="https://kb-support.com/support/" target="_blank">Support Documents</a> to help new and advanced users with features and customisations.', 'kb-support' ); ?></p>
-                    </div>
-                    <div class="col">
-                        <h3><?php _e( 'Excellent Support', 'kb-support' ); ?></h3>
-                        <p><?php printf( __( 'We pride ourselves on our level of support and excellent response times. If you are experiencing an issue, <a href="%s" target="_blank">submit a support ticket</a> and we will respond quickly.', 'kb-support' ), 'https://kb-support.com/support-request/' );?></p>
-                    </div>
+                <div class="content feature-section-item add-content">
+                    <h3><?php esc_html_e( 'STEP 3: Add Additional Content', 'kb-support' ); ?></h3>
+
+                    <p><?php esc_html_e( 'Every donation form you create with Give can be used on its own stand-alone page, or it can be inserted into any other page or post throughout your site via a shortcode or widget.', 'kb-support' ); ?></p>
+
+                    <p><?php esc_html_e( 'You can choose these different modes by going to the "Form Content" section. From there, you can choose to add content before or after the donation form on a page, or if you choose "None" perhaps you want to instead use the shortcode. You can find the shortcode in the top right column directly under the Publish/Save button. This feature gives you the most amount of flexibility with controlling your content on your website all within the same page.', 'kb-support' ); ?></p>
                 </div>
 
-				<div class="under-the-hood two-col">
-                    <div class="col">
-                        <h3><?php _e( 'Get the Latest News','kb-support' ); ?></h3>
-                        <p><?php printf( __( '<a href="%s" target="_blank">Subscribe to our Newsletter</a> for all the latest news and offers from KB Support.', 'kb-support' ), 'http://eepurl.com/cnxWcz' ); ?></p>
-                    </div>
-                    <div class="col">
-                        <h3><?php _e( 'Get Social', 'kb-support' );?></h3>
-                        <p><?php printf( __( 'The <a href="%s" target="_blank">KB Support Facebook Page</a> and our <a href="%s" target="_blank">Twitter Account</a> are also great places for the latest news.', 'kb-support' ), 'https://www.facebook.com/kbsupport/', 'https://twitter.com/kbsupport_wp' ); ?></p>
-                    </div>
+                <div class="content feature-section-item last-feature">
+                    <img src="<?php echo KBS_PLUGIN_URL; ?>assets/images/kbs-logo.png">
                 </div>
+
             </div>
+            <!-- /.feature-section -->
 
-			<hr />
+            <div class="feature-section clearfix">
 
-            <div class="feature-section no-heading two-col">
-                <div class="col">
-                    <h3><?php _e( 'Extensions', 'kb-support' ); ?></h3>
-                    <p><?php printf( __( 'We have an ever growing catalogue of extensions available at our <a href="%s" target="_blank">plugin store</a> that will extend the functionality of KB Support and further enhance your customers support experience.', 'kb-support' ), 'https://kb-support.com/extensions/' ); ?></p>
+                <div class="content feature-section-item display-options">
+                    <img src="<?php echo KBS_PLUGIN_URL; ?>assets/images/kbs-logo.png">
                 </div>
-                <div class="col">
-                    <h3><?php _e( 'Contribute to KB Support', 'kb-support' ); ?></h3>
-                    <p><?php _e( 'Anyone is welcome to contribute to KB Support and we\'d love you to get involved with our project. Please read the <a href="" target="_blank">guidelines for contributing</a> to our <a href="" target="_blank">GitHub repository</a>.', 'kb-support' ); ?></p>
-                    <p><?php _e( 'There are various ways you can contribute', 'kb-support' ); ?>&hellip;<br />
-                       <?php printf( __( '<a href="%s" target="_blank">Raise an Issue on GitHub</a>', 'kb-support' ), 'https://github.com/KB-Support/kb-support/issues' ); ?><br />
-                       <?php printf( __( '<a href="%s" target="_blank">Send us a Pull Request</a> with your bug fixes and/or new features', 'kb-support' ), 'https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=0ahUKEwikn8uql5fQAhXiDsAKHcP6AIQQFgggMAE&url=https%3A%2F%2Fhelp.github.com%2Farticles%2Fcreating-a-pull-request%2F&usg=AFQjCNEyxULKOpCMlFly-Rcy8_YemfrOhQ&sig2=OSYkosRNJKTjCkbKTS8Qdg&bvm=bv.137904068,d.bGg' ); ?><br />
-                       <?php printf( __( '<a href="%s" target="_blank">Translate KB Support</a> into different languages', 'kb-support' ), 'https://kb-support.com/articles/translating-kb-support/' ); ?><br />
-                       <?php printf( __( 'Provide feedback and suggestions on <a href="%s" target="_blank">enhancements</a>', 'kb-support' ), 'https://github.com/KB-Support/kb-support/issues' ); ?><br />
-                       <?php _e( 'Assist with maintaining documentation', 'kb-support' ); ?></p>
+
+                <div class="content feature-section-item last-feature">
+                    <h3><?php esc_html_e( 'STEP 4: Configure Your Display Options', 'kb-support' ); ?></h3>
+
+                    <p><?php esc_html_e( 'Lastly, you can present the form in a number of different ways that each create their own unique donor experience. The "Modal" display mode opens the credit card fieldset within a popup window. The "Reveal" mode will slide into place the additional fields. If you\'re looking for a simple button, then "Button" more is the way to go. This allows you to create a customizable "Donate Now" button which will open the donation form upon clicking. There\'s tons of possibilities here, give it a try!', 'kb-support' ); ?></p>
                 </div>
+
+
             </div>
+            <!-- /.feature-section -->
 
 			<hr />
 
@@ -514,6 +370,61 @@ class KBS_Welcome {
 
 		return $readme;
 	} // parse_readme
+
+    /**
+	 * The header section for the welcome screen.
+	 *
+	 * @since 1.1
+	 */
+	public function get_welcome_header() {
+		// Badge for welcome page
+		$badge_url = KBS_PLUGIN_URL . 'assets/images/kbs-logo.png';
+		?>
+        <h1 class="welcome-h1"><?php echo get_admin_page_title(); ?></h1>
+		<?php $this->social_media_elements(); ?>
+
+        
+        <?php
+    } // get_welcome_header
+
+	/**
+	 * Social Media Like Buttons
+	 *
+	 * Various social media elements to KB Support
+     *
+     * @since   1.1
+	 */
+	public function social_media_elements() { ?>
+
+        <div class="social-items-wrap">
+
+            <iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fkbsupport&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21&amp;appId=220596284639969"
+                    scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px;"
+                    allowTransparency="true"></iframe>
+
+            <a href="https://twitter.com/kbsupport_wp" class="twitter-follow-button" data-show-count="false"><?php
+				printf(
+				/* translators: %s: Give twitter user @givewp */
+					esc_html_e( 'Follow %s', 'kb-support' ),
+					'@kbsupport_wp'
+				);
+				?></a>
+            <script>!function (d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+                    if (!d.getElementById(id)) {
+                        js = d.createElement(s);
+                        js.id = id;
+                        js.src = p + '://platform.twitter.com/widgets.js';
+                        fjs.parentNode.insertBefore(js, fjs);
+                    }
+                }(document, 'script', 'twitter-wjs');
+            </script>
+
+        </div>
+        <!--/.social-items-wrap -->
+
+		<?php
+	} // social_media_elements
 
 	/**
 	 * Sends user to the Welcome page on first activation of KBS as well as each

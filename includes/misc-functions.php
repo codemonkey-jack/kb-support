@@ -563,6 +563,92 @@ function kbs_is_func_disabled( $function ) {
 } // kbs_is_func_disabled
 
 /**
+ * KBS Newsletter
+ *
+ * @since   1.1
+ * @return  The KB Support newsletter form
+ */
+function kbs_get_newsletter()    {
+
+    ?>
+	<p class="newsletter-intro">
+	    <?php printf( __( 
+            'Sign up for the KB Support newsletter below to receive a <strong>25%s discount</strong> off our <a href="%s">extensions</a> and to stay informed of important updates and news.', 'kb-support' ),
+            '%',
+            'https://kb-support.com/extensions/'
+        ); ?>
+    </p>
+
+	<div class="kbs-newsletter-form-wrap">
+
+		<form action="//kb-support.us14.list-manage.com/subscribe/post?u=71d2a491e4f8a672ad45bea89&amp;id=7b91a81d25" 
+		    method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+			<div class="kbs-newsletter-confirmation">
+				<p><?php esc_html_e( 'Thanks for Subscribing! Please check your inbox to confirm your subscription and receive your discount code.', 'kb-support' ); ?></p>
+			</div>
+
+			<table class="form-table kbs-newsletter-form">
+				<tr valign="middle">
+					<td>
+						<label for="mce-EMAIL" class="screen-reader-text"><?php esc_html_e( 'Email Address (required)', 'kb-support' ); ?></label>
+						<input type="email" name="EMAIL" id="mce-EMAIL" placeholder="<?php esc_attr_e( 'Email Address (required)', 'kb-support' ); ?>" class="required email" value="">
+					</td>
+					<td>
+						<label for="mce-FNAME"
+						       class="screen-reader-text"><?php esc_html_e( 'First Name', 'kb-support' ); ?></label>
+						<input type="text" name="FNAME" id="mce-FNAME" placeholder="<?php esc_attr_e( 'First Name', 'kb-support' ); ?>" class="" value="" />
+					</td>
+					<td>
+						<label for="mce-LNAME" class="screen-reader-text"><?php esc_html_e( 'Last Name', 'kb-support' ); ?></label>
+						<input type="text" name="LNAME" id="mce-LNAME" placeholder="<?php esc_attr_e( 'Last Name', 'kb-support' ); ?>" class="" value="" />
+					</td>
+					<td>
+						<input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button" value="<?php esc_attr_e( 'Subscribe', 'kb-support' ); ?>" />
+					</td>
+				</tr>
+			</table>
+		</form>
+
+		<div style="position: absolute; left: -5000px;">
+			<input type="text" name="b_3ccb75d68bda4381e2f45794c_12a081aa13" tabindex="-1" value="">
+		</div>
+
+	</div>
+
+	<script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script>
+	<script type='text/javascript'>(function ($) {
+			window.fnames = new Array();
+			window.ftypes = new Array();
+			fnames[0] = 'EMAIL';
+			ftypes[0] = 'email';
+			fnames[1] = 'FNAME';
+			ftypes[1] = 'text';
+			fnames[2] = 'LNAME';
+			ftypes[2] = 'text';
+
+			//Successful submission
+			$('form[name="mc-embedded-subscribe-form"]').on('submit', function () {
+
+				var email_field = $(this).find('#mce-EMAIL').val();
+				if (!email_field) {
+					return false;
+				}
+				$(this).find('.kbs-newsletter-confirmation').show().delay(5000).slideUp();
+				$(this).find('.kbs-newsletter-form').hide();
+
+			});
+
+		}(jQuery));
+		var $mcj = jQuery.noConflict(true);
+
+
+	</script>
+	<!--End mc_embed_signup-->
+    <?php
+
+} // kbs_get_newsletter
+
+/**
  * Get Country List
  *
  * @since	1.0
