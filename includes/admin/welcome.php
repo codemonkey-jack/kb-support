@@ -314,9 +314,14 @@ class KBS_Welcome {
 
 			<h4><?php printf( __( 'Additional Updates with Version %s', 'kb-support' ), $display_version ); ?></h4>
             <ul class="ul-disc">
-                <li><a href="https://kb-support.com/" target="_blank"><?php esc_html_e( 'Visit the KB Support Website', 'kb-support' ); ?></a></li>
-                <li><a href="https://kb-support.com/features/" target="_blank"><?php esc_html_e( 'View the KB Support Features', 'kb-support' ); ?></a></li>
-                <li><a href="https://kb-support.com/support/" target="_blank"><?php esc_html_e( 'Read the Documentation', 'kb-support' ); ?></a></li>
+                <li><?php _e( 'Corrected variable name being passed to <code>kbs_register_redirect</code> filter', 'kb-support' ); ?></li>
+                <li><?php _e( 'Added a notice for when settings are imported', 'kb-support' ); ?></li>
+                <li><?php _e( 'Corrected CSS syntax which was causing alignment issue within the KB Article restrictions metabox', 'kb-support' ); ?></li>
+                <li><?php _e( 'Updated contextual help for settings screen', 'kb-support' ); ?></li>
+                <li><?php _e( 'Corrected variable name being passed via <code>kbs_auto_assign_agent</code> hook', 'kb-support' ); ?></li>
+                <li><?php _e( 'Added hook <code>kbs_update_ticket_meta</code> hook', 'kb-support' ); ?></li>
+                <li><?php _e( 'Set <code>$prev_value</code> when updating ticket meta if it is not passed to the function', 'kb-support' ); ?></li>
+                <li><?php _e( 'Added filter <code>kbs_disable_ticket_post_lock</code> to enable removal of post lock for tickets', 'kb-support' ); ?></li>
             </ul>
 
         </div>
