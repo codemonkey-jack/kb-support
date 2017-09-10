@@ -50,8 +50,8 @@ function kbs_extensions_page()	{
 		</h1>
 		<div>
         	<p><a href="<?php echo $extensions_url; ?>" class="button-primary" target="_blank"><?php _e( 'Browse All Extensions', 'kb-support' ); ?></a></p>
-			<p><?php _e( 'These extensions <em><strong>add even more functionality</strong></em> to your KB Support help desk.', 'kb-support' ); ?></p>
-            <p><?php printf( __( '<em><strong>Remember</strong></em> to <a href="%s" target="_blank">sign up to our newsletter</a> and receive a 25%s discount off your next purchase from our <a href="%s" target="_blank">plugin store</a>.', 'kb-support' ), $newsletter_url, '%', $extensions_url ); ?></p>
+			<p class="newsletter-intro"><?php _e( 'These extensions <em><strong>add even more functionality</strong></em> to your KB Support help desk.', 'kb-support' ); ?></p>
+            <?php kbs_get_newsletter(); ?>
 		</div>
 
 		<div class="kbs-extension-wrapper grid3">

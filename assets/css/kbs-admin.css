@@ -615,11 +615,9 @@ td.kbs_article_label {
     padding-top: 150px;
     height: 52px;
     width: 185px;
-    color: #FFF;
+    color: #05aae8;
     font-weight: bold;
     font-size: 14px;
-    text-align: center;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
     margin: 0 -5px;
     position: absolute;
     top: 0;

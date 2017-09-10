@@ -573,7 +573,7 @@ function kbs_get_newsletter()    {
     ?>
 	<p class="newsletter-intro">
 	    <?php printf( __( 
-            'Sign up for the KB Support newsletter below to receive a <strong>25%s discount</strong> off our <a href="%s">extensions</a> and to stay informed of important updates and news.', 'kb-support' ),
+            'Sign up for the KB Support newsletter below to receive a <strong>25%s discount</strong> off our <a href="%s" target="_blank">extensions</a> and to stay informed of important updates and news.', 'kb-support' ),
             '%',
             'https://kb-support.com/extensions/'
         ); ?>
