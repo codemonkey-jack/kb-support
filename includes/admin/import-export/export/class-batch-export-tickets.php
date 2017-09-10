@@ -48,8 +48,10 @@ class KBS_Batch_Export_Tickets extends KBS_Batch_Export {
 			'company'       => __( 'Company', 'kb-support' ),
 			'customer'      => __( 'Customer', 'kb-support' ),
 			'agent'         => __( 'Agent', 'kb-support' ),
+			'agents'        => __( 'Additional Agents', 'kb-support' ),
 			'title'         => __( 'Title', 'kb-support' ),
-			'content'       => __( 'Content', 'kb-support' )
+			'content'       => __( 'Content', 'kb-support' ),
+			'replies'       => __( 'Replies', 'kb-support' )
 		);
 
 		return $cols;
@@ -94,32 +96,42 @@ class KBS_Batch_Export_Tickets extends KBS_Batch_Export {
 				$user_info     = $ticket->user_info;
 				$user_id       = isset( $user_info['id'] ) && $user_info['id'] != -1 ? $user_info['id'] : $user_info['email'];
 				$agent_id      = $ticket->agent_id;
-			}
 
-			if ( is_numeric( $user_id ) ) {
-				$user = get_userdata( $user_id );
-			} else {
-				$user = false;
-			}
+				if ( is_numeric( $user_id ) ) {
+					$user = get_userdata( $user_id );
+				} else {
+					$user = false;
+				}
 
-			if ( ! empty( $agent_id ) ) {
-				$agent = get_userdata( $agent_id );
-			} else {
-				$agent = false;
-			}
+				if ( ! empty( $agent_id ) ) {
+					$agent = get_userdata( $agent_id );
+				} else {
+					$agent = false;
+				}
 
-			$data[] = array(
-				'id'            => $ticket->ID,
-				'ticket_number' => kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ),
-				'date'          => $ticket->date,
-				'status'        => $ticket->status_nicename,
-				'categories'    => strip_tags( get_the_term_list( $ticket->ID, 'ticket_category', '', ', ', '') ),
-				'company'       => kbs_get_company_name( $ticket->company_id ),
-				'customer'      => $ticket->first_name . ' ' . $ticket->last_name,
-				'agent'         => $agent ? $agent->display_name : __( 'Unassigned', 'kb-support' ),
-				'title'         => $ticket->ticket_title,
-				'content'       => $ticket->ticket_content
-			);
+				$additional_agents = array();
+				if ( ! empty( $ticket->agents ) )	{
+					foreach( $ticket->agents as $additional_agent )	{
+						$additional_agents[] = get_userdata( $additional_agent )->display_name;
+					}
+				}
+
+				$data[] = array(
+					'id'                 => $ticket->ID,
+					'ticket_number'      => kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ),
+					'date'               => $ticket->date,
+					'status'             => $ticket->status_nicename,
+					'categories'         => strip_tags( get_the_term_list( $ticket->ID, 'ticket_category', '', ', ', '') ),
+					'company'            => kbs_get_company_name( $ticket->company_id ),
+					'customer'           => $ticket->first_name . ' ' . $ticket->last_name,
+					'agent'              => $agent ? $agent->display_name : __( 'Unassigned', 'kb-support' ),
+					'agents'             => implode( ', ', $additional_agents ),
+					'title'              => $ticket->ticket_title,
+					'content'            => $ticket->ticket_content,
+					'replies'            => $ticket->get_reply_count(),
+				);
+
+			}
 
 			$data = apply_filters( 'kbs_export_get_data', $data );
 			$data = apply_filters( 'kbs_export_get_data_' . $this->export_type, $data );
