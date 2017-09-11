@@ -693,7 +693,9 @@ class KBS_Ticket {
                         }
 
                         if ( kbs_multiple_agents() )    {
+                            $current_agents = $this->get_meta( '_kbs_ticket_agents' );
                             $this->update_meta( '_kbs_ticket_agents', $this->agents );
+                            kbs_record_additional_agents_change_in_log( $ticket_id = 0, $this->agents, $current_agents );
                         }
                         break;
 

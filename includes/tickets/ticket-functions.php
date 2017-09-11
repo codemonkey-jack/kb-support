@@ -798,6 +798,42 @@ function kbs_record_agent_change_in_log( $ticket_id = 0, $new_agent = 0, $old_ag
 } // kbs_record_agent_change_in_log
 
 /**
+ * Record Additional Agents Change In Log
+ *
+ * Stores log information for a ticket agents assignment change.
+ *
+ * @since	1.2
+ * @global	$kbs_logs
+ * @param	int			$ticket_id		Ticket ID
+ * @param	str			$new_agent		The new ticket status
+ * @param	str			$old_agent		The old ticket status
+ * @param	str|null	$changed_by		The email address of the user changing agent
+ * @return	void
+*/
+function kbs_record_additional_agents_change_in_log( $ticket_id = 0, $new_agent = 0, $old_agent = 0, $changed_by = null ) {
+	global $kbs_logs;
+
+	$log_data = array(
+		'post_parent'   => $ticket_id,
+		'log_type'      => 'assign'
+	);
+
+	if ( empty( $changed_by ) )	{
+		if ( is_user_logged_in() )	{
+			$changed_by = get_userdata( get_current_user_id() )->user_email;
+		}
+	}
+
+	$log_meta = array(
+		'previous_agents'  => (int) $old_agent,
+		'new_agents'       => (int) $new_agent,
+		'changed_by'       => $changed_by
+	);
+
+	$kbs_logs->insert_log( $log_data, $log_meta );
+} // kbs_record_additional_agents_change_in_log
+
+/**
  * Retrieve the ticket meta.
  *
  * @since	1.0
