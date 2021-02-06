@@ -455,7 +455,7 @@ function kbs_restrict_agent_ticket_view( $query )	{
 			$departments  = kbs_get_agent_departments( $agent_id );
 			foreach( $departments as $department )	{
 				$meta_query[] = array(
-					'key'   => '_kbs_ticket_department',
+					'key'   => '_kbs_ticket_agent_id',
 					'value' => (int) $department,
 					'type'  => 'NUMERIC'
 				);
