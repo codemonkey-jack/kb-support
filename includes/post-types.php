@@ -14,13 +14,48 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Retrieve array of KBS registered post types.
+ *
+ * @since   1.5.4
+ * @return  bool|array  True|false if $exists is defined, otherwise array of all registered post types
+ */
+function kbs_get_registered_post_types()    {
+    $post_types = array(
+        'kbs_company',
+        'kbs_form',
+        'kbs_form_field',
+        'kbs_ticket',
+        'kbs_ticket_reply',
+        KBS()->KB->post_type
+    );
+
+    $post_types = apply_filters( 'kbs_registered_post_types', $post_types );
+
+    return $post_types;
+} // kbs_get_registered_post_types
+
+/**
+ * Whether or not the specified post type is registered for KBS.
+ *
+ * @since   1.5.4
+ * @param   string  $post_type  Post type to check
+ * @return  bool    True or false
+ */
+function kbs_is_registered_post_type( $post_type = '' )  {
+    if ( empty( $post_type ) )  {
+        return false;
+    }
+
+    return in_array( $post_type, kbs_get_registered_post_types() );
+} // kbs_is_registered_post_type
+
+/**
  * Registers and sets up the Tickets and Articles custom post types
  *
  * @since	1.0
  * @return	void
  */
 function kbs_setup_post_types() {
-
 	$ticket_labels =  apply_filters( 'kbs_ticket_labels', array(
 		'name'                  => _x( '%2$s', 'kbs_ticket post type name', 'kb-support' ),
 		'singular_name'         => _x( '%1$s', 'singular kbs_ticket post type name', 'kb-support' ),
