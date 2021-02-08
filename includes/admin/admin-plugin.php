@@ -72,14 +72,14 @@ function kbs_admin_footer_rate_us( $footer_text )	{
 
     $disable = kbs_get_option( 'remove_rating' );
 
-	if ( ! $disable && ( 'kbs_ticket' == $typenow || KBS()->KB->post_type == $typenow || 'kbs_form' == $typenow ) )	{
-
-		$footer_text = sprintf(
-			__( 'If <strong>KB Support</strong> is helping you support your customers, please <a href="%s" target="_blank">leave us a ★★★★★ rating</a>. A <strong style="text-decoration: underline;">huge</strong> thank you in advance!', 'kb-support'
-			),
-			'https://wordpress.org/support/view/plugin-reviews/kb-support?rate=5#postform'
+	if ( ! $disable && ( kbs_is_registered_post_type( $typenow ) ) )	{
+        $rate_text = sprintf(
+            __( 'Thank you for using <a href="%1$s" target="_blank">KB Support</a>! Please <a href="%2$s" target="_blank">rate us on WordPress.org</a>', 'kb-support' ),
+            'https://kb-support.com',
+			'https://wordpress.org/support/plugin/kb-support/reviews/?rate=5#new-post'
 		);
 
+		$footer_text = str_replace( '</span>', '', $footer_text ) . ' | ' . $rate_text . '</span>';
 	}
 
 	return $footer_text;
