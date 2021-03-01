@@ -67,7 +67,7 @@ function kbs_load_scripts() {
         'permalinks'            => get_option( 'permalink_structure' ) ? '1' : '0',
         'recaptcha_site_key'    => kbs_get_option( 'recaptcha_site_key' ),
         'recaptcha_version'     => kbs_get_recaptcha_version(),
-        'replies_to_load'       => kbs_get_customer_replies_to_load(), 
+        'replies_to_load'       => kbs_get_customer_replies_to_load(),
         'reply_label'           => kbs_get_ticket_reply_label(),
         'search_placeholder'    => __( 'Search options', 'kb-support' ),
         'submit_ticket'         => kbs_get_form_submit_label(),
@@ -234,7 +234,7 @@ function kbs_load_admin_styles( $hook ) {
 		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( $_GET['post'] ) )	{
 			$ui_style = 'humanity';
 		}
-		
+
 	}
 
 	wp_register_style( 'jquery-ui-css', $css_dir . 'jquery-ui-' . $ui_style . $suffix . '.css' );
@@ -359,7 +359,7 @@ function kbs_load_admin_scripts( $hook ) {
 		}
 	}
 
-    wp_register_script( 'kbs-font-awesome', '//use.fontawesome.com/releases/v5.0.8/js/all.js', array(), KBS_VERSION ); 
+	wp_register_script( 'kbs-font-awesome', KBS_PLUGIN_DIR . '/assets/js/fontawesome.min.js', array(), KBS_VERSION );
 	wp_enqueue_script( 'kbs-font-awesome' );
 
 	wp_enqueue_style( 'wp-color-picker' );
