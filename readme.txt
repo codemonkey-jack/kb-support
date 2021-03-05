@@ -123,6 +123,9 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
+= 1.5.5 - - =
+Added: Review Class
+
 = 1.5.4 - 01.03.2021 =
 Fixed: FontAwesome style and scripts
 Fixed: compatibility with Zapier - https://github.com/WPChill/kb-support/issues/150
