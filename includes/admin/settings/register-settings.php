@@ -121,13 +121,13 @@ function kbs_delete_option( $key = '' ) {
  */
 function kbs_get_settings() {
 	$settings = get_option( 'kbs_settings' );
-	
+
 	if( empty( $settings ) ) {
 
 		$settings = array();
 
 		update_option( 'kbs_settings', $settings );
-		
+
 	}
 
 	return apply_filters( 'kbs_get_settings', $settings );
@@ -250,7 +250,15 @@ function kbs_get_registered_settings() {
 						'type'    => 'select',
 						'chosen'  => true,
 						'options' => kbs_get_pages(),
-					)
+					),
+					'floating_widget'   => array(
+						'id'      => 'floating_widget',
+						'name'    => __( 'Flaoting widget', 'kb-support' ),
+						'desc'    => sprintf( __( 'This is the page where customers will submit their %s. Should contain the <code>[kbs_submit]</code> shortcode.', 'kb-support' ), strtolower( $plural ) ),
+						'type'    => 'checkbox',
+						'chosen'  => true,
+						'options' => kbs_get_pages(),
+					),
 				),
                 'customers' => array(
                     'customer_registration_settings_header' => array(
@@ -858,7 +866,7 @@ function kbs_get_registered_settings() {
 						'name' => __( 'Content', 'kb-support' ),
 						'desc' => sprintf( __( 'Enter the content that is sent to customers when their %1$s receives a reply. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br/>' . kbs_get_emails_tags_list(),
 						'type' => 'rich_editor',
-						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" . 
+						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" .
 								  sprintf( __( 'Your support %1$s # {ticket_id} has received a reply. Click the link below to access your %1$s and review the details.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
 								  '<a href="{ticket_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .
@@ -896,7 +904,7 @@ function kbs_get_registered_settings() {
 						'name' => __( 'Content', 'kb-support' ),
 						'desc' => sprintf( __( 'Enter the content that is sent to customers when their %1$s is closed. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br/>' . kbs_get_emails_tags_list(),
 						'type' => 'rich_editor',
-						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" . 
+						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" .
 								  sprintf( __( 'Your support %1$s # {ticket_id} is now closed. You can review the details of your %1$s by clicking the URL below.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
 								  '<a href="{ticket_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .
@@ -1214,7 +1222,7 @@ function kbs_get_registered_settings() {
 						'desc'    => __( 'Choose whether to show a reCAPTCHA on the <code>[kbs_register]</code> form.', 'kb-support' ),
 						'type'    => 'checkbox'
 					)
-					
+
 				)
 			)
 		)
@@ -1425,7 +1433,7 @@ function kbs_get_settings_tabs() {
 	if ( ! empty( $settings['licenses'] ) ) {
 		$tabs['licenses'] = __( 'Licenses', 'kb-support' );
 	}
-	
+
 	$tabs['misc']   = __( 'Misc', 'kb-support' );
 
 	return apply_filters( 'kbs_settings_tabs', $tabs );
@@ -1549,7 +1557,16 @@ function kbs_checkbox_callback( $args ) {
 	$class = kbs_sanitize_html_class( $args['field_class'] );
 
 	$checked = ! empty( $kbs_option ) ? checked( 1, $kbs_option, false ) : '';
-	$html = '<input type="checkbox" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"' . $name . ' value="1" ' . $checked . ' class="' . $class . '"/>';
+
+	$html = '<div class="wpchill-toggle">';
+	$html .= '<input class="wpchill-toggle__input" type="checkbox" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" '.$name.' value="1" ' . $checked . '>';
+	$html .= '<div class="wpchill-toggle__items">';
+	$html .= '<span class="wpchill-toggle__track"></span>';
+	$html .= '<span class="wpchill-toggle__thumb"></span>';
+	$html .= '<svg class="wpchill-toggle__off" width="6" height="6" aria-hidden="true" role="img" focusable="false" viewBox="0 0 6 6"><path d="M3 1.5c.8 0 1.5.7 1.5 1.5S3.8 4.5 3 4.5 1.5 3.8 1.5 3 2.2 1.5 3 1.5M3 0C1.3 0 0 1.3 0 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z"></path></svg>';
+	$html .= '<svg class="wpchill-toggle__on" width="2" height="6" aria-hidden="true" role="img" focusable="false" viewBox="0 0 2 6"><path d="M0 0h2v6H0z"></path></svg>';
+	$html .= '</div>';
+	$html .= '</div>';
 	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
 
 	echo apply_filters( 'kbs_after_setting_output', $html, $args );
@@ -2426,7 +2443,7 @@ function kbs_get_user_role_options()	{
 
         $roles[ $role ] = $name;
     }
-	
+
 	return apply_filters( 'kbs_user_role_options', $roles );
 } // kbs_get_user_role_options
 
@@ -2493,7 +2510,7 @@ function kbs_get_resolve_time_options()	{
 		3 * WEEK_IN_SECONDS  => __( '3 Weeks', 'kb-support' ),
 		4 * WEEK_IN_SECONDS  => __( '4 Weeks', 'kb-support' )
 	);
-	
+
 	return apply_filters( 'kbs_target_resolve_time_options', $resolve_times );
 } // kbs_get_resolve_time_options
 

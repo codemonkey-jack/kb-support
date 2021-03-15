@@ -359,7 +359,7 @@ function kbs_load_admin_scripts( $hook ) {
 		}
 	}
 
-	wp_register_script( 'kbs-font-awesome', KBS_PLUGIN_DIR . '/assets/js/fontawesome.min.js', array(), KBS_VERSION );
+	wp_register_script( 'kbs-font-awesome', KBS_PLUGIN_DIR . 'assets/js/fontawesome.min.js', array(), KBS_VERSION );
 	wp_enqueue_script( 'kbs-font-awesome' );
 
 	wp_enqueue_style( 'wp-color-picker' );
