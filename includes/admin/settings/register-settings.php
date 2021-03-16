@@ -251,13 +251,54 @@ function kbs_get_registered_settings() {
 						'chosen'  => true,
 						'options' => kbs_get_pages(),
 					),
-					'floating_widget'   => array(
+					'floating_widget'          => array(
 						'id'      => 'floating_widget',
-						'name'    => __( 'Flaoting widget', 'kb-support' ),
-						'desc'    => sprintf( __( 'This is the page where customers will submit their %s. Should contain the <code>[kbs_submit]</code> shortcode.', 'kb-support' ), strtolower( $plural ) ),
+						'name'    => __( 'Floating widget', 'kb-support' ),
+						'desc'    => sprintf( __( 'Toggle ON if you want to display a floating widget with your submitting form.', 'kb-support' ), strtolower( $plural ) ),
 						'type'    => 'checkbox',
-						'chosen'  => true,
 						'options' => kbs_get_pages(),
+					),
+					'floating_widget_form'     => array(
+						'id'      => 'floating_widget_form',
+						'name'    => __( 'Floating widget Form', 'kb-support' ),
+						'desc'    => __( 'Choose what form should be displayed in the floating widget', 'kb-support' ),
+						'type'    => 'select',
+						'chosen'  => true,
+						'options' => kbs_get_user_role_options(),
+					),
+					'floating_widget_icon'     => array(
+						'id'      => 'floating_widget_icon',
+						'name'    => __( 'Floating widget Icon', 'kb-support' ),
+						'desc'    => __( 'Choose the floating widget icon', 'kb-support' ),
+						'type'    => 'select',
+						'chosen'  => true,
+						'options' => kbs_get_user_role_options(),
+					),
+					'floating_widget_position' => array(
+						'id'      => 'floating_widget_position',
+						'name'    => __( 'Floating widget Position', 'kb-support' ),
+						'desc'    => __( 'Choose the floating widget position', 'kb-support' ),
+						'type'    => 'select',
+						'chosen'  => true,
+						'options' => array(
+							'left'   => esc_html__( 'Left', 'kb-support' ),
+							'right'  => esc_html__( 'Right', 'kb-support' ),
+							'center' => esc_html__( 'Center', 'kb-support' ),
+						),
+						'std'     => 'left'
+					),
+					'floating_widget_color'    => array(
+						'id'      => 'floating_widget_color',
+						'name'    => __( 'Floating widget Color', 'kb-support' ),
+						'desc'    => __( 'Choose the floating widget color', 'kb-support' ),
+						'type'    => 'select',
+						'chosen'  => true,
+						'options' => array(
+							'left'   => esc_html__( 'Left', 'kb-support' ),
+							'right'  => esc_html__( 'Right', 'kb-support' ),
+							'center' => esc_html__( 'Center', 'kb-support' ),
+						),
+						'std'     => 'left'
 					),
 				),
                 'customers' => array(
