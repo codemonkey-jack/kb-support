@@ -44,7 +44,7 @@ add_filter( 'kbs_ticket_statuses', 'kbs_sort_ticket_status_array_action', 900 );
  */
 function kbs_process_ticket_submission()	{
 
-	if ( ! isset( $_POST['kbs_action'] ) || 'submit_ticket' != $_POST['kbs_action'] )	{
+	if ( ! isset( $_POST['kbs__form_action'] ) || 'submit_ticket' != $_POST['kbs__form_action'] )	{
 		return;
 	}
 
@@ -102,16 +102,14 @@ function kbs_process_ticket_submission()	{
 
     do_action( 'kbs_ticket_form_submitted', $ticket_id, $form_id, $posted );
 
-	wp_redirect( add_query_arg(
-		array( 'kbs_notice' => $message ),
-		$redirect
-	) );
+	echo json_encode( array( 'kbs_notice' => $message ) );
 
 	die();
 
 } // kbs_process_ticket_form
-add_action( 'init', 'kbs_process_ticket_submission' );
-
+//add_action( 'init', 'kbs_process_ticket_submission' );
+add_action( 'wp_ajax_kbs__form_action', 'kbs_process_ticket_submission' );
+add_action( 'wp_ajax_nopriv_kbs__form_action', 'kbs_process_ticket_submission' );
 /**
 * When a ticket is assigned to a department, set some additional meta keys.
 * This enables us to perform query's better within the admin ticket list
@@ -226,27 +224,27 @@ function kbs_reopen_ticket()	{
 		$message = 'nonce_fail';
 	} else	{
 		remove_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
-	
+
 		if ( 'closed' == get_post_status( $_GET['post'] ) )	{
 			$update = wp_update_post( array(
 				'ID'          => $_GET['post'],
 				'post_status' => 'open'
 			) );
-			
+
 			if ( $update )	{
 				$message = 'ticket_reopened';
-				kbs_insert_note( $_GET['post'], sprintf( __( '%s re-opened.', 'kb-support' ), kbs_get_ticket_label_singular() ) ); 
+				kbs_insert_note( $_GET['post'], sprintf( __( '%s re-opened.', 'kb-support' ), kbs_get_ticket_label_singular() ) );
 			}
 		}
-		
+
 		if ( ! isset( $message ) )	{
 			$message = 'ticket_not_closed';
 		}
-		
+
 	}
-	
+
 	$url = remove_query_arg( array( 'kbs-action', 'kbs-message', 'kbs-ticket-nonce' ) );
-	
+
 	wp_redirect( add_query_arg( 'kbs-message', $message, $url ) );
 
 	die();
@@ -421,9 +419,9 @@ function kbs_auto_assign_agent_to_ticket_action()	{
 	if ( ! isset( $_GET['post'] ) || 'kbs_ticket' != get_post_type( $_GET['post'] ) || ! kbs_get_option( 'auto_assign_agent', false ) )	{
 		return;
 	}
-	
+
 	$kbs_ticket = new KBS_Ticket( $_GET['post'] );
-	
+
 	if ( 'new' != $kbs_ticket->post_status || ! empty( $kbs_ticket->agent_id ) )	{
 		return;
 	}

@@ -100,8 +100,30 @@ jQuery(document).ready(function ($) {
 					$('#kbs_ticket_form_submit').find('#kbs-loading').remove();
 					$('#kbs_ticket_submit').val(kbs_scripts.submit_ticket);
 				} else	{
-					$form.append( '<input type="hidden" name="kbs_action" value="submit_ticket" />' );
-					$form.get(0).submit();
+					$form.append( '<input type="hidden" name="kbs__form_action" value="submit_ticket" />' );
+					$form.append( '<input type="hidden" name="action" value="kbs__form_action" />' );
+					/*$form.get(0).submit();*/
+					var ticketDataa = $('#kbs_ticket_form').serialize();
+
+					$.ajax({
+						type       : 'POST',
+						dataType   : 'json',
+						data       : ticketDataa,
+						url        : kbs_scripts.ajaxurl,
+						success    : function (myResponse) {
+
+							if ( myResponse.error ) {
+
+							} else {
+								$( '#kbs_ticket_form_wrap' ).html( 'Great Work, your ticket has been submitted' );
+							}
+						}
+					}).fail(function (data) {
+						if ( window.console && window.console.log ) {
+							console.log('tralala');
+						}
+					});
+
 				}
 			}
 		}).fail(function (data) {
