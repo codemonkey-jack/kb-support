@@ -128,6 +128,39 @@ function kbs_get_forms( $args = array() )	{
 } // kbs_get_forms
 
 /**
+ * Returns an array of forms that has form ID as index and form title as value
+ * Primarily used for selects
+ *
+ * @param array $args
+ *
+ * @return array
+ * @since 1.5.6
+ *
+ */
+function kbs_get_array_forms( $args = array() ){
+
+	$defaults = array(
+		'post_type'      => 'kbs_form',
+		'post_status'    => 'any',
+		'posts_per_page' => -1
+	);
+
+	$args  = wp_parse_args( $args, $defaults );
+	$forms = get_posts( $args );
+
+	$return = array(
+		'none' => esc_html__( 'Select form', 'kb-support' )
+	);
+
+	foreach ( $forms as $form ){
+		$return[ $form->ID ] = $form->post_title;
+	}
+
+	return $return;
+
+}
+
+/**
  * Retrieve a form.
  *
  * @since	1.0
@@ -135,11 +168,11 @@ function kbs_get_forms( $args = array() )	{
  * @return	obj		WP_Post
  */
 function kbs_get_form( $form_id )	{
-	
+
 	$form = new KBS_Form( $form_id );
-	
+
 	return apply_filters( 'kbs_get_form', $form, $form_id );
-	
+
 } // kbs_get_form
 
 /**
@@ -226,7 +259,7 @@ function kbs_form_default_fields()	{
 			'show_logged_in'  => false,
 			'kb_search'       => false,
 			'menu_order'      => '1'
-		), 
+		),
 		'email'       => array(
 			'type'            => 'email',
 			'mapping'         => 'customer_email',
@@ -272,11 +305,11 @@ function kbs_add_default_fields_to_form( $form_id )	{
 	$default_fields = kbs_form_default_fields();
 
 	foreach( $default_fields as $field => $field_data )	{
-		
+
 		if ( ! kbs_form_has_default_field( $form_id, $field ) )	{
-	
+
 			$form = new KBS_Form( $form_id );
-	
+
 			$data = array(
 				'form_id'         => $form_id,
 				'type'            => $field_data['type'],
@@ -297,13 +330,13 @@ function kbs_add_default_fields_to_form( $form_id )	{
 				'show_logged_in'  => $field_data['show_logged_in'],
 				'menu_order'      => $field_data['menu_order']
 			);
-	
+
 			$field_id = $form->add_field( $data );
-	
+
 			if ( $field_id )	{
 				add_post_meta( $field_id, '_default_field', $field );
 			}
-	
+
 		}
 
 	}
@@ -320,11 +353,11 @@ add_action( 'kbs_form_before_save', 'kbs_add_default_fields_to_form', 5 );
  * @return	obj		WP_Query Object.
  */
 function kbs_get_fields( $form_id )	{
-	
+
 	$form = new KBS_Form( $form_id );
-	
+
 	return $form->get_fields();
-	
+
 } // kbs_get_fields
 
 /**
@@ -337,17 +370,17 @@ function kbs_get_fields( $form_id )	{
  * @return	obj		WP_Query Object.
  */
 function kbs_get_field( $field_id )	{
-	
+
 	$field = get_post( $field_id );
-	
+
 	if ( ! $field )	{
 		return false;
 	}
-	
+
 	$field->settings = kbs_get_field_settings( $field->ID );
-	
+
 	return apply_filters( 'kbs_get_field', $field );
-	
+
 } // kbs_get_field
 
 /**
@@ -432,11 +465,11 @@ function kbs_delete_field( $field_id, $force = false )	{
 	}
 
 	do_action( 'kbs_pre_delete_field', $field_id );
-	
-	$result = wp_delete_post( $field_id );	
-	
+
+	$result = wp_delete_post( $field_id );
+
 	do_action( 'kbs_post_delete_field', $field_id, $result );
-	
+
 	return $result;
 
 } // kbs_delete_field
@@ -449,11 +482,11 @@ function kbs_delete_field( $field_id, $force = false )	{
  * @return	str		The field type in readable format.
  */
 function kbs_get_field_type( $type )	{
-	
+
 	$field_types = kbs_get_field_types();
-	
+
 	return $field_types[ $type ];
-	
+
 } // kbs_get_field_type
 
 /**
@@ -464,11 +497,11 @@ function kbs_get_field_type( $type )	{
  * @return	arr		The field settings.
  */
 function kbs_get_field_settings( $field_id )	{
-	
+
 	$field_settings = get_post_meta( $field_id, '_kbs_field_settings', true );
-		
+
 	return apply_filters( 'kbs_field_settings', $field_settings, $field_id );
-	
+
 } // kbs_get_field_settings
 
 /**
@@ -479,7 +512,7 @@ function kbs_get_field_settings( $field_id )	{
  * @return	arr
  */
 function kbs_get_field_types()	{
-	
+
 	$field_types = array(
 		'checkbox'                  => __( 'Checkbox', 'kb-support' ),
 		'checkbox_list'             => __( 'Checkbox List', 'kb-support' ),
@@ -496,7 +529,7 @@ function kbs_get_field_types()	{
 		'text'                      => __( 'Text Field', 'kb-support' ),
 		'textarea'                  => __( 'Textarea', 'kb-support' ),
 		'ticket_category_dropdown'  => sprintf( __( '%s Categories', 'kb-support' ), kbs_get_ticket_label_singular() ),
-		'url'                       => __( 'URL Field', 'kb-support' ),		
+		'url'                       => __( 'URL Field', 'kb-support' ),
 	);
 
 	if ( ! kbs_departments_enabled() )	{
@@ -578,9 +611,9 @@ function kbs_get_mappings( $mapping = null )	{
  * @return	arr
  */
 function kbs_get_available_mappings( $form_id )	{
-	
+
 	$kbs_form = new KBS_Form( $form_id );
-	
+
 	$mappings = kbs_get_mappings();
 
 	foreach( $mappings as $key => $value )	{
@@ -590,7 +623,7 @@ function kbs_get_available_mappings( $form_id )	{
 	}
 
 	return $mappings;
-	
+
 } // kbs_get_available_mappings
 
 /**
@@ -624,7 +657,7 @@ function kbs_display_field_setting_icons( $field_id )	{
 	$settings = kbs_get_field_settings( $field_id );
 	$mappings = kbs_get_mappings();
 	$output   = array();
-	
+
 	if ( $settings )	{
 		if ( ! empty( $settings['hide_label'] ) )	{
 			$output[] = '<i title="' . __( 'Label Hidden', 'kb-support' ) . '" class="fas fa-tag" aria-hidden="true"></i>';
@@ -637,13 +670,13 @@ function kbs_display_field_setting_icons( $field_id )	{
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
-		
+
 		if ( ! empty( $settings['placeholder'] ) )	{
 			$output[] = '<i title="' . sprintf( __( 'Placeholder: %s', 'kb-support' ), stripslashes( $settings['placeholder'] ) ) . '" class="fas fa-info-circle" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
-		
+
 		if ( ! empty( $settings['mapping'] ) && 'post_category' != $settings['mapping'] )	{
 			$output[] = '<i title="' . sprintf( __( 'Maps to %s', 'kb-support' ), stripslashes( $mappings[ $settings['mapping'] ] ) ) . '" class="fas fa-map-marker-alt" aria-hidden="true"></i>';
 		} else	{
@@ -690,15 +723,15 @@ function kbs_display_form( $form_id = 0 ) {
 	} else	{
 
 		$kbs_form = new KBS_Form( $form_id );
-	
+
 		if ( ! $kbs_form ) {
 			return __( 'Submission form not found', 'kb-support' );
 		}
-	
+
 		ob_start();
-	
+
 		kbs_get_template_part( 'shortcode', apply_filters( 'kbs_form_template', 'form', $kbs_form, $form_id ) );
-	
+
 		return apply_filters( 'kbs_submit_form', ob_get_clean(), $kbs_form, $form_id );
 
 	}
@@ -749,7 +782,7 @@ function kbs_check_email_from_submission( $email )	{
 
 	if ( ! empty( $banned ) )	{
 		if ( is_user_logged_in() )	{
-	
+
 			// The user is logged in, check that their account email is not banned
 			$user_data = get_userdata( get_current_user_id() );
 			if ( kbs_is_email_banned( $user_data->user_email ) )	{
@@ -760,7 +793,7 @@ function kbs_check_email_from_submission( $email )	{
 		if ( kbs_is_email_banned( $email ) )	{
 			$is_banned = true;
 		}
-	
+
 	}
 
 	return $is_banned;
@@ -791,13 +824,15 @@ function kbs_display_form_text_field( $field, $settings )	{
 			$class .= ' kbs_datepicker';
 		}
 		$type = 'text';
-		
+
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 		wp_register_style( 'jquery-ui-css', KBS_PLUGIN_URL . 'assets/css/jquery-ui-fresh.min.css' );
 		wp_enqueue_style( 'jquery-ui-css' );
 	}
 
 	$class = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $class ) ) );
+	$class = 'kbs-article-search ' . $class;
+	$type  = 'search';
 
 	if ( ! empty( $settings['kb_search'] ) )	{
 		$class = 'kbs-article-search ' . $class;
@@ -1179,7 +1214,7 @@ function kbs_display_form_checkbox_list_field( $field, $settings )	{
 			esc_attr( $option ),
 			esc_attr( $option )
 		);
-		
+
 	}
 
 	$output = apply_filters( 'kbs_display_form_checkbox_field', $output, $field, $settings );
@@ -1214,7 +1249,7 @@ function kbs_display_form_radio_field( $field, $settings )	{
 			esc_attr( $option ),
 			esc_attr( $option )
 		);
-		
+
 	}
 
 	$output = apply_filters( 'kbs_display_form_radio_field', $output, $field, $settings );
@@ -1377,7 +1412,7 @@ function kbs_get_banned_emails() {
  * Determines if an email is banned
  *
  * @since	1.0
- * @param	str		$email	Email address to check	
+ * @param	str		$email	Email address to check
  * @return	bool	true if the email address is banned, or false
  */
 function kbs_is_email_banned( $email = '' ) {
@@ -1407,3 +1442,53 @@ function kbs_is_email_banned( $email = '' ) {
 	return apply_filters( 'kbs_is_email_banned', $return, $email );
 
 } // kbs_is_email_banned
+
+/**
+ * Floating widget
+ *
+ * @since 1.5.6
+ */
+function kbs_floating_widget(){
+
+	$settings = get_option( 'kbs_settings' );
+
+	if ( !isset( $settings['floating_widget'] ) || '1' != $settings['floating_widget'] ){
+		return;
+	}
+
+	if ( !isset( $settings['floating_widget_form'] ) || 'none' == $settings['floating_widget_form'] ){
+		return;
+	}
+
+	$widget_icon = 'fa-comment-o';
+
+	if ( isset( $settings['floating_widget_icon'] ) && '' != $settings['floating_widget_icon'] ){
+		$widget_icon = $settings['floating_widget_icon'];
+	}
+
+	$css = '<style>';
+
+	if ( isset( $settings['floating_widget_position'] ) ){
+		$css .= 'html body #kbs-beacon,html body #kbs-beacon .kbs-beacon-content{' . esc_attr( $settings['floating_widget_position'] ) . ' : 60px;}';
+	}
+
+	if ( isset( $settings['floating_widget_color'] ) ){
+		$css .= 'html body #kbs-beacon .kbs-beacon-wrapper{background-color:' . esc_attr( $settings['floating_widget_color'] ) . ';}';
+	}
+
+	$css  .= '</style>'; // End style
+	$html = '<div id="kbs-beacon">';
+	$html .= '<input type="checkbox" class="kbs-beacon-toggle__input">';
+	$html .= '<div class="kbs-beacon-wrapper">';
+	$html .= '<span class="kbs-beacon-icon fa ' . esc_attr( $widget_icon ) . '"></span>';
+	$html .= '<span class="kbs-beacon-close fa fa-close"></span>';
+	$html .= '<div class="kbs-beacon-content">';
+	$html .= do_shortcode( '[kbs_submit form="' . absint( $settings['floating_widget_form'] ) . '"]' );
+	$html .= '</div>'; // .kbs-beacon-content
+	$html .= '</div>'; // .kbs-beacon-wrapper
+	$html .= '</div>'; // #kbs-beacon
+
+	echo $css . $html;
+}
+
+add_action('wp_footer','kbs_floating_widget');

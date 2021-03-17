@@ -1,0 +1,80 @@
+#kbs-beacon {
+	position : fixed;
+	width    : 60px;
+	height   : 60px;
+	bottom   : 60px;
+	outline  : none;
+	padding  : 0;
+	right    : 60px;
+}
+
+#kbs-beacon .kbs-beacon-wrapper {
+	width            : 100%;
+	height           : 100%;
+	border-radius    : 30px;
+	background-color : blue;
+	text-align       : center;
+}
+
+#kbs-beacon .kbs-beacon-toggle__input[type=checkbox] {
+	transition : none;
+	height     : 100%;
+	width      : 100%;
+	left       : 0;
+	top        : 0;
+	margin     : 0;
+	padding    : 0;
+	opacity    : 0;
+	position   : absolute;
+	z-index    : 9;
+}
+
+#kbs-beacon .kbs-beacon-close {
+	position  : relative;
+	display   : none;
+	font-size : 26px;
+	color     : #fff;
+	top       : 17px;
+}
+
+#kbs-beacon .kbs-beacon-icon {
+	position  : relative;
+	display   : inline-block;
+	font-size : 26px;
+	color     : #fff;
+	top       : 17px;
+}
+
+.kbs-beacon-content {
+	bottom           : 160px;
+	opacity          : 0;
+	transform        : translateY(20px);
+	transition       : 850ms ease-in-out;
+	position         : fixed;
+	width            : 100%;
+	max-width        : 350px;
+	visibility       : hidden;
+	height           : 100%;
+	max-height       : 600px;
+	overflow-y       : scroll;
+	padding          : 20px;
+	border           : 1px solid;
+	box-shadow       : rgb(0 0 0 / 5%) 0px 0px 0px 1px, rgb(0 0 0 / 15%) 0px 5px 30px 0px, rgb(0 0 0 / 5%) 0px 3px 3px 0px;
+	border-radius    : 5px;
+	background-color : #fff;
+	right            : 60px;
+}
+
+#kbs-beacon .kbs-beacon-toggle__input[type=checkbox]:checked + .kbs-beacon-wrapper .kbs-beacon-icon {
+	display : none;
+}
+
+#kbs-beacon .kbs-beacon-toggle__input[type=checkbox]:checked + .kbs-beacon-wrapper .kbs-beacon-close {
+	display : inline-block;
+}
+
+#kbs-beacon .kbs-beacon-toggle__input[type=checkbox]:checked + .kbs-beacon-wrapper .kbs-beacon-content {
+	opacity    : 1;
+	transform  : translateY(0);
+	visibility : visible;
+}

@@ -251,28 +251,36 @@ function kbs_get_registered_settings() {
 						'chosen'  => true,
 						'options' => kbs_get_pages(),
 					),
-					'floating_widget'          => array(
+					'floating_widget' => array(
 						'id'      => 'floating_widget',
 						'name'    => __( 'Floating widget', 'kb-support' ),
 						'desc'    => sprintf( __( 'Toggle ON if you want to display a floating widget with your submitting form.', 'kb-support' ), strtolower( $plural ) ),
 						'type'    => 'checkbox',
 						'options' => kbs_get_pages(),
 					),
-					'floating_widget_form'     => array(
+					'floating_widget_form' => array(
 						'id'      => 'floating_widget_form',
 						'name'    => __( 'Floating widget Form', 'kb-support' ),
 						'desc'    => __( 'Choose what form should be displayed in the floating widget', 'kb-support' ),
 						'type'    => 'select',
 						'chosen'  => true,
-						'options' => kbs_get_user_role_options(),
+						'options' => kbs_get_array_forms(),
+						'std'     => 'none'
 					),
-					'floating_widget_icon'     => array(
+					'floating_widget_icon' => array(
 						'id'      => 'floating_widget_icon',
 						'name'    => __( 'Floating widget Icon', 'kb-support' ),
 						'desc'    => __( 'Choose the floating widget icon', 'kb-support' ),
 						'type'    => 'select',
 						'chosen'  => true,
-						'options' => kbs_get_user_role_options(),
+						'options' => array(
+							'fa-comment-o'       => esc_html__( 'Empty comment icon', 'kb-support' ),
+							'fa-comment'         => esc_html__( 'Full comment icon', 'kb-support' ),
+							'fa-bars'            => esc_html__( 'Bars', 'kb-support' ),
+							'fa-ticket'          => esc_html__( 'Ticket', 'kb-support' ),
+							'fa-envelope'        => esc_html__( 'Envelope', 'kb-support' ),
+							'fa-pencil-square-o' => esc_html__( 'Pencil', 'kb-support' )
+						),
 					),
 					'floating_widget_position' => array(
 						'id'      => 'floating_widget_position',
@@ -283,22 +291,19 @@ function kbs_get_registered_settings() {
 						'options' => array(
 							'left'   => esc_html__( 'Left', 'kb-support' ),
 							'right'  => esc_html__( 'Right', 'kb-support' ),
-							'center' => esc_html__( 'Center', 'kb-support' ),
 						),
 						'std'     => 'left'
 					),
-					'floating_widget_color'    => array(
+					'floating_widget_color' => array(
 						'id'      => 'floating_widget_color',
 						'name'    => __( 'Floating widget Color', 'kb-support' ),
 						'desc'    => __( 'Choose the floating widget color', 'kb-support' ),
-						'type'    => 'select',
-						'chosen'  => true,
+						'type'    => 'color',
 						'options' => array(
 							'left'   => esc_html__( 'Left', 'kb-support' ),
 							'right'  => esc_html__( 'Right', 'kb-support' ),
 							'center' => esc_html__( 'Center', 'kb-support' ),
 						),
-						'std'     => 'left'
 					),
 				),
                 'customers' => array(

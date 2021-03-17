@@ -205,6 +205,13 @@ function kbs_register_styles() {
 		wp_enqueue_style( 'jquery-chosen-css' );
 	}
 
+	if ( kbs_get_option( 'floating_widget' ) ){
+		wp_register_style( 'kbs-beacon-style', $css_dir . 'beacon.css', array(), KBS_VERSION );
+		wp_enqueue_style( 'kbs-beacon-style' );
+		wp_register_style( 'fontawesome', $css_dir . 'font-awesome.min.css', array() );
+		wp_enqueue_style( 'fontawesome' );
+	}
+
 } // kbs_register_styles
 add_action( 'wp_enqueue_scripts', 'kbs_register_styles' );
 
@@ -359,7 +366,7 @@ function kbs_load_admin_scripts( $hook ) {
 		}
 	}
 
-	wp_register_script( 'kbs-font-awesome', KBS_PLUGIN_DIR . 'assets/js/fontawesome.min.js', array(), KBS_VERSION );
+	wp_register_script( 'kbs-font-awesome', KBS_PLUGIN_URL . 'assets/js/fontawesome.min.js', array(), KBS_VERSION );
 	wp_enqueue_script( 'kbs-font-awesome' );
 
 	wp_enqueue_style( 'wp-color-picker' );
