@@ -206,8 +206,6 @@ function kbs_register_styles() {
 	}
 
 	if ( kbs_get_option( 'floating_widget' ) ){
-		wp_register_style( 'kbs-beacon-style', $css_dir . 'beacon.css', array(), KBS_VERSION );
-		wp_enqueue_style( 'kbs-beacon-style' );
 		wp_register_style( 'fontawesome', $css_dir . 'font-awesome.min.css', array() );
 		wp_enqueue_style( 'fontawesome' );
 	}

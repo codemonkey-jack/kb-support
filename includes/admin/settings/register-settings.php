@@ -256,7 +256,6 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'Floating widget', 'kb-support' ),
 						'desc'    => sprintf( __( 'Toggle ON if you want to display a floating widget with your submitting form.', 'kb-support' ), strtolower( $plural ) ),
 						'type'    => 'checkbox',
-						'options' => kbs_get_pages(),
 					),
 					'floating_widget_form' => array(
 						'id'      => 'floating_widget_form',
@@ -304,6 +303,12 @@ function kbs_get_registered_settings() {
 							'right'  => esc_html__( 'Right', 'kb-support' ),
 							'center' => esc_html__( 'Center', 'kb-support' ),
 						),
+					),
+					'floating_widget_label' => array(
+						'id'   => 'floating_widget_label',
+						'name' => __( 'Hide floating widget Label', 'kb-support' ),
+						'desc' => __( 'Choose whether to hide or display the input label', 'kb-support' ),
+						'type' => 'checkbox',
 					),
 				),
                 'customers' => array(
