@@ -65,7 +65,7 @@ jQuery(document).ready(function ($) {
     /* = Ticket submission form validation and submission
 	====================================================================================== */
 	$(document).on('click', '#kbs_ticket_form #kbs_ticket_submit', function(e) {
-		var kbsTicketForm = document.getElementById('kbs_ticket_form');
+		var kbsTicketForm = $(this).parents('#kbs_ticket_form');
 
 		if( typeof kbsTicketForm.checkValidity === 'function' && false === kbsTicketForm.checkValidity() ) {
 			return;
@@ -75,7 +75,7 @@ jQuery(document).ready(function ($) {
 		$(this).val(kbs_scripts.submit_ticket_loading);
 		$(this).prop('disabled', true);
 		$(this).after(' <span id="kbs-loading" class="kbs-loader"><img src="' + kbs_scripts.ajax_loader + '" /></span>');
-		$('input').removeClass('error');
+		kbsTicketForm.find('input').removeClass('error');
 
 		var tinymceActive = (typeof tinyMCE !== 'undefined') && tinyMCE.activeEditor && ! tinyMCE.activeEditor.isHidden();
 
@@ -83,8 +83,7 @@ jQuery(document).ready(function ($) {
 			tinyMCE.triggerSave();
 		}
 
-        var $form      = $('#kbs_ticket_form'),
-            ticketData = $('#kbs_ticket_form').serialize();
+        var ticketData = kbsTicketForm.serialize();
 
 		$.ajax({
 			type       : 'POST',
@@ -93,15 +92,37 @@ jQuery(document).ready(function ($) {
 			url        : kbs_scripts.ajaxurl,
 			success    : function (response) {
 				if ( response.error )	{
-					$form.find('.kbs_alert_error').show('fast');
-					$form.find('.kbs_alert_error').html(response.error);
+					kbsTicketForm.find('.kbs_alert_error').show('fast');
+					kbsTicketForm.find('.kbs_alert_error').html(response.error);
 
-					$('#kbs_ticket_submit').prop('disabled', false);
-					$('#kbs_ticket_form_submit').find('#kbs-loading').remove();
-					$('#kbs_ticket_submit').val(kbs_scripts.submit_ticket);
+					kbsTicketForm.find('#kbs_ticket_submit').prop('disabled', false);
+					kbsTicketForm.find('#kbs_ticket_form_submit').find('#kbs-loading').remove();
+					kbsTicketForm.find('#kbs_ticket_submit').val(kbs_scripts.submit_ticket);
 				} else	{
-					$form.append( '<input type="hidden" name="kbs_action" value="submit_ticket" />' );
-					$form.get(0).submit();
+					kbsTicketForm.append( '<input type="hidden" name="kbs__form_action" value="submit_ticket" />' );
+					kbsTicketForm.append( '<input type="hidden" name="action" value="kbs__form_action" />' );
+					var ticketDataa = kbsTicketForm.serialize();
+
+					$.ajax({
+						type       : 'POST',
+						dataType   : 'json',
+						data       : ticketDataa,
+						url        : kbs_scripts.ajaxurl,
+						success    : function (myResponse) {
+
+							if ( myResponse.error ) {
+
+							} else {
+								kbsTicketForm.parents('#kbs_ticket_wrap').addClass('form-submitted');
+								kbsTicketForm.parents( '#kbs_ticket_form_wrap' ).html( '<p>' + kbs_scripts.ticket_submitted + '</p>' );
+							}
+						}
+					}).fail(function (data) {
+						if ( window.console && window.console.log ) {
+							console.log(data);
+						}
+					});
+
 				}
 			}
 		}).fail(function (data) {
