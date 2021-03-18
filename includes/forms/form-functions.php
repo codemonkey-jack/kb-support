@@ -1460,6 +1460,13 @@ function kbs_floating_widget(){
 		return;
 	}
 
+	$user  = wp_get_current_user();
+	$roles = $user->roles;
+
+	if ( is_user_logged_in() && in_array( 'support_agent', $roles ) ){
+		return;
+	}
+
 	$widget_icon = 'fa-comment-o';
 
 	if ( isset( $settings['floating_widget_icon'] ) && '' != $settings['floating_widget_icon'] ){
@@ -1525,15 +1532,22 @@ function kbs_floating_widget(){
 			width            : 100%;
 			max-width        : 350px;
 			visibility       : hidden;
-			height           : 100%;
-			max-height       : 600px;
+			height           : 600px;
+			max-height       : calc(100vh - 250px);
 			overflow-y       : scroll;
 			padding          : 20px;
-			border           : 1px solid;
-			box-shadow       : rgb(0 0 0 / 5%) 0px 0px 0px 1px, rgb(0 0 0 / 15%) 0px 5px 30px 0px, rgb(0 0 0 / 5%) 0px 3px 3px 0px;
+			border           : 1px solid rgb(31 171 230);
+			box-shadow       : 0px 0px 5px rgb(31 171 230);
 			border-radius    : 5px;
 			background-color : #fff;
 			right            : 60px;
+		}
+
+		#kbs-beacon .kbs-beacon-content #kbs_ticket_wrap.form-submitted {
+			display         : flex;
+			height          : 100%;
+			align-items     : center;
+			justify-content : center;
 		}
 
 		#kbs-beacon .kbs-beacon-toggle__input[type=checkbox]:checked + .kbs-beacon-wrapper .kbs-beacon-icon {
@@ -1570,6 +1584,32 @@ function kbs_floating_widget(){
 			border-radius:5px;
 		}
 
+		#kbs-beacon .kbs-beacon-content::-webkit-scrollbar {
+			width : 4px;
+		}
+
+		#kbs-beacon .kbs-beacon-content::-webkit-scrollbar-track {
+			box-shadow    : inset 0 0 2px grey;
+			border-radius : 2px;
+		}
+
+		#kbs-beacon .kbs-beacon-content::-webkit-scrollbar-thumb {
+			border-radius : 2px;
+			background    : rgb(31 171 230);
+		}
+
+		#kbs-beacon .kbs-beacon-content::-webkit-scrollbar-thumb:hover {
+			background : black;
+		}
+
+		/**
+		** Firefox scrollbar style
+		 */
+		#kbs-beacon .kbs-beacon-content {
+			scrollbar-width : thin; /* "auto" or "thin" */
+			scrollbar-color : rgb(31 171 230) rgba(0,0,0,0.2); /* scroll thumb and track */
+		}
+
 		/**
 		** End form styling
 		 */
@@ -1581,6 +1621,9 @@ function kbs_floating_widget(){
 
 			if ( isset( $settings['floating_widget_color'] ) ){
 				echo 'html body #kbs-beacon .kbs-beacon-wrapper{background-color:' . esc_attr( $settings['floating_widget_color'] ) . ';}';
+				echo 'html body #kbs-beacon .kbs-beacon-content{ border-color: ' . esc_attr( $settings['floating_widget_color'] ) . '; box-shadow: 0px 0px 5px ' . esc_attr( $settings['floating_widget_color'] ) . '; }';
+				echo 'html body #kbs-beacon .kbs-beacon-content::-webkit-scrollbar-thumb {background:' . esc_attr( $settings['floating_widget_color'] ) . ';}';
+				echo 'html body #kbs-beacon .kbs-beacon-content { scrollbar-color : ' . esc_attr( $settings['floating_widget_color'] ) . ' rgba(0,0,0,0.2);}';
 			}
 
 			if ( isset( $settings['floating_widget_label'] ) && '1' == $settings['floating_widget_label'] ){
