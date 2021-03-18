@@ -28,6 +28,9 @@ class KBS_Floating_Widget {
 		$this->settings = get_option( 'kbs_settings' );
 
 		add_action( 'wp_footer', array( $this, 'floating_widget' ) );
+
+		add_action( 'wp_ajax_kbs_ajax_floating_article_search', array( $this, 'kbs_ajax_floating_article_search' ) );
+		add_action( 'wp_ajax_nopriv_kbs_ajax_floating_article_search', array( $this, 'kbs_ajax_floating_article_search' ) );
 	}
 
 	/**
@@ -116,28 +119,29 @@ class KBS_Floating_Widget {
 				height           : 600px;
 				max-height       : calc(100vh - 250px);
 				overflow-y       : scroll;
-				padding          : 0 20px;
+				padding          : 0 10px;
 				border           : 1px solid rgb(31 171 230);
-				box-shadow       : 0px 0px 5px rgb(31 171 230);
+				box-shadow       : 0 0 5px rgb(31 171 230);
 				border-radius    : 5px;
 				background-color : #fff;
 				right            : 60px;
 			}
 
 			.kbs-beacon-content .kbs-beacon-articles-wrapper {
-				height : 100%;
+				height : calc(100% + 80px);
 			}
 
 			.kbs-beacon-content .kbs-beacon-search-wrapper {
 				position    : sticky;
 				bottom      : 0;
-				width       : calc(100% + 40px);
-				margin-left : -20px;
+				width       : calc(100% + 20px);
+				margin-left : -10px;
+				z-index     : 999;
 			}
 
 			.kbs-beacon-content .kbs-beacon-search-wrapper input {
-				box-shadow : 0px -2px 1px rgb(31 171 230);
-				border     : 0px;
+				box-shadow : 0 -2px 1px rgb(31 171 230);
+				border     : 0;
 			}
 
 			html body #kbs-beacon .kbs-beacon-content .kbs-beacon-search-wrapper input {
@@ -199,8 +203,8 @@ class KBS_Floating_Widget {
 
 			#kbs-beacon .kbs-beacon-content .kbs-beacon-header {
 				position      : sticky;
-				width         : calc(100% + 40px);
-				margin-left   : -20px;
+				width         : calc(100% + 20px);
+				margin-left   : -10px;
 				top           : 0;
 				background    : rgb(31 171 230);
 				border-bottom : 1px solid rgb(31 171 230);
@@ -208,6 +212,7 @@ class KBS_Floating_Widget {
 				align-items   : center;
 				margin-bottom : 25px;
 				color         : #fff;
+				z-index       : 9999;
 			}
 
 			#kbs-beacon .kbs-beacon-content .kbs-beacon-header img {
@@ -272,6 +277,42 @@ class KBS_Floating_Widget {
 			/**
 			** End form styling
 			 */
+
+			/**
+			** Floating Articles List style
+			 */
+			#kbs-beacon .kbs-floating-articles-list {
+				display : block;
+				width   : 100%;
+			}
+
+			#kbs-beacon .kbs-floating-article {
+				display                : block;
+				width                  : 100%;
+				text-align             : left;
+				will-change            : box-shadow;
+				border                 : 1px solid rgb(31 171 230);
+				margin-bottom          : 3px;
+				border-radius          : 5px;
+				padding                : 20px 20px 22px;
+				position               : relative;
+				overflow-wrap          : break-word;
+				-webkit-font-smoothing : antialiased;
+				transition             : 336ms ease-in-out;
+			}
+
+			#kbs-beacon .kbs-floating-article:hover {
+				transform : translateY(-5px);
+			}
+
+			#kbs-beacon .kbs-floating-article .kbs-floating-article-title {
+				margin-bottom : 15px;
+				display       : block;
+			}
+
+			/**
+			** End Floating Articles List style
+			 */
 			<?php
 
 				if ( isset( $this->settings['floating_widget_position'] ) ){
@@ -287,6 +328,8 @@ class KBS_Floating_Widget {
 					echo 'html body .kbs-beacon-content input:focus {outline-color:' . esc_attr( $this->settings['floating_widget_color'] ) . ';}';
 					echo 'html body .kbs-beacon-content input[type="submit"] {background: ' . esc_attr( $this->settings['floating_widget_color'] ) . ';}';
 					echo 'html body .kbs-beacon-content .kbs-beacon-search-wrapper input {box-shadow: 0px -2px 1px ' . esc_attr( $this->settings['floating_widget_color'] ) . ';}';
+					echo 'html body #kbs-beacon .kbs-floating-article{border-color: ' . esc_attr( $this->settings['floating_widget_color'] ) . ';}';
+					echo 'html body #kbs-beacon .kbs-floating-article:hover{box-shadow:0px 0px 5px ' . esc_attr( $this->settings['floating_widget_color'] ) . ';}';
 				}
 
 				if ( isset( $this->settings['floating_widget_label'] ) && '1' == $this->settings['floating_widget_label'] ){
@@ -340,6 +383,7 @@ class KBS_Floating_Widget {
 		$html .= '</div>'; // .kbs-beacon-header-navigation
 		$html .= '</div>'; // .kbs-beacon-header
 		$html .= '<div class="kbs-beacon-articles-wrapper" data-toggle="kbs-beacon-search">';
+		$html .= $this->floating_default_articles();
 		$html .= '</div>'; // kbs-beacon-articles-wrapper
 		$html .= '<div class="kbs-beacon-search-wrapper">';
 		$html .= '<input type="text" id="kbs-beacon-search-input" placeholder="' . esc_html__( 'Search articles here', 'kb-support' ) . '">';
@@ -354,8 +398,105 @@ class KBS_Floating_Widget {
 		echo $html;
 	}
 
-	public function kb_articles(){
+	/**
+	 * Perform article search.
+	 *
+	 * @return    void
+	 * @since    1.0
+	 */
+	public function kbs_ajax_floating_article_search(){
 
+		$output      = false;
+		$results     = false;
+		$search_term = sanitize_text_field( $_POST['term'] );
+
+		$args = array(
+			'number'  => kbs_get_option( 'article_num_posts_ajax', 5 ),
+			's'       => $search_term,
+			'orderby' => 'relevance'
+		);
+
+		if ( !is_user_logged_in() && kbs_get_option( 'article_hide_restricted_ajax' ) ){
+			$args['post__not_in'] = kbs_get_restricted_articles();
+		}
+
+		$articles_query = new KBS_Articles_Query( $args );
+		$articles       = $articles_query->get_articles();
+
+		if ( !empty( $articles ) ){
+
+			$output = '<div class="floating-articles-list">';
+
+			foreach ( $articles as $article ){
+				$output .= '<div class="kbs-floating-article">';
+				$output .= '<a href="' . get_post_permalink( $article->ID ) . '" target="_blank" class="kbs-floating-article-title">';
+				$output .= esc_html( $article->post_title );
+				$output .= '</a>';
+
+				$output .= '<div class="kbs-floating-article-excerpt">';
+				$output .= wp_kses_post( $article->post_excerpt );
+				$output .= '</div>';
+
+				$output .= '</div>';
+			}
+
+			$output .= '</div>';
+
+			if ( $articles_query->total_articles > $args['number'] ){
+
+				$search_url = add_query_arg( array(
+					'kbs_action' => 'search_articles',
+					's_article'  => $search_term
+				), site_url() );
+
+				$output .= '<a href="' . $search_url . '" target="_blank">';
+				$output .= sprintf( __( 'View all %d possible solutions.', 'kb-support' ), $articles_query->total_articles );
+				$output .= '</a>';
+
+			}
+
+			$results = true;
+		}
+
+		wp_send_json( array(
+			'articles' => $output
+		) );
+
+	}
+
+	public function floating_default_articles(){
+
+		$output = false;
+		$args   = array( 'number' => 5 );
+
+		if ( !is_user_logged_in() && kbs_get_option( 'article_hide_restricted_ajax' ) ){
+			$args['post__not_in'] = kbs_get_restricted_articles();
+		}
+
+		$articles_query = new KBS_Articles_Query( $args );
+		$articles       = $articles_query->get_articles();
+
+		if ( !empty( $articles ) ){
+
+			$output = '<div class="kbs-floating-articles-list">';
+
+			foreach ( $articles as $article ){
+				$output .= '<div class="kbs-floating-article">';
+				$output .= '<a href="' . get_post_permalink( $article->ID ) . '" target="_blank" class="kbs-floating-article-title">';
+				$output .= esc_html( $article->post_title );
+				$output .= '</a>';
+
+				$output .= '<div class="kbs-floating-article-excerpt">';
+				$output .= wp_kses_post( $article->post_excerpt );
+				$output .= '</div>';
+
+				$output .= '</div>';
+			}
+
+			$output .= '</div>';
+		}
+
+		return $output;
 	}
 
 }

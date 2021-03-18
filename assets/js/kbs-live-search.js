@@ -59,4 +59,46 @@ jQuery(document).ready(function ($) {
 		search_timeout_id = setTimeout( find_article.bind( undefined, e.target.value ,$(this)), 500 );
 	});
 
+	// Calls the article search function
+	$( '#kbs-beacon-search-input' ).keyup( function(e)	{
+		clearTimeout( search_timeout_id );
+		search_timeout_id = setTimeout( find_floating_article.bind( undefined, e.target.value ,$(this)), 500 );
+	});
+
+	// Execute the article search
+	function find_floating_article( search_text, $element )	{
+
+		var wrapper = $element.parents( '#kbs-beacon' ).find( '.kbs-beacon-articles-wrapper' );
+		wrapper.find( '#kbs-article-results' ).html( '' );
+
+		if ( search_text.length < kbs_search_vars.min_search_trigger ) {
+			return;
+		}
+
+		var postData = {
+			term  : search_text,
+			action: 'kbs_ajax_floating_article_search'
+		};
+
+		$.ajax( {
+			type    : 'POST',
+			dataType: 'json',
+			data    : postData,
+			url     : kbs_scripts.ajaxurl,
+			success : function ( response ) {
+				if ( response.articles && '' !== response.articles ) {
+					wrapper.html( response.articles );
+				} else {
+					wrapper.html();
+				}
+			},
+			complete: function () {
+
+			}
+		} ).fail( function ( data ) {
+			if ( window.console && window.console.log ) {
+				console.log( data );
+			}
+		} );
+	}
 });
