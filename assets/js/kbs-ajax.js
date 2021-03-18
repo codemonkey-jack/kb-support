@@ -62,6 +62,24 @@ jQuery(document).ready(function ($) {
         kbs_recaptcha_V3();
     }
 
+	/* = Floating widget wrapper toggle
+	 ====================================================================================== */
+	$( document.body ).on( 'click', '.kbs-beacon-header-navigation span', function () {
+		var btn    = $( this ),
+		    id     = btn.attr( 'id' ),
+		    target = $( 'div[data-toggle="' + id + '"]' );
+
+		$( '.kbs-beacon-header-navigation span' ).toggleClass( 'active' );
+		$( 'div[data-toggle]' ).not( target ).addClass( 'hide' );
+		target.removeClass( 'hide' );
+
+		if ( 'kbs-beacon-ask' === id ) {
+			$( '#kbs-beacon .kbs-beacon-search-wrapper' ).addClass( 'hide' );
+		} else {
+			$( '#kbs-beacon .kbs-beacon-search-wrapper' ).removeClass( 'hide' );
+		}
+	} );
+
     /* = Ticket submission form validation and submission
 	====================================================================================== */
 	$(document).on('click', '#kbs_ticket_form #kbs_ticket_submit', function(e) {

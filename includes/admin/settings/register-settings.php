@@ -257,6 +257,12 @@ function kbs_get_registered_settings() {
 						'desc'    => sprintf( __( 'Toggle ON if you want to display a floating widget with your submitting form.', 'kb-support' ), strtolower( $plural ) ),
 						'type'    => 'checkbox',
 					),
+					'floating_widget_logo' => array(
+						'id'      => 'floating_widget_logo',
+						'name'    => __( 'Floating widget Icon', 'kb-support' ),
+						'desc'    => __( 'Choose the floating widget logo', 'kb-support' ),
+						'type' => 'upload'
+					),
 					'floating_widget_form' => array(
 						'id'      => 'floating_widget_form',
 						'name'    => __( 'Floating widget Form', 'kb-support' ),
