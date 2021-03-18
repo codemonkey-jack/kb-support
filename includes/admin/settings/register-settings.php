@@ -2363,12 +2363,6 @@ if ( ! function_exists( 'kbs_premium_extension_callback' ) ) {
         $data = $args['data'];
         $demo = false;
 
-        $html = sprintf(
-            '<input type="text" class="regular-text" id="kbs_settings[%1$s]" name="kbs_settings[%1$s]" value="" placeholder="%2$s" disabled="disabled" />',
-            kbs_sanitize_key( $args['name'] ),
-            __( 'Enter your license key', 'kb-support' )
-        );
-
 		if ( isset( $data['demo_url'] ) ) {
             $demo = true;
 
