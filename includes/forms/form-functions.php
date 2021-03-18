@@ -1472,6 +1472,11 @@ function kbs_floating_widget(){
 	if ( isset( $settings['floating_widget_icon'] ) && '' != $settings['floating_widget_icon'] ){
 		$widget_icon = $settings['floating_widget_icon'];
 	}
+
+	$logo_image = KBS_PLUGIN_URL . 'assets/images/icon-128x128.png';
+	if ( isset( $settings['floating_widget_logo'] ) && '' != $settings['floating_widget_logo'] ){
+		$logo_image = $settings['floating_widget_logo'];
+	}
 	?>
 
 	<style>
@@ -1484,13 +1489,14 @@ function kbs_floating_widget(){
 			outline  : none;
 			padding  : 0;
 			right    : 60px;
+			z-index  : 9999;
 		}
 
 		#kbs-beacon .kbs-beacon-wrapper {
 			width            : 100%;
 			height           : 100%;
 			border-radius    : 30px;
-			background-color : blue;
+			background-color : rgb(31 171 230);
 			text-align       : center;
 		}
 
@@ -1535,7 +1541,7 @@ function kbs_floating_widget(){
 			height           : 600px;
 			max-height       : calc(100vh - 250px);
 			overflow-y       : scroll;
-			padding          : 20px;
+			padding          : 0 20px 20px 20px;
 			border           : 1px solid rgb(31 171 230);
 			box-shadow       : 0px 0px 5px rgb(31 171 230);
 			border-radius    : 5px;
@@ -1579,9 +1585,29 @@ function kbs_floating_widget(){
 
 		#kbs-beacon .kbs-beacon-wrapper fieldset input,
 		#kbs-beacon .kbs-beacon-wrapper fieldset textarea,
-		#kbs-beacon .kbs-beacon-wrapper fieldset button{
-			width:100%;
-			border-radius:5px;
+		#kbs-beacon .kbs-beacon-wrapper fieldset button {
+			width         : 100%;
+			border-radius : 5px;
+		}
+
+		#kbs-beacon .kbs-beacon-content .kbs-beacon-header {
+			position      : sticky;
+			width         : calc(100% + 40px);
+			margin-left   : -20px;
+			top           : 0;
+			background    : rgb(31 171 230);
+			border-bottom : 1px solid rgb(31 171 230);
+			box-shadow    : 0 0 5px rgb(31 171 230);
+			display       : flex;
+			align-items   : center;
+			margin-bottom : 25px;
+		}
+
+		#kbs-beacon .kbs-beacon-content .kbs-beacon-header img {
+			max-height : 100%;
+			max-width  : 100%;
+			width      : auto;
+			height     : auto;
 		}
 
 		#kbs-beacon .kbs-beacon-content::-webkit-scrollbar {
@@ -1619,11 +1645,12 @@ function kbs_floating_widget(){
 				echo 'html body #kbs-beacon,html body #kbs-beacon .kbs-beacon-content{' . esc_attr( $settings['floating_widget_position'] ) . ' : 60px;}';
 			}
 
-			if ( isset( $settings['floating_widget_color'] ) ){
+			if ( isset( $settings['floating_widget_color'] ) && '' != $settings['floating_widget_color']  ){
 				echo 'html body #kbs-beacon .kbs-beacon-wrapper{background-color:' . esc_attr( $settings['floating_widget_color'] ) . ';}';
 				echo 'html body #kbs-beacon .kbs-beacon-content{ border-color: ' . esc_attr( $settings['floating_widget_color'] ) . '; box-shadow: 0px 0px 5px ' . esc_attr( $settings['floating_widget_color'] ) . '; }';
 				echo 'html body #kbs-beacon .kbs-beacon-content::-webkit-scrollbar-thumb {background:' . esc_attr( $settings['floating_widget_color'] ) . ';}';
 				echo 'html body #kbs-beacon .kbs-beacon-content { scrollbar-color : ' . esc_attr( $settings['floating_widget_color'] ) . ' rgba(0,0,0,0.2);}';
+				echo 'html body #kbs-beacon .kbs-beacon-content .kbs-beacon-header{border-color:' . esc_attr( $settings['floating_widget_color'] ) . ' rgba(0,0,0,0.2); box-shadow: 0 0 5px ' . esc_attr( $settings['floating_widget_color'] ) . '; background:' . esc_attr( $settings['floating_widget_color'] ) . '; }';
 			}
 
 			if ( isset( $settings['floating_widget_label'] ) && '1' == $settings['floating_widget_label'] ){
@@ -1638,6 +1665,9 @@ function kbs_floating_widget(){
 	$html .= '<span class="kbs-beacon-icon fa ' . esc_attr( $widget_icon ) . '"></span>';
 	$html .= '<span class="kbs-beacon-close fa fa-close"></span>';
 	$html .= '<div class="kbs-beacon-content">';
+	$html .= '<div class="kbs-beacon-header">';
+	$html .= '<img src="' . esc_url( $logo_image ) . '">';
+	$html .= '</div>'; // .kbs-beacon-header
 	$html .= do_shortcode( '[kbs_submit form="' . absint( $settings['floating_widget_form'] ) . '"]' );
 	$html .= '</div>'; // .kbs-beacon-content
 	$html .= '</div>'; // .kbs-beacon-wrapper
