@@ -1549,6 +1549,15 @@ function kbs_floating_widget(){
 			right            : 60px;
 		}
 
+		.kbs-beacon-content input:focus {
+			outline:auto rgb(31 171 230);
+			outline-offset:0;
+		}
+
+		.kbs-beacon-content input[type="submit"] {
+			background: rgb(31 171 230);
+		}
+
 		#kbs-beacon .kbs-beacon-content #kbs_ticket_wrap.form-submitted {
 			display         : flex;
 			height          : 100%;
@@ -1588,6 +1597,8 @@ function kbs_floating_widget(){
 		#kbs-beacon .kbs-beacon-wrapper fieldset button {
 			width         : 100%;
 			border-radius : 5px;
+			font-size:13px;
+			text-decoration:none;
 		}
 
 		#kbs-beacon .kbs-beacon-content .kbs-beacon-header {
@@ -1651,6 +1662,8 @@ function kbs_floating_widget(){
 				echo 'html body #kbs-beacon .kbs-beacon-content::-webkit-scrollbar-thumb {background:' . esc_attr( $settings['floating_widget_color'] ) . ';}';
 				echo 'html body #kbs-beacon .kbs-beacon-content { scrollbar-color : ' . esc_attr( $settings['floating_widget_color'] ) . ' rgba(0,0,0,0.2);}';
 				echo 'html body #kbs-beacon .kbs-beacon-content .kbs-beacon-header{border-color:' . esc_attr( $settings['floating_widget_color'] ) . ' rgba(0,0,0,0.2); box-shadow: 0 0 5px ' . esc_attr( $settings['floating_widget_color'] ) . '; background:' . esc_attr( $settings['floating_widget_color'] ) . '; }';
+				echo 'html body .kbs-beacon-content input:focus {outline-color:' . esc_attr( $settings['floating_widget_color'] ) . ';}';
+				echo 'html body .kbs-beacon-content input[type="submit"] {background: ' . esc_attr( $settings['floating_widget_color'] ) . ';}';
 			}
 
 			if ( isset( $settings['floating_widget_label'] ) && '1' == $settings['floating_widget_label'] ){
