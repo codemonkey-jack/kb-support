@@ -99,6 +99,12 @@ class KBS_Floating_Widget {
 				top       : 17px;
 			}
 
+			#kbs-beacon .kbs-beacon-close::before {
+				display    : block;
+				transform  : rotate(45deg);
+				transition : 450ms ease-in-out;
+			}
+
 			#kbs-beacon .kbs-beacon-icon {
 				position  : relative;
 				display   : inline-block;
@@ -127,10 +133,6 @@ class KBS_Floating_Widget {
 				right            : 60px;
 			}
 
-			.kbs-beacon-content .kbs-beacon-articles-wrapper {
-				height : calc(100% + 80px);
-			}
-
 			.kbs-beacon-content .kbs-beacon-search-wrapper {
 				position    : sticky;
 				bottom      : 0;
@@ -157,6 +159,10 @@ class KBS_Floating_Widget {
 				background : rgb(31 171 230);
 			}
 
+			#kbs-beacon #kbs-beacon-search-input {
+				border-radius : 0;
+			}
+
 			#kbs-beacon .kbs-beacon-content #kbs_ticket_wrap.form-submitted {
 				display         : flex;
 				height          : 100%;
@@ -169,7 +175,12 @@ class KBS_Floating_Widget {
 			}
 
 			#kbs-beacon .kbs-beacon-toggle__input[type=checkbox]:checked + .kbs-beacon-wrapper .kbs-beacon-close {
-				display : inline-block;
+				display   : inline-block;
+				transform : rotate(0deg);
+			}
+
+			#kbs-beacon .kbs-beacon-toggle__input[type=checkbox]:checked + .kbs-beacon-wrapper .kbs-beacon-close::before {
+				transform : rotate(0deg);
 			}
 
 			#kbs-beacon .kbs-beacon-toggle__input[type=checkbox]:checked + .kbs-beacon-wrapper .kbs-beacon-content {
@@ -245,22 +256,22 @@ class KBS_Floating_Widget {
 			}
 
 			#kbs-beacon .kbs-beacon-content::-webkit-scrollbar {
-				width : 4px;
+				width : 0;
 			}
 
-			#kbs-beacon .kbs-beacon-content::-webkit-scrollbar-track {
-				box-shadow    : inset 0 0 2px grey;
-				border-radius : 2px;
-			}
+			/*	#kbs-beacon .kbs-beacon-content::-webkit-scrollbar-track {
+					!*box-shadow    : inset 0 0 2px grey;*!
+					border-radius : 2px;
+				}
 
-			#kbs-beacon .kbs-beacon-content::-webkit-scrollbar-thumb {
-				border-radius : 2px;
-				background    : rgb(31 171 230);
-			}
+				#kbs-beacon .kbs-beacon-content::-webkit-scrollbar-thumb {
+					border-radius : 2px;
+					background    : rgb(31 171 230);
+				}
 
-			#kbs-beacon .kbs-beacon-content::-webkit-scrollbar-thumb:hover {
-				background : black;
-			}
+				#kbs-beacon .kbs-beacon-content::-webkit-scrollbar-thumb:hover {
+					background : black;
+				}*/
 
 			html body #kbs-beacon .hide {
 				display : none;
@@ -407,7 +418,6 @@ class KBS_Floating_Widget {
 	public function kbs_ajax_floating_article_search(){
 
 		$output      = false;
-		$results     = false;
 		$search_term = sanitize_text_field( $_POST['term'] );
 
 		$args = array(
@@ -455,7 +465,6 @@ class KBS_Floating_Widget {
 
 			}
 
-			$results = true;
 		}
 
 		wp_send_json( array(
