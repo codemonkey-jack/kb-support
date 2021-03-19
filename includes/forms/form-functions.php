@@ -195,6 +195,28 @@ function kbs_get_form_redirect_target( $form_id )	{
 } // kbs_get_form_redirect_target
 
 /**
+ * Retrieve a forms redirection page.
+ *
+ * @param int $form_id Post ID.
+ *
+ * @return    string        The after form submission action
+ * @since    1.6.0
+ */
+function kbs_get_form_submission_options( $form_id ){
+
+	$submission = get_post_meta( $form_id, '_submission_action', true );
+
+	if ( !$submission ){
+		$submission = 'redirect';
+	}
+
+	return apply_filters( 'kbs_form_submission_action', $submission, $form_id );
+
+} // kbs_get_form_submission_options
+
+
+
+/**
  * Retrieve the form shortcode.
  *
  * @since	1.0

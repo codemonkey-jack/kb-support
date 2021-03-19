@@ -90,19 +90,34 @@ function kbs_process_ticket_submission()	{
 
 	$ticket_id = kbs_add_ticket_from_form( $form_id, $posted );
 
-	if ( $ticket_id )	{
+	if ( $ticket_id ){
 		$message  = 'ticket_submitted';
 		$redirect = add_query_arg( array(
 			'ticket' => kbs_get_ticket_key( $ticket_id )
-			), get_permalink( kbs_get_form_redirect_target( $form_id ) )
+		), get_permalink( kbs_get_form_redirect_target( $form_id ) )
 		);
-	} else	{
+	} else {
 		$message = 'ticket_failed';
 	}
 
     do_action( 'kbs_ticket_form_submitted', $ticket_id, $form_id, $posted );
 
-	echo json_encode( array( 'kbs_notice' => $message ) );
+	$submission_action = get_post_meta( $form_id, '_submission_action', true );
+	$submission_text   = get_post_meta( $form_id, '_submission_text', true );
+
+	$submission_text   = str_replace( '[link]', '<a href="' . esc_url( get_post_permalink( kbs_get_option( 'tickets_page' ) ) ) . '">', $submission_text );
+	$submission_text   = str_replace( '[/link]', '</a>', $submission_text );
+
+	if ( 'text' == $submission_action ){
+		echo json_encode( array( 'kbs_notice' => $message, 'kbs_submission_text' => $submission_text ) );
+	} else if ( 'redirect' == $submission_action ){
+		wp_redirect( add_query_arg(
+			array( 'kbs_notice' => $message ),
+			$redirect
+		) );
+	} else {
+		do_action( 'kbs_after_form_submission', $ticket_id, $form_id, $posted );
+	}
 
 	die();
 

@@ -25,6 +25,23 @@ function kbs_render_form_field_redirect_setting( $post )    {
 		?>
 		<div class="misc-pub-section curtime misc-pub-redirect">
 			<label for="kbs_form_redirect" class="screen-reader-text"><?php _e( 'Redirect to', 'kb-support' ) ?></label>
+			<?php _e( 'After submission action:', 'kb-support' ); ?><br>
+			<?php echo KBS()->html->select( array(
+				'name'             => 'kbs_form_submission',
+				'selected'         => 'redirect',
+				'chosen'           => true,
+				'show_option_all'  => false,
+				'show_option_none' => false,
+				'options'          => array(
+					'redirect' => esc_html__( 'Redirect to page', 'kb-support' ),
+					'text'     => esc_html__( 'Display text', 'kb-support' )
+				),
+				'selected'         => kbs_get_form_submission_options( $post->ID ),
+			) ); ?>
+		</div>
+
+		<div class="misc-pub-section curtime misc-pub-redirect">
+			<label for="kbs_form_redirect" class="screen-reader-text"><?php _e( 'Redirect to', 'kb-support' ) ?></label>
 			<?php _e( 'Redirect after submission to:', 'kb-support' ); ?><br>
 			<?php echo KBS()->html->select( array(
 				'name'             => 'kbs_form_redirect',
@@ -38,6 +55,20 @@ function kbs_render_form_field_redirect_setting( $post )    {
 					'search-type'        => 'pages',
 					'search-placeholder' => __( 'Type to search all pages', 'kb-support' ),
 				)
+			) ); ?>
+		</div>
+
+		<div class="misc-pub-section curtime misc-pub-redirect">
+			<label for="kbs_form_redirect" class="screen-reader-text"><?php _e( 'Redirect to', 'kb-support' ) ?></label>
+			<?php _e( 'Text after form submission:', 'kb-support' ); ?><br>
+			<?php echo KBS()->html->textarea( array(
+				'name'     => 'kbs_form_submission_text',
+				'value'    => esc_html__( 'You can check your tickets [link] here [/link]', 'kb-support' ),
+				'class'    => 'large-text',
+				'disabled' => false,
+				'rows'     => 30,
+				'cols'     => 20,
+				'desc'     => esc_html__( 'Use [link]text[/link] to anchor the text, where the anchor will be the ticket manager page.', 'kb-support' )
 			) ); ?>
 		</div>
 		<?php
@@ -81,7 +112,7 @@ function kbs_form_add_meta_boxes( $post )	{
 		'normal',
 		'high'
 	);
-			
+
 	add_meta_box(
 		'kbs_form_add_field_mb',
 		__( 'Add a New Field', 'kb-support' ),
@@ -90,7 +121,7 @@ function kbs_form_add_meta_boxes( $post )	{
 		'side',
 		'high'
 	);
-	
+
 } // kbs_form_add_meta_boxes
 add_action( 'add_meta_boxes_kbs_form', 'kbs_form_add_meta_boxes' );
 
@@ -102,7 +133,7 @@ add_action( 'add_meta_boxes_kbs_form', 'kbs_form_add_meta_boxes' );
  * @return
  */
 function kbs_form_fields_mb_callback( $post )	{
-	
+
 	global $post;
 
 	/*
@@ -110,7 +141,7 @@ function kbs_form_fields_mb_callback( $post )	{
 	 * @since	1.0
 	 */
 	do_action( 'kbs_form_mb_form_fields', $post->ID );
-	
+
 } // kbs_form_fields_mb_callback
 
 /**
@@ -122,7 +153,7 @@ function kbs_form_fields_mb_callback( $post )	{
  * @return
  */
 function kbs_form_add_field_mb_callback( $post, $args )	{
-	
+
 	global $post;
 
 	/*
@@ -130,7 +161,7 @@ function kbs_form_add_field_mb_callback( $post, $args )	{
 	 * @since	1.0
 	 */
 	do_action( 'kbs_form_mb_add_form_field', $post->ID, $args );
-	
+
 } // kbs_form_add_field_mb_callback
 
 /**
@@ -145,11 +176,11 @@ function kbs_form_add_field_mb_callback( $post, $args )	{
  * @return
  */
 function kbs_form_not_ready_mb_callback( $post, $args )	{
-	
+
 	?>
    <p><i class="fas fa-exclamation-circle" aria-hidden="true"></i> <?php _e( 'Please save or publish your form before adding fields.', 'kb-support' ); ?></p>
     <?php
-	
+
 } // kbs_form_not_ready_mb_callback
 
 /**
@@ -202,7 +233,7 @@ function kbs_display_meta_box_form_fields( $post_id )	{
         </table>
     </div>
 	<?php
-	
+
 } // kbs_display_meta_box_form_fields
 add_action( 'kbs_form_mb_form_fields', 'kbs_display_meta_box_form_fields', 10 );
 
@@ -219,7 +250,7 @@ function kbs_render_form_field_row( $field, $form )	{
 	$settings = $form->get_field_settings( $field->ID );
 
 	$url  = remove_query_arg( array( 'edit_field', 'delete_field', 'kbs-message', 'kbs-action-nonce' ) );
-	
+
 	$edit = wp_nonce_url(
 		add_query_arg(
 			array(
@@ -232,7 +263,7 @@ function kbs_render_form_field_row( $field, $form )	{
 		'edit_form_field',
 		'kbs-action-nonce'
 	);
-	
+
 	$delete = wp_nonce_url(
 		add_query_arg(
 			array(
@@ -252,18 +283,18 @@ function kbs_render_form_field_row( $field, $form )	{
         'value' => $field->menu_order,
         'class' => 'kbs_sortable_index'
     ) ); ?>
-    
+
     <td><?php echo $field->post_title; ?>
 		<?php if ( ! empty( $settings['description'] ) ) : ?>
         	<br />
             <span class="description"><?php echo esc_html( $settings['description'] ); ?></span>
         <?php endif; ?>
     </td>
-    
+
     <td><?php echo kbs_get_field_type( $settings['type'] ); ?></td>
-    
+
     <td><?php echo kbs_display_field_setting_icons( $field->ID ); ?></td>
-    
+
     <td>
     	<a href="<?php echo $edit; ?>" class="button button-primary button-small"><?php _e( 'Edit', 'kb-support' ); ?></a>
 
@@ -271,7 +302,7 @@ function kbs_render_form_field_row( $field, $form )	{
 	        <a href="<?php echo $delete; ?>" class="button button-secondary button-small"><?php _e( 'Delete', 'kb-support' ); ?></a>
         <?php endif; ?>
     </td>
-    
+
     <?php
 } // kbs_render_form_field_row
 add_action( 'kbs_render_field_row', 'kbs_render_form_field_row', 10, 2 );
@@ -290,7 +321,7 @@ function kbs_render_field_label_row( $post_id, $args )	{
 	kbs_maybe_editing_field();
 
 	?>
-    
+
 	<div id="kbs_meta_field_label_wrap">
 		<p><strong><?php _e( 'Label', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_label">
@@ -327,7 +358,7 @@ function kbs_render_field_description_row( $post_id, $args )	{
 	}
 
 	?>
-    
+
 	<div id="kbs_meta_field_description_wrap">
 		<p><strong><?php _e( 'Description', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_description">

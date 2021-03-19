@@ -132,7 +132,7 @@ jQuery(document).ready(function ($) {
 
 							} else {
 								kbsTicketForm.parents('#kbs_ticket_wrap').addClass('form-submitted');
-								kbsTicketForm.parents( '#kbs_ticket_form_wrap' ).html( '<p>' + kbs_scripts.ticket_submitted + '</p>' );
+								kbsTicketForm.parents( '#kbs_ticket_form_wrap' ).html( '<p>' + myResponse.kbs_submission_text + '</p>' );
 							}
 						}
 					}).fail(function (data) {

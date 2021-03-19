@@ -73,7 +73,8 @@ function kbs_load_scripts() {
 		'submit_ticket'         => kbs_get_form_submit_label(),
 		'submit_ticket_loading' => __( 'Please Wait...', 'kb-support' ),
 		'type_to_search'        => __( 'Type to search', 'kb-support' ),
-		'ticket_submitted'      => esc_html__( 'Great Work, your ticket has been submitted', 'kb-support' )
+		'ticket_submitted'      => esc_html__( 'Great Work, your ticket has been submitted', 'kb-support' ),
+		'tickets_manager_link'  => kbs_get_option( 'tickets_page', false ),
 	) ) );
 
 	if ( $is_submission || '1' == kbs_get_option( 'floating_widget')  )	{
