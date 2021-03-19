@@ -224,11 +224,12 @@ class KBS_Floating_Widget {
 				margin-bottom : 25px;
 				color         : #fff;
 				z-index       : 9999;
+				padding:5px;
 			}
 
 			#kbs-beacon .kbs-beacon-content .kbs-beacon-header img {
-				max-height : 100%;
-				max-width  : 100%;
+				max-height : 60%;
+				max-width  : 60%;
 				width      : auto;
 				height     : auto;
 				display    : block;
@@ -377,6 +378,8 @@ class KBS_Floating_Widget {
 			$logo_image = $this->settings['floating_widget_logo'];
 		}
 		$this->widget_css();
+		$articles = $this->floating_default_articles();
+		$hide     = '';
 		?>
 
 		<?php
@@ -388,18 +391,29 @@ class KBS_Floating_Widget {
 		$html .= '<div class="kbs-beacon-content">';
 		$html .= '<div class="kbs-beacon-header">';
 		$html .= '<img src="' . esc_url( $logo_image ) . '">';
-		$html .= '<div class="kbs-beacon-header-navigation">';
-		$html .= '<span class="fa fa-search active" id="kbs-beacon-search"> ' . esc_html__( 'Search Articles', 'kb-support' ) . '</span>';
-		$html .= '<span class="fa fa-commenting " id="kbs-beacon-ask"> ' . esc_html__( 'Submit ticket', 'kb-support' ) . '</span>';
-		$html .= '</div>'; // .kbs-beacon-header-navigation
-		$html .= '</div>'; // .kbs-beacon-header
-		$html .= '<div class="kbs-beacon-articles-wrapper" data-toggle="kbs-beacon-search">';
-		$html .= $this->floating_default_articles();
-		$html .= '</div>'; // kbs-beacon-articles-wrapper
-		$html .= '<div class="kbs-beacon-search-wrapper">';
-		$html .= '<input type="text" id="kbs-beacon-search-input" placeholder="' . esc_html__( 'Search articles here', 'kb-support' ) . '">';
-		$html .= '</div>'; // .kbs-beacon-search-wrapper
-		$html .= '<div class="kbs-beacon-form-wrapper hide"  data-toggle="kbs-beacon-ask">';
+
+		// Check if there are articles. if there aren't, don't show tabs
+		if ( $articles ){
+
+			$html .= '<div class="kbs-beacon-header-navigation">';
+			$html .= '<span class="active" id="kbs-beacon-search"> ' . esc_html__( 'Search Articles', 'kb-support' ) . '</span>';
+			$html .= '<span id="kbs-beacon-ask"> ' . esc_html__( 'Submit ticket', 'kb-support' ) . '</span>';
+			$html .= '</div>'; // .kbs-beacon-header-navigation
+			$html .= '</div>'; // .kbs-beacon-header
+			$html .= '<div class="kbs-beacon-articles-wrapper" data-toggle="kbs-beacon-search">';
+			$html .= $articles;
+			$html .= '</div>'; // kbs-beacon-articles-wrapper
+			$html .= '<div class="kbs-beacon-search-wrapper">';
+			$html .= '<input type="text" id="kbs-beacon-search-input" placeholder="' . esc_html__( 'Search articles here', 'kb-support' ) . '">';
+			$html .= '</div>'; // .kbs-beacon-search-wrapper
+
+			$hide = 'hide';
+		} else {
+
+			$html .= '</div>'; // .kbs-beacon-header
+		}
+
+		$html .= '<div class="kbs-beacon-form-wrapper ' . $hide . '"  data-toggle="kbs-beacon-ask">';
 		$html .= do_shortcode( '[kbs_submit form="' . absint( $this->settings['floating_widget_form'] ) . '"]' );
 		$html .= '</div>'; // kbs-beacon-form-wrapper
 		$html .= '</div>'; // .kbs-beacon-content
@@ -485,25 +499,26 @@ class KBS_Floating_Widget {
 		$articles_query = new KBS_Articles_Query( $args );
 		$articles       = $articles_query->get_articles();
 
-		if ( !empty( $articles ) ){
+		if ( empty( $articles ) ){
+			return false;
+		}
 
-			$output = '<div class="kbs-floating-articles-list">';
+		$output = '<div class="kbs-floating-articles-list">';
 
-			foreach ( $articles as $article ){
-				$output .= '<div class="kbs-floating-article">';
-				$output .= '<a href="' . get_post_permalink( $article->ID ) . '" target="_blank" class="kbs-floating-article-title">';
-				$output .= esc_html( $article->post_title );
-				$output .= '</a>';
+		foreach ( $articles as $article ){
+			$output .= '<div class="kbs-floating-article">';
+			$output .= '<a href="' . get_post_permalink( $article->ID ) . '" target="_blank" class="kbs-floating-article-title">';
+			$output .= esc_html( $article->post_title );
+			$output .= '</a>';
 
-				$output .= '<div class="kbs-floating-article-excerpt">';
-				$output .= wp_kses_post( $article->post_excerpt );
-				$output .= '</div>';
-
-				$output .= '</div>';
-			}
+			$output .= '<div class="kbs-floating-article-excerpt">';
+			$output .= wp_kses_post( $article->post_excerpt );
+			$output .= '</div>';
 
 			$output .= '</div>';
 		}
+
+		$output .= '</div>';
 
 		return $output;
 	}

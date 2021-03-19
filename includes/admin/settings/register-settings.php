@@ -251,71 +251,6 @@ function kbs_get_registered_settings() {
 						'chosen'  => true,
 						'options' => kbs_get_pages(),
 					),
-					'floating_widget' => array(
-						'id'      => 'floating_widget',
-						'name'    => __( 'Floating widget', 'kb-support' ),
-						'desc'    => sprintf( __( 'Toggle ON if you want to display a floating widget with your submitting form.', 'kb-support' ), strtolower( $plural ) ),
-						'type'    => 'checkbox',
-					),
-					'floating_widget_logo' => array(
-						'id'      => 'floating_widget_logo',
-						'name'    => __( 'Floating widget Icon', 'kb-support' ),
-						'desc'    => __( 'Choose the floating widget logo', 'kb-support' ),
-						'type' => 'upload'
-					),
-					'floating_widget_form' => array(
-						'id'      => 'floating_widget_form',
-						'name'    => __( 'Floating widget Form', 'kb-support' ),
-						'desc'    => __( 'Choose what form should be displayed in the floating widget', 'kb-support' ),
-						'type'    => 'select',
-						'chosen'  => true,
-						'options' => kbs_get_array_forms(),
-						'std'     => 'none'
-					),
-					'floating_widget_icon' => array(
-						'id'      => 'floating_widget_icon',
-						'name'    => __( 'Floating widget Icon', 'kb-support' ),
-						'desc'    => __( 'Choose the floating widget icon', 'kb-support' ),
-						'type'    => 'select',
-						'chosen'  => true,
-						'options' => array(
-							'fa-comment-o'       => esc_html__( 'Empty comment icon', 'kb-support' ),
-							'fa-comment'         => esc_html__( 'Full comment icon', 'kb-support' ),
-							'fa-bars'            => esc_html__( 'Bars', 'kb-support' ),
-							'fa-ticket'          => esc_html__( 'Ticket', 'kb-support' ),
-							'fa-envelope'        => esc_html__( 'Envelope', 'kb-support' ),
-							'fa-pencil-square-o' => esc_html__( 'Pencil', 'kb-support' )
-						),
-					),
-					'floating_widget_position' => array(
-						'id'      => 'floating_widget_position',
-						'name'    => __( 'Floating widget Position', 'kb-support' ),
-						'desc'    => __( 'Choose the floating widget position', 'kb-support' ),
-						'type'    => 'select',
-						'chosen'  => true,
-						'options' => array(
-							'left'   => esc_html__( 'Left', 'kb-support' ),
-							'right'  => esc_html__( 'Right', 'kb-support' ),
-						),
-						'std'     => 'left'
-					),
-					'floating_widget_color' => array(
-						'id'      => 'floating_widget_color',
-						'name'    => __( 'Floating widget Color', 'kb-support' ),
-						'desc'    => __( 'Choose the floating widget color', 'kb-support' ),
-						'type'    => 'color',
-						'options' => array(
-							'left'   => esc_html__( 'Left', 'kb-support' ),
-							'right'  => esc_html__( 'Right', 'kb-support' ),
-							'center' => esc_html__( 'Center', 'kb-support' ),
-						),
-					),
-					'floating_widget_label' => array(
-						'id'   => 'floating_widget_label',
-						'name' => __( 'Hide floating widget Label', 'kb-support' ),
-						'desc' => __( 'Choose whether to hide or display the input label', 'kb-support' ),
-						'type' => 'checkbox',
-					),
 				),
                 'customers' => array(
                     'customer_registration_settings_header' => array(
@@ -1282,7 +1217,85 @@ function kbs_get_registered_settings() {
 
 				)
 			)
-		)
+		),
+		/** Widgets Settings */
+		'widgets' => apply_filters( 'kbs_settings_widgets',
+			array(
+				'main' => array(
+					'floating_widget_settings' => array(
+						'id'   => 'floating_widget_settings',
+						'name' => '<h3>' . __( 'Floating Widget', 'kb-support' ) . '</h3>',
+						'desc' => '',
+						'type' => 'header'
+					),
+					'floating_widget' => array(
+						'id'      => 'floating_widget',
+						'name'    => __( 'Enable floating widget', 'kb-support' ),
+						'desc'    => sprintf( __( 'Toggle ON if you want to display a floating widget with your submitting form.', 'kb-support' ), strtolower( $plural ) ),
+						'type'    => 'checkbox',
+					),
+					'floating_widget_logo' => array(
+						'id'      => 'floating_widget_logo',
+						'name'    => __( 'Floating widget Icon', 'kb-support' ),
+						'desc'    => __( 'Choose the floating widget logo', 'kb-support' ),
+						'type' => 'upload'
+					),
+					'floating_widget_form' => array(
+						'id'      => 'floating_widget_form',
+						'name'    => __( 'Floating widget Form', 'kb-support' ),
+						'desc'    => __( 'Choose what form should be displayed in the floating widget', 'kb-support' ),
+						'type'    => 'select',
+						'chosen'  => true,
+						'options' => kbs_get_array_forms(),
+						'std'     => 'none'
+					),
+					'floating_widget_icon' => array(
+						'id'      => 'floating_widget_icon',
+						'name'    => __( 'Floating widget Icon', 'kb-support' ),
+						'desc'    => __( 'Choose the floating widget icon', 'kb-support' ),
+						'type'    => 'select',
+						'chosen'  => true,
+						'options' => array(
+							'fa-comment-o'       => esc_html__( 'Empty comment icon', 'kb-support' ),
+							'fa-comment'         => esc_html__( 'Full comment icon', 'kb-support' ),
+							'fa-bars'            => esc_html__( 'Bars', 'kb-support' ),
+							'fa-ticket'          => esc_html__( 'Ticket', 'kb-support' ),
+							'fa-envelope'        => esc_html__( 'Envelope', 'kb-support' ),
+							'fa-pencil-square-o' => esc_html__( 'Pencil', 'kb-support' )
+						),
+					),
+					'floating_widget_position' => array(
+						'id'      => 'floating_widget_position',
+						'name'    => __( 'Floating widget Position', 'kb-support' ),
+						'desc'    => __( 'Choose the floating widget position', 'kb-support' ),
+						'type'    => 'select',
+						'chosen'  => true,
+						'options' => array(
+							'left'   => esc_html__( 'Left', 'kb-support' ),
+							'right'  => esc_html__( 'Right', 'kb-support' ),
+						),
+						'std'     => 'left'
+					),
+					'floating_widget_color' => array(
+						'id'      => 'floating_widget_color',
+						'name'    => __( 'Floating widget Color', 'kb-support' ),
+						'desc'    => __( 'Choose the floating widget color', 'kb-support' ),
+						'type'    => 'color',
+						'options' => array(
+							'left'   => esc_html__( 'Left', 'kb-support' ),
+							'right'  => esc_html__( 'Right', 'kb-support' ),
+							'center' => esc_html__( 'Center', 'kb-support' ),
+						),
+					),
+					'floating_widget_label' => array(
+						'id'   => 'floating_widget_label',
+						'name' => __( 'Hide floating widget Label', 'kb-support' ),
+						'desc' => __( 'Choose whether to hide or display the input label', 'kb-support' ),
+						'type' => 'checkbox',
+					),
+				),
+			)
+		),
 	);
 
     if ( ! kbs_participants_enabled() ) {
@@ -1493,6 +1506,8 @@ function kbs_get_settings_tabs() {
 
 	$tabs['misc']   = __( 'Misc', 'kb-support' );
 
+	$tabs['widgets']   = __( 'Widgets', 'kb-support' );
+
 	return apply_filters( 'kbs_settings_tabs', $tabs );
 } // kbs_get_settings_tabs
 
@@ -1571,7 +1586,10 @@ function kbs_get_registered_settings_sections() {
 		'misc'       => apply_filters( 'kbs_settings_sections_misc', array(
 			'main'                 => __( 'Misc Settings', 'kb-support' ),
 			'recaptcha'            => __( 'Google reCAPTCHA', 'kb-support' )
-		) )
+		) ),
+		'widgets' => apply_filters( 'kbs_settings_sections_widgets', array(
+			'main' => __( 'Floating widget', 'kb-support' ),
+		) ),
 	);
 
 	$sections = apply_filters( 'kbs_settings_sections', $sections );
@@ -2167,6 +2185,7 @@ if ( ! function_exists( 'kbs_premium_extension_callback' ) ) {
 	function kbs_premium_extension_callback( $args )	{
         $data = $args['data'];
         $demo = false;
+        $html = '';
 
 		if ( isset( $data['demo_url'] ) ) {
             $demo = true;
