@@ -23,8 +23,9 @@ function kbs_render_form_field_redirect_setting( $post )    {
 	if ( 'kbs_form' == $post->post_type )	{
 		$selected = get_post_meta( $post->ID, '_redirect_page', true );
 		?>
-		<div class="misc-pub-section curtime misc-pub-redirect">
-			<label for="kbs_form_redirect" class="screen-reader-text"><?php _e( 'Redirect to', 'kb-support' ) ?></label>
+		<div id="kbs_form_submission_wrapper" class="misc-pub-section curtime misc-pub-redirect">
+			<label for="kbs_form_submission"
+				   class="screen-reader-text"><?php _e( 'Redirect to', 'kb-support' ) ?></label>
 			<?php _e( 'After submission action:', 'kb-support' ); ?><br>
 			<?php echo KBS()->html->select( array(
 				'name'             => 'kbs_form_submission',
@@ -40,7 +41,7 @@ function kbs_render_form_field_redirect_setting( $post )    {
 			) ); ?>
 		</div>
 
-		<div class="misc-pub-section curtime misc-pub-redirect">
+		<div id="kbs_form_redirect_wrapper" class="misc-pub-section curtime misc-pub-redirect">
 			<label for="kbs_form_redirect" class="screen-reader-text"><?php _e( 'Redirect to', 'kb-support' ) ?></label>
 			<?php _e( 'Redirect after submission to:', 'kb-support' ); ?><br>
 			<?php echo KBS()->html->select( array(
@@ -58,8 +59,8 @@ function kbs_render_form_field_redirect_setting( $post )    {
 			) ); ?>
 		</div>
 
-		<div class="misc-pub-section curtime misc-pub-redirect">
-			<label for="kbs_form_redirect" class="screen-reader-text"><?php _e( 'Redirect to', 'kb-support' ) ?></label>
+		<div id="kbs_form_submission_text_wrapper" class="misc-pub-section curtime misc-pub-redirect">
+			<label for="kbs_form_submission_text" class="screen-reader-text"><?php _e( 'Redirect to', 'kb-support' ) ?></label>
 			<?php _e( 'Text after form submission:', 'kb-support' ); ?><br>
 			<?php echo KBS()->html->textarea( array(
 				'name'     => 'kbs_form_submission_text',

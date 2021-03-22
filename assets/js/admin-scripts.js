@@ -1350,6 +1350,9 @@ jQuery(document).ready(function ($) {
 	});
 
 
+	/**
+	 * Floating widget settings conditions
+	 */
 	if ( $( 'input[name="kbs_settings[floating_widget]"]' ).is( ':checked' ) ) {
 		$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label' ).show();
 	} else {
@@ -1362,6 +1365,27 @@ jQuery(document).ready(function ($) {
 			$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label' ).show();
 		} else {
 			$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label' ).hide();
+		}
+	} );
+
+	/**
+	 * Forms redirection action conditions
+	 */
+
+	if ( 'redirect' === $( 'select#kbs_form_submission' ).val() ) {
+		$( '#kbs_form_submission_text_wrapper' ).hide();
+	} else {
+		$( '#kbs_form_redirect_wrapper' ).hide();
+	}
+
+	$( 'select#kbs_form_submission' ).on( 'change', function () {
+
+		if ( 'redirect' === $( this ).val() ) {
+			$( '#kbs_form_submission_text_wrapper' ).hide();
+			$( '#kbs_form_redirect_wrapper' ).show();
+		} else {
+			$( '#kbs_form_submission_text_wrapper' ).show();
+			$( '#kbs_form_redirect_wrapper' ).hide();
 		}
 	} );
 
