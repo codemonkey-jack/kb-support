@@ -1256,12 +1256,12 @@ function kbs_get_registered_settings() {
 						'type'    => 'select',
 						'chosen'  => true,
 						'options' => array(
-							'fa-comment-o'       => esc_html__( 'Empty comment icon', 'kb-support' ),
-							'fa-comment'         => esc_html__( 'Full comment icon', 'kb-support' ),
-							'fa-bars'            => esc_html__( 'Bars', 'kb-support' ),
-							'fa-ticket'          => esc_html__( 'Ticket', 'kb-support' ),
-							'fa-envelope'        => esc_html__( 'Envelope', 'kb-support' ),
-							'fa-pencil-square-o' => esc_html__( 'Pencil', 'kb-support' )
+							'comments-regular' => esc_html__( 'Empty comment icon', 'kb-support' ),
+							'comments-solid'   => esc_html__( 'Full comment icon', 'kb-support' ),
+							'bars-solid'       => esc_html__( 'Bars', 'kb-support' ),
+							'ticket-alt-solid' => esc_html__( 'Ticket', 'kb-support' ),
+							'envelope-regular' => esc_html__( 'Envelope', 'kb-support' ),
+							'user-edit-solid'  => esc_html__( 'User pencil', 'kb-support' )
 						),
 					),
 					'floating_widget_position' => array(

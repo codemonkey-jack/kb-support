@@ -121,6 +121,16 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 6. When a customer is accessing a KB Article that is restricted
 
+== Licenses ==
+This plugin uses the following svg icon files from https://fontawesome.com/ licensed under the Creative Commons Attribution 4.0 International license, located in assets/images/
+- user-edit-solid.svg
+- envelope-regular.svg
+- ticket-alt-solid.svg
+- bars-solid.svg
+- comments-solid.svg
+- comments-regular.svg
+- times-solid.svg
+
 == Changelog ==
 
 = 1.5.5 - - =

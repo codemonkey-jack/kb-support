@@ -207,11 +207,6 @@ function kbs_register_styles() {
 		wp_enqueue_style( 'jquery-chosen-css' );
 	}
 
-	if ( kbs_get_option( 'floating_widget' ) ){
-		wp_register_style( 'fontawesome', $css_dir . 'font-awesome.min.css', array() );
-		wp_enqueue_style( 'fontawesome' );
-	}
-
 } // kbs_register_styles
 add_action( 'wp_enqueue_scripts', 'kbs_register_styles' );
 

@@ -92,25 +92,25 @@ class KBS_Floating_Widget {
 			}
 
 			#kbs-beacon .kbs-beacon-close {
-				position  : relative;
-				display   : none;
-				font-size : 26px;
-				color     : #fff;
-				top       : 17px;
-			}
-
-			#kbs-beacon .kbs-beacon-close::before {
-				display    : block;
-				transform  : rotate(45deg);
-				transition : 450ms ease-in-out;
+				display : none;
 			}
 
 			#kbs-beacon .kbs-beacon-icon {
-				position  : relative;
-				display   : inline-block;
-				font-size : 26px;
-				color     : #fff;
-				top       : 17px;
+				display : inline-block;
+			}
+
+			#kbs-beacon .kbs-beacon-icon,
+			#kbs-beacon .kbs-beacon-close {
+				width      : 30px;
+				height     : 30px;
+				background : #fff;
+				top        : 15px;
+				position   : relative;
+			}
+
+			#kbs-beacon .kbs-beacon-close {
+				-webkit-mask : url(<?php echo  esc_url( KBS_PLUGIN_URL . 'assets/images/times-solid.svg' ) ?>) center center no-repeat;
+				mask         : url(<?php echo  esc_url( KBS_PLUGIN_URL . 'assets/images/times-solid.svg' ) ?>) center center no-repeat;
 			}
 
 			.kbs-beacon-content {
@@ -224,7 +224,7 @@ class KBS_Floating_Widget {
 				margin-bottom : 25px;
 				color         : #fff;
 				z-index       : 9999;
-				padding:5px;
+				padding       : 5px;
 			}
 
 			#kbs-beacon .kbs-beacon-content .kbs-beacon-header img {
@@ -347,7 +347,18 @@ class KBS_Floating_Widget {
 				if ( isset( $this->settings['floating_widget_label'] ) && '1' == $this->settings['floating_widget_label'] ){
 					echo 'html body #kbs-beacon .kbs-beacon-wrapper label {display:none;}';
 				}
-			?>
+
+				$widget_icon = 'comments-regular';
+
+				if ( isset( $this->settings['floating_widget_icon'] ) && '' != $this->settings['floating_widget_icon'] ){
+					$widget_icon = $this->settings['floating_widget_icon'];
+				}
+					?>
+			#kbs-beacon .kbs-beacon-icon {
+				-webkit-mask : url(<?php echo  esc_url( KBS_PLUGIN_URL . 'assets/images/'.$widget_icon.'.svg' ) ?>) center center no-repeat;
+				mask         : url(<?php echo  esc_url( KBS_PLUGIN_URL . 'assets/images/times-solid.svg' ) ?>) center center no-repeat;
+			}
+
 		</style> <!-- End style-->
 		<?php
 	}
@@ -367,7 +378,7 @@ class KBS_Floating_Widget {
 			return;
 		}
 
-		$widget_icon = 'fa-comment-o';
+		$widget_icon = 'comments-regular';
 
 		if ( isset( $this->settings['floating_widget_icon'] ) && '' != $this->settings['floating_widget_icon'] ){
 			$widget_icon = $this->settings['floating_widget_icon'];
@@ -386,8 +397,8 @@ class KBS_Floating_Widget {
 		$html = '<div id="kbs-beacon">';
 		$html .= '<input type="checkbox" class="kbs-beacon-toggle__input">';
 		$html .= '<div class="kbs-beacon-wrapper">';
-		$html .= '<span class="kbs-beacon-icon fa ' . esc_attr( $widget_icon ) . '"></span>';
-		$html .= '<span class="kbs-beacon-close fa fa-close"></span>';
+		$html .= '<span class="kbs-beacon-icon"></span>';
+		$html .= '<span class="kbs-beacon-close"></span>';
 		$html .= '<div class="kbs-beacon-content">';
 		$html .= '<div class="kbs-beacon-header">';
 		$html .= '<img src="' . esc_url( $logo_image ) . '">';
