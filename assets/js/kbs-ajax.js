@@ -131,8 +131,12 @@ jQuery(document).ready(function ($) {
 							if ( myResponse.error ) {
 
 							} else {
-								kbsTicketForm.parents('#kbs_ticket_wrap').addClass('form-submitted');
-								kbsTicketForm.parents( '#kbs_ticket_form_wrap' ).html( '<p>' + myResponse.kbs_submission_text + '</p>' );
+								if ( 'undefined' != typeof myResponse.kbs_submission_text ) {
+									kbsTicketForm.parents( '#kbs_ticket_wrap' ).addClass( 'form-submitted' );
+									kbsTicketForm.parents( '#kbs_ticket_form_wrap' ).html( '<p>' + myResponse.kbs_submission_text + '</p>' );
+								} else if ( 'undefined' != typeof myResponse.kbs_submission_redirect ) {
+									window.location.href = myResponse.kbs_submission_redirect
+								}
 							}
 						}
 					}).fail(function (data) {

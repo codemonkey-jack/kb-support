@@ -82,7 +82,7 @@ function kbs_form_post_save( $post_id, $post, $update )	{
 
 	$redirect        = isset( $_POST['kbs_form_redirect'] ) ? $_POST['kbs_form_redirect'] : kbs_get_option( 'tickets_page' );
 	$submission      = isset( $_POST['kbs_form_submission'] ) ? $_POST['kbs_form_submission'] : 'redirect';
-	$submission_text = isset( $_POST['kbs_form_submission_text'] ) ? $_POST['kbs_form_submission_text'] : esc_html__( 'You can check your tickets [link] here [/link]', 'kb-support' );
+	$submission_text = isset( $_POST['kbs_form_submission_text'] ) ? $_POST['kbs_form_submission_text'] : esc_html__( 'Ticket has been created. You can check your tickets [link] here [/link]', 'kb-support' );
 
 	update_post_meta( $post_id, '_redirect_page', $redirect );
 	update_post_meta( $post_id, '_submission_action', $submission );

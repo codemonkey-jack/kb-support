@@ -64,7 +64,7 @@ function kbs_render_form_field_redirect_setting( $post )    {
 			<?php _e( 'Text after form submission:', 'kb-support' ); ?><br>
 			<?php echo KBS()->html->textarea( array(
 				'name'     => 'kbs_form_submission_text',
-				'value'    => esc_html__( 'You can check your tickets [link] here [/link]', 'kb-support' ),
+				'value'    => esc_html__( 'Ticket has been created. You can check your tickets [link] here [/link]', 'kb-support' ),
 				'class'    => 'large-text',
 				'disabled' => false,
 				'rows'     => 30,

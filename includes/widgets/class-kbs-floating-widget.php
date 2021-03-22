@@ -92,7 +92,7 @@ class KBS_Floating_Widget {
 			}
 
 			#kbs-beacon .kbs-beacon-close {
-				display : none;
+				display    : none;
 			}
 
 			#kbs-beacon .kbs-beacon-icon {
@@ -176,11 +176,6 @@ class KBS_Floating_Widget {
 
 			#kbs-beacon .kbs-beacon-toggle__input[type=checkbox]:checked + .kbs-beacon-wrapper .kbs-beacon-close {
 				display   : inline-block;
-				transform : rotate(0deg);
-			}
-
-			#kbs-beacon .kbs-beacon-toggle__input[type=checkbox]:checked + .kbs-beacon-wrapper .kbs-beacon-close::before {
-				transform : rotate(0deg);
 			}
 
 			#kbs-beacon .kbs-beacon-toggle__input[type=checkbox]:checked + .kbs-beacon-wrapper .kbs-beacon-content {

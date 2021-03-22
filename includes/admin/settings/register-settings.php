@@ -1263,6 +1263,7 @@ function kbs_get_registered_settings() {
 							'envelope-regular' => esc_html__( 'Envelope', 'kb-support' ),
 							'user-edit-solid'  => esc_html__( 'User pencil', 'kb-support' )
 						),
+						'std'     => 'comments-regular'
 					),
 					'floating_widget_position' => array(
 						'id'      => 'floating_widget_position',

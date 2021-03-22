@@ -245,11 +245,11 @@ class KBS_Register_Meta {
 	            'type'         => 'string',
 	            'description'  => __( 'After submission text', 'kb-support' ),
 	            'single'       => true,
-	            'default'      => esc_html__( 'You can check your tickets [link] here [/link]', 'kb-support' ),
+	            'default'      => esc_html__( 'Ticket has been created. You can check your tickets [link] here [/link]', 'kb-support' ),
 	            'show_in_rest' => array(
 		            'schema' => array(
 			            'type'    => 'string',
-			            'default' => esc_html__( 'You can check your tickets [link] here [/link]', 'kb-support' ),
+			            'default' => esc_html__( 'Ticket has been created. You can check your tickets [link] here [/link]', 'kb-support' ),
 		            )
 	            )
             ),

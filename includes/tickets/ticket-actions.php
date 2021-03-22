@@ -111,10 +111,7 @@ function kbs_process_ticket_submission()	{
 	if ( 'text' == $submission_action ){
 		echo json_encode( array( 'kbs_notice' => $message, 'kbs_submission_text' => $submission_text ) );
 	} else if ( 'redirect' == $submission_action ){
-		wp_redirect( add_query_arg(
-			array( 'kbs_notice' => $message ),
-			$redirect
-		) );
+		echo json_encode( array( 'kbs_notice' => $message, 'kbs_submission_redirect' => $redirect ) );
 	} else {
 		do_action( 'kbs_after_form_submission', $ticket_id, $form_id, $posted );
 	}
@@ -125,6 +122,7 @@ function kbs_process_ticket_submission()	{
 //add_action( 'init', 'kbs_process_ticket_submission' );
 add_action( 'wp_ajax_kbs__form_action', 'kbs_process_ticket_submission' );
 add_action( 'wp_ajax_nopriv_kbs__form_action', 'kbs_process_ticket_submission' );
+
 /**
 * When a ticket is assigned to a department, set some additional meta keys.
 * This enables us to perform query's better within the admin ticket list
