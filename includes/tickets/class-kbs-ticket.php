@@ -526,7 +526,7 @@ class KBS_Ticket {
 
 		// Extensions can hook here to add items to this object
 		do_action( 'kbs_setup_ticket', $this, $ticket_id );
-								
+
 		return true;
 	} // setup_ticket
 
@@ -948,7 +948,7 @@ class KBS_Ticket {
 						do_action( 'kbs_ticket_save', $this, $key );
 						break;
 				}
-                
+
 			}
 
 			$customer = new KBS_Customer( $this->customer_id );
@@ -1082,7 +1082,7 @@ class KBS_Ticket {
 	public function get_ID() {
 		return $this->ID;
 	} // get_ID
-	
+
 	/**
 	 * Retrieve the ticket content
 	 *
@@ -1092,7 +1092,7 @@ class KBS_Ticket {
 	public function get_content() {
 		$content = apply_filters( 'the_content', $this->ticket_content );
 		$content = str_replace( ']]>', ']]&gt;', $content );
-		
+
 		return apply_filters( 'kbs_ticket_content', $content );
 	} // get_content
 
@@ -1331,7 +1331,7 @@ class KBS_Ticket {
 	 * @since	1.0
 	 * @return	int
 	 */
-	public function setup_agent_id()	{	
+	public function setup_agent_id()	{
 		return $this->get_meta( '_kbs_ticket_agent_id', true );
 	} // setup_agent_id
 
@@ -1360,7 +1360,7 @@ class KBS_Ticket {
 	 * @since	1.0
 	 * @return	int
 	 */
-	public function setup_logged_by()	{	
+	public function setup_logged_by()	{
 		return $this->get_meta( '_kbs_ticket_logged_by', true );
 	} // setup_logged_by
 
@@ -1796,7 +1796,7 @@ class KBS_Ticket {
 		$args = wp_parse_args( $args, $defaults );
 
 		$this->replies = get_posts( $args );
-		
+
 		return apply_filters( 'kbs_ticket_replies', $this->replies, $this->ID );
 	} // get_replies
 
@@ -1838,7 +1838,7 @@ class KBS_Ticket {
 		if ( ! $files )	{
 			return false;
 		}
-		
+
 		return $files;
 	} // get_files
 
@@ -1925,7 +1925,7 @@ class KBS_Ticket {
 	public function get_source( $field = 'slug' ) {
 		$return = $this->source;
 
-        $sources = get_the_terms( $this->ID, 'ticket_source' );        
+        $sources = get_the_terms( $this->ID, 'ticket_source' );
 
         if ( $sources && ! is_wp_error( $sources ) ) {
             $return = $sources[0]->$field;
@@ -2029,8 +2029,9 @@ class KBS_Ticket {
 			return false;
 		}
 
-		$source = ! empty( $reply_data['source'] ) ? $reply_data['source'] : 'kbs-website';
-		wp_set_object_terms( $reply_id, $source, 'ticket_source' );
+		// Comment this for now, reply shouldn't go to ticket sources
+		/*$source = ! empty( $reply_data['source'] ) ? $reply_data['source'] : 'kbs-website';
+		wp_set_object_terms( $reply_id, $source, 'ticket_source' );*/
 
 		if ( $close )	{
 			$this->update_status( 'closed' );
