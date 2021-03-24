@@ -876,7 +876,7 @@ function kbs_ticket_determine_existing_replies_location( $ticket_id )   {
 
     $user_id  = get_current_user_id();
     $priority = get_user_meta( $user_id, '_kbs_replies_location', true );
-    $priority = '' == $priority ? 10 : absint( $priority );
+    $priority = '' == $priority ? 25 : absint( $priority );
 
     add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_existing_replies_row', $priority );
 } // kbs_ticket_determine_existing_replies_location

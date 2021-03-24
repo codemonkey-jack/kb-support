@@ -291,7 +291,7 @@ add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile
  */
 function kbs_render_user_profile_replies_location_field( $user )  {
 	$location = get_user_meta( $user->ID, '_kbs_replies_location', true );
-    $location = '' == $location ? 10 : esc_attr( $location );
+    $location = '' == $location ? 25 : esc_attr( $location );
 
 	ob_start(); ?>
 
@@ -304,9 +304,9 @@ function kbs_render_user_profile_replies_location_field( $user )  {
                 <option value="10"<?php selected( 10, $location ); ?>>
                     <?php _e( 'Above Reply Field', 'kb-support' ); ?>
                 </option>
-                <option value="25"<?php selected( 25, $location ); ?>>
-                    <?php _e( 'Below Reply Field', 'kb-support' ); ?>
-                </option>
+				<option value="25"<?php selected( 25, $location ); ?>>
+					<?php _e( 'Below Reply Field', 'kb-support' ); ?>
+				</option>
             </select>
             <p class="description"><?php printf( __( 'Choose where you would like %s replies displayed.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></p>
         </td>
