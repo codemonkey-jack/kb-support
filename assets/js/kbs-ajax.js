@@ -158,10 +158,10 @@ jQuery(document).ready(function ($) {
 	/* = Ticket reply form validation and submission
 	====================================================================================== */
     // Mark reply as read
-	$(document).on('click', '.ticket_reply_content', function()	{
-		var reply_id = $(this).data('key');
-        kbs_cust_read_reply(reply_id);
-	});
+	$( document ).on( 'click', '.ticket_reply_content, .toggle-view-reply-option-section[aria-expanded="false"]', function () {
+		var reply_id = $( this ).data( 'key' );
+		kbs_cust_read_reply( reply_id );
+	} );
 
     // Load more replies
     $( document.body ).on( 'click', '#kbs-replies-next-page', function(e) {
