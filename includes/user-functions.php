@@ -982,7 +982,7 @@ add_action( 'init', 'kbs_process_profile_editor_updates' );
  * @return  string	Post field to order by
  */
 function kbs_get_user_tickets_orderby_setting( $user_id = 0 )   {
-    $default = 'date';
+    $default = 'dates';
 
     if ( empty( $user_id ) )    {
         $user_id = get_current_user_id();

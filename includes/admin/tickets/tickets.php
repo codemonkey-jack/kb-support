@@ -257,12 +257,28 @@ function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
  * @param	obj	$kbs_ticket	The KBS Ticket object
  * @return	str
  */
-function kb_tickets_post_column_date( $ticket_id, $kbs_ticket )	{
+function kb_tickets_post_column_date( $ticket_id, $kbs_ticket ){
 	do_action( 'kbs_tickets_pre_column_date', $kbs_ticket );
 
-	$output  = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $kbs_ticket->date ) );
-	$output .= '<br />';
-	$output .= date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $kbs_ticket->modified_date ) );
+	$dif = absint( time() - $kbs_ticket->last_reply_date );
+
+	$time_passed = 0;
+
+	if ( ( $dif / ( 60 ) ) < 60 ){
+		$time_passed = absint( $dif / ( 60 ) ) . ( ( absint( $dif / ( 60 ) ) <= 1 ) ? esc_html__( ' minute', 'kb-support' ) : esc_html__( ' minutes', 'kb-support' ) );
+	} else if ( ( $dif / ( 60 * 60 ) ) <= 24 ){
+		$time_passed = absint( $dif / ( 60 * 60 ) ) . ( ( absint( $dif / ( 60 * 60 ) ) <= 1 ) ? esc_html__( ' hour', 'kb-support' ) : esc_html__( ' hours', 'kb-support' ) );
+	} else {
+		$time_passed = absint( $dif / ( 60 * 60 * 24 ) ) . ( ( absint( $dif / ( 60 * 60 * 24 ) ) <= 1 ) ? esc_html__( ' day', 'kb-support' ) : esc_html__( ' days', 'kb-support' ) );
+	}
+
+	$tooltip = '<div class="wpchill-tooltip"><span>[?]</span>' .
+			   '<div class="wpchill-tooltip-content">' .
+			   esc_html__( 'Ticket receive date:  ', 'kb-support' ) .
+			   date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $kbs_ticket->date ) ) .
+			   '</div></div>';
+
+	$output = $time_passed . $tooltip;
 
 	do_action( 'kbs_tickets_post_column_date', $kbs_ticket );
 
@@ -390,24 +406,16 @@ function kbs_order_admin_tickets( $query )	{
 	$order   = '' != $query->get( 'order' )   ? $query->get( 'order' )   : $order_setting;
 
 	switch( $orderby )	{
-		case 'ID':
         case 'id':
 			$query->set( 'orderby',  'ID' );
 			$query->set( 'order',  $order );
 			break;
-
-		case 'post_date':
-        case 'date':
-        case 'dates':
-			$query->set( 'orderby',  'post_date' );
-			$query->set( 'order',  $order );
+		case 'date':
+			//@todo: Need to find a way to sort old tickets also. Currently, with this setup, old tickets are missing from table
+			$query->set( 'orderby', 'meta_value' );
+			$query->set( 'meta_key', '_kbs_ticket_last_reply_date' );
+			$query->set( 'order', $order );
 			break;
-
-		case 'modified':
-			$query->set( 'orderby',  'modified' );
-			$query->set( 'order',  $order );
-			break;
-
 		case 'title':
 			$query->set( 'orderby',  'title' );
 			$query->set( 'order',  $order );

@@ -155,6 +155,16 @@ class KBS_Ticket {
 	 */
 	protected $modified_date = '';
 
+
+	/**
+	 * The date the ticket was last modified
+	 *
+	 * @since	1.0
+	 * @var		str
+	 */
+	protected $last_reply_date = '';
+
+
 	/**
 	 * The date the ticket was marked as 'resolved'
 	 *
@@ -487,6 +497,7 @@ class KBS_Ticket {
 		// Status and Dates
 		$this->date            = $ticket->post_date;
 		$this->modified_date   = $ticket->post_modified;
+		$this->last_reply_date = absint( '' != $this->get_meta( '_kbs_ticket_last_reply_date' ) ? $this->get_meta( '_kbs_ticket_last_reply_date' ) : strtotime($ticket->post_modified) );
 		$this->closed_date     = $this->setup_closed_date();
 		$this->status          = $ticket->post_status;
 		$this->post_status     = $this->status;
@@ -581,7 +592,7 @@ class KBS_Ticket {
 			'privacy_accepted'  => $this->privacy_accepted,
 			'terms_agree'       => $this->terms_agreed,
 			'files'             => $this->new_files,
-			'form_data'         => $this->form_data
+			'form_data'         => $this->form_data,
 		);
 
 		$args = apply_filters( 'kbs_insert_ticket_args', array(
@@ -709,6 +720,9 @@ class KBS_Ticket {
 			$this->update_meta( '_kbs_ticket_version_created', KBS_VERSION );
 			$this->update_meta( '_ticket_data', $this->ticket_meta );
             $this->update_meta( '_kbs_pending_ticket_created_email', true );
+            // At first, last reply should be time created
+			// Need this for sorting the columns
+			$this->update_meta( '_kbs_ticket_last_reply_date', time() );
 
 			if ( kbs_use_sequential_ticket_numbers() )	{
 				$number       = kbs_get_next_ticket_number();
@@ -830,7 +844,6 @@ class KBS_Ticket {
 							'post_date' => $this->date,
 							'edit_date' => true,
 						);
-
 						wp_update_post( $args );
 						break;
 
@@ -2024,6 +2037,7 @@ class KBS_Ticket {
         $args = apply_filters( 'kbs_ticket_add_reply_args', $args, $reply_data );
 
 		$reply_id = wp_insert_post( $args );
+		$this->update_meta( '_kbs_ticket_last_reply_date', time() );
 
 		if ( empty( $reply_id ) )	{
 			return false;

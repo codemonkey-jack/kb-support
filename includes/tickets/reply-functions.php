@@ -116,7 +116,7 @@ function kbs_get_ticket_reply_status_colour( $replier, $default = false )	{
  *
  * @since	1.0
  * @param	int			$ticket_id		The Ticket ID.
- * @return	obj|false	
+ * @return	obj|false
  */
 function kbs_ticket_has_agent_reply( $ticket_id )	{
 	$reply_args = array(

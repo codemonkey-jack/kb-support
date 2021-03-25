@@ -302,6 +302,7 @@ final class KB_Support {
         require_once KBS_PLUGIN_DIR . 'includes/api/endpoints/class-kbs-replies-api.php';
         require_once KBS_PLUGIN_DIR . 'includes/api/endpoints/class-kbs-forms-api.php';
         require_once KBS_PLUGIN_DIR . 'includes/api/endpoints/class-kbs-form-fields-api.php';
+		require_once KBS_PLUGIN_DIR . 'includes/backwards-compatibility/class-kbs-backwards-compatibility.php';
 
 		if ( is_admin() )	{
 			require_once KBS_PLUGIN_DIR . 'includes/admin/admin-pages.php';
