@@ -89,6 +89,24 @@
 	border-radius: 3px;
 }
 
+.kbs-label.kbs-label-status {
+	width:10px;
+	height:10px;
+	border-radius:5px;
+	padding:0;
+	margin-right:5px;
+}
+
+.kbs-label.kbs-reply-status {
+	transform:rotate(90deg);
+	margin-left:15px;
+	background:transparent;
+	padding:0;
+	margin-right:5px;
+	width:20px;
+	height:14px;
+}
+
 .kbs-label a,
 .kbs-label a:hover,
 .kbs-label a:visited {

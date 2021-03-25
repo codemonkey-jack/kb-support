@@ -130,6 +130,7 @@ This plugin uses the following svg icon files from https://fontawesome.com/ lice
 - comments-solid.svg
 - comments-regular.svg
 - times-solid.svg
+- level-up-alt-solid.svg
 
 == Changelog ==
 

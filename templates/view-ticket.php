@@ -96,7 +96,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 														$agent,
 														$status
 													);
-													
+
 												endif;
 											else :
 												$agent = __( 'No Agent Assigned', 'kb-support' );
@@ -209,7 +209,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                                 </span>
                                             </div>
 
-                                            <div id="kbs_ticket_reply-<?php echo $reply->ID; ?>" class="collapse<?php echo $show; ?>" aria-labelledby="kbs_ticket_reply-<?php echo $reply->ID; ?>-heading" data-parent="#kbs-ticket-replies">
+                                            <div id="kbs_ticket_reply-<?php echo esc_attr($reply->ID); ?>" class="collapse<?php echo $show; ?>" aria-labelledby="kbs_ticket_reply-<?php echo $reply->ID; ?>-heading" data-parent="#kbs-ticket-replies">
                                                 <div class="card-body">
                                                     <?php echo $reply_content; ?>
                                                     <?php if ( $files ) : ?>
@@ -309,7 +309,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                     <?php do_action( 'kbs_before_single_ticket_close', $ticket ); ?>
 
                                     <div class="reply_close">
-                                        <p><input type="checkbox" name="kbs_close_ticket" id="kbs-close-ticket" /> 
+                                        <p><input type="checkbox" name="kbs_close_ticket" id="kbs-close-ticket" />
                                             <?php printf( __( 'This %s can be closed', 'kb-support' ), strtolower( $singular ) ); ?>
                                         </p>
                                     </div>
@@ -349,7 +349,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 		$args = array( 'ticket' => $_GET['ticket'] );
 	}
     $redirect  = add_query_arg( $args, get_permalink( kbs_get_option( 'tickets_page' ) ) );
-	
+
 	?>
 	<?php echo kbs_display_notice( 'ticket_login' ); ?>
     <?php echo kbs_login_form( $redirect ); ?>

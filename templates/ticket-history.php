@@ -56,7 +56,7 @@ if ( is_user_logged_in() )	: ?>
                             <td class="the_ticket_id"><a href="<?php echo esc_url( $ticket_url ); ?>"><?php echo kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ); ?></a></td>
 							<td class="title"><?php echo esc_html( $ticket->post_title ); ?></td>
 							<td class="date"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $ticket->post_date ) ); ?></td>
-                            <td class="status"><span class="kbs-label kbs-label-status" style="background-color: <?php echo kbs_get_ticket_status_colour( $ticket->post_status ); ?>;"><?php echo kbs_get_ticket_status( $ticket, true ); ?></span></td>
+                            <td class="status"><span class="kbs-label kbs-label-status" style="background-color: <?php echo kbs_get_ticket_status_colour( $ticket->post_status ); ?>;"></span><?php echo kbs_get_ticket_status( $ticket, true ); ?></td>
                             <td class="actions"><a href="<?php echo esc_url( $ticket_url ); ?>"><?php _e( 'View', 'kb-support' ); ?></a></td>
                         </tr>
 
@@ -66,7 +66,7 @@ if ( is_user_logged_in() )	: ?>
                 <?php do_action( 'kbs_after_ticket_history_table', $tickets, $customer, $total_tickets ); ?>
 
             </div>
-    
+
             <div id="kbs_ticket_history_pagination" class="kbs_pagination navigation">
                 <?php
                 $big = 999999;
