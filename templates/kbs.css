@@ -284,12 +284,13 @@ span.kbs-time    {
 -------------------------------------------------------------- */
 .kbs-label {
 	display: inline-block;
-	padding: 2px 8px;
 	font-weight: bold;
 	color: #fff;
 	vertical-align: baseline;
 	background-color: #999;
-	border-radius: 3px;
+	width:10px;
+	height:10px;
+	border-radius:5px;
 }
 
 .kbs-label a,
@@ -487,7 +488,7 @@ span.kbs-time    {
 }
 
 a.ticket_reply_content	{
-	cursor: pointer;	
+	cursor: pointer;
 }
 
 .kbs_replies_load_more	{
@@ -597,7 +598,7 @@ a .kbs_action_button    {
 #kbs_search_form input[type=submit]:hover,
 #kbs_search_form button,
 #kbs_search_form button:hover {
-	position: relative; 
+	position: relative;
 	left: -4px;
 	border: 1px solid #d0d0d0;
 	padding: 6px 15px 6px 15px;
