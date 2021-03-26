@@ -41,10 +41,10 @@ if ( is_user_logged_in() )	: ?>
                 <table id="ticket_history">
                     <thead>
                         <tr id="ticket_history_header">
-                            <th><?php echo '#'; ?></th>
+                            <th><?php echo __('Ticket ID','kb-support'); ?></th>
 							<th><?php _e( 'Title', 'kb-support' ); ?></th>
+							<th><?php _e( 'Status', 'kb-support' ); ?></th>
                             <th><?php _e( 'Opened', 'kb-support' ); ?></th>
-                            <th><?php _e( 'Status', 'kb-support' ); ?></th>
                             <th><?php _e( 'Actions', 'kb-support' ); ?></th>
                         </tr>
                     </thead>
@@ -53,11 +53,11 @@ if ( is_user_logged_in() )	: ?>
 
                         <?php $ticket_url = kbs_get_ticket_url( $ticket->ID ); ?>
                         <tr id="ticket_data_<?php echo $ticket->ID; ?>" class="ticket_data_row">
-                            <td class="the_ticket_id"><a href="<?php echo esc_url( $ticket_url ); ?>"><?php echo kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ); ?></a></td>
+                            <td class="the_ticket_id"><a class="kbs-hover hvr-underline-from-center" href="<?php echo esc_url( $ticket_url ); ?>"><?php echo kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ); ?></a></td>
 							<td class="title"><?php echo esc_html( $ticket->post_title ); ?></td>
-							<td class="date"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $ticket->post_date ) ); ?></td>
 							<td class="status"><span class="kbs-label kbs-label-status" style="background-color: <?php echo kbs_get_ticket_status_colour( $ticket->post_status ); ?>;"></span><span><?php echo kbs_get_ticket_status( $ticket, true ); ?></span></td>
-                            <td class="actions"><a href="<?php echo esc_url( $ticket_url ); ?>"><?php _e( 'View', 'kb-support' ); ?></a></td>
+							<td class="date"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $ticket->post_date ) ); ?></td>
+                            <td class="actions"><a class="button view-ticket kbs-hover hvr-float-shadow" href="<?php echo esc_url( $ticket_url ); ?>"><?php _e( 'View', 'kb-support' ); ?></a></td>
                         </tr>
 
                     <?php endforeach; ?>

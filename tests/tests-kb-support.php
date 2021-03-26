@@ -139,9 +139,10 @@ class Tests_KBS extends KBS_UnitTestCase {
 
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'templates/kbs.css' );
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'templates/kbs.min.css' );
+		$this->assertFileExists( KBS_PLUGIN_DIR . 'assts/css/hover.min.css' );
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'templates/images/agent_status_online.gif' );
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'templates/images/agent_status_offline.gif' );
-		
+
 
 	}
 }

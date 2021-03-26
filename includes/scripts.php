@@ -196,6 +196,9 @@ function kbs_register_styles() {
 	wp_register_style( 'kbs-styles', $url, array(), KBS_VERSION, 'all' );
 	wp_enqueue_style( 'kbs-styles' );
 
+	wp_register_style( 'kbs-hover-styles', $css_dir . 'hover.min.css', array(), KBS_VERSION, 'all' );
+	wp_enqueue_style( 'kbs-hover-styles' );
+
     if ( is_admin_bar_showing() )   {
         wp_register_style( 'kbs-admin-bar', $css_dir . 'kbs-admin-bar' . $suffix . '.css', array(), KBS_VERSION, 'all' );
     	wp_enqueue_style( 'kbs-admin-bar' );

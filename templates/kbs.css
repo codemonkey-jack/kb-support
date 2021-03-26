@@ -291,6 +291,7 @@ span.kbs-time    {
 	width:10px;
 	height:10px;
 	border-radius:5px;
+	margin-right:5px;
 }
 
 .kbs-label a,
@@ -319,6 +320,7 @@ span.kbs-time    {
 	width: 100%;
 	z-index: 2;
 	font-size: 90%;
+	background:#fff;
 }
 #kbs_item_wrapper .data_section {
 	border-bottom: 1px solid #eee;
@@ -327,6 +329,10 @@ span.kbs-time    {
 }
 #kbs_item_wrapper .data_section table {
 	margin-bottom: 20px;
+	background:#fff;
+}
+#kbs_item_wrapper .data_section table#ticket_history tbody tr:nth-child(odd){
+	background:rgba(0,0,0,0.1);
 }
 #kbs_item_wrapper > div {
 	padding: 0px 20px;
@@ -634,4 +640,45 @@ div.kbs_articles_list ul li	{
 }
 div.kbs_articles_list ul li span	{
 	display: block;
+}
+
+/**
+Ticket history form
+ */
+
+.ticket_info_wrapper #ticket_history a {
+	text-decoration:none;
+}
+
+.ticket_info_wrapper #ticket_history a.button {
+	padding : 5px 15px;
+	background:#05aae8;
+}
+
+.ticket_info_wrapper #ticket_history a:hover {
+	color : #fff;
+}
+
+.ticket_info_wrapper #ticket_history .the_ticket_id a {
+	color:#000;
+}
+
+.ticket_info_wrapper #ticket_history .the_ticket_id a:hover {
+	color:#05aae8;
+}
+
+html body a.kbs-hover,
+html body input.kbs-hover,
+html body button.kbs-hover {
+	transition : 0.5s;
+}
+
+/**
+Reply form
+ */
+
+form#kbs_ticket_reply_form .button {
+	padding : 5px 15px;
+	background:#05aae8;
+	text-decoration:none;
 }

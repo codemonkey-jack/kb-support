@@ -79,7 +79,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 								<div id="kbs-ticket-status-agent" class="row kbs_ticket_data">
 									<div class="col-sm">
 										<span class="ticket_status">
-											<label><?php _e( 'Status', 'kb-support' ); ?>:</label> <span class="kbs-label kbs-label-status" style="background-color: <?php echo kbs_get_ticket_status_colour( $ticket->post_status ); ?>;"><?php echo $ticket->status_nicename; ?></span>
+											<label><?php _e( 'Status', 'kb-support' ); ?>:</label> <span class="kbs-label kbs-label-status" style="background-color: <?php echo kbs_get_ticket_status_colour( $ticket->post_status ); ?>;"></span><span><?php echo $ticket->status_nicename; ?></span>
 										</span>
 									</div>
 
@@ -203,7 +203,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                                 </span>
 
                                                 <span class="kbs-replies-row-actions">
-                                                    <a href="#" class="toggle-view-reply-option-section" data-toggle="collapse" data-target="#kbs_ticket_reply-<?php echo $reply->ID; ?>" aria-expanded="false" aria-controls="kbs_ticket_reply-<?php echo $reply->ID; ?>" data-key="<?php echo $reply->ID; ?>">
+                                                    <a href="#" class="toggle-view-reply-option-section " data-toggle="collapse" data-target="#kbs_ticket_reply-<?php echo $reply->ID; ?>" aria-expanded="false" aria-controls="kbs_ticket_reply-<?php echo $reply->ID; ?>" data-key="<?php echo $reply->ID; ?>">
                                                         <?php _e( 'View Reply', 'kb-support' ); ?>
                                                     </a>
                                                 </span>
