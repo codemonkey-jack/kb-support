@@ -99,7 +99,6 @@
 
 .kbs-label.kbs-reply-status {
 	transform:rotate(90deg);
-	margin-left:15px;
 	background:transparent;
 	padding:0;
 	margin-right:5px;
@@ -1580,7 +1579,6 @@ body .wpchill-toggle__track {
 Tooltips
  */
 
-/* Tabs tooltips */
 .wpchill-tooltip {
 	position: relative;
 	display: inline-block;

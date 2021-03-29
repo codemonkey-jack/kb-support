@@ -74,7 +74,7 @@ function kbs_set_kbs_ticket_post_columns( $columns ) {
 		'id'              => '#',
 		'title'           => __( 'Title', 'kb-support' ),
 		'status'          => __( 'Status', 'kb-support' ),
-		'dates'           => __( 'Date', 'kb-support' ),
+		'dates'           => __( 'Updated', 'kb-support' ),
 		'customer'        => __( 'Customer', 'kb-support' ),
 		'ticket_category' => $category_labels['menu_name'],
 		'ticket_tag'      => $tag_labels['menu_name'],
@@ -278,16 +278,16 @@ function kb_tickets_post_column_date( $ticket_id, $kbs_ticket ){
 	$time_passed = 0;
 
 	if ( ( $dif / ( 60 ) ) < 60 ){
-		$time_passed = absint( $dif / ( 60 ) ) . ( ( absint( $dif / ( 60 ) ) <= 1 ) ? esc_html__( ' minute', 'kb-support' ) : esc_html__( ' minutes', 'kb-support' ) );
+		$time_passed = absint( $dif / ( 60 ) ) . ( ( absint( $dif / ( 60 ) ) <= 1 ) ? esc_html__( ' minute', 'kb-support' ) : esc_html__( ' minutes ago', 'kb-support' ) );
 	} else if ( ( $dif / ( 60 * 60 ) ) <= 24 ){
-		$time_passed = absint( $dif / ( 60 * 60 ) ) . ( ( absint( $dif / ( 60 * 60 ) ) <= 1 ) ? esc_html__( ' hour', 'kb-support' ) : esc_html__( ' hours', 'kb-support' ) );
+		$time_passed = absint( $dif / ( 60 * 60 ) ) . ( ( absint( $dif / ( 60 * 60 ) ) <= 1 ) ? esc_html__( ' hour', 'kb-support' ) : esc_html__( ' hours ago', 'kb-support' ) );
 	} else {
-		$time_passed = absint( $dif / ( 60 * 60 * 24 ) ) . ( ( absint( $dif / ( 60 * 60 * 24 ) ) <= 1 ) ? esc_html__( ' day', 'kb-support' ) : esc_html__( ' days', 'kb-support' ) );
+		$time_passed = absint( $dif / ( 60 * 60 * 24 ) ) . ( ( absint( $dif / ( 60 * 60 * 24 ) ) <= 1 ) ? esc_html__( ' day', 'kb-support' ) : esc_html__( ' days ago', 'kb-support' ) );
 	}
 
 	$tooltip = '<div class="wpchill-tooltip"><span>[?]</span>' .
 			   '<div class="wpchill-tooltip-content">' .
-			   esc_html__( 'Ticket receive date:  ', 'kb-support' ) .
+			   esc_html__( 'Receive date:  ', 'kb-support' ) .
 			   date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $kbs_ticket->date ) ) .
 			   '</div></div>';
 

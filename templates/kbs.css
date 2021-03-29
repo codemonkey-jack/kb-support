@@ -644,37 +644,75 @@ div.kbs_articles_list ul li span	{
 }
 
 /**
+** WPChill general table
+ */
+
+.wpchill-table {
+	border : 0;
+}
+
+.wpchill-table th,
+.wpchill-table td {
+	border-left   : 0;
+	border-right  : 0;
+	border-bottom : 0;
+	border-top    : 1px solid #f3f4f6;
+	color         : rgb(107, 114, 128);
+}
+
+.wpchill-table .wpchill-tooltip-content {
+	font-size:13px;
+}
+
+.wpchill-table a {
+	color : rgb(107, 114, 128);
+}
+
+.wpchill-table span.kbs-label-status {
+	color : #fff;
+}
+
+/**
 Ticket history form
  */
 
-.ticket_info_wrapper #ticket_history {
+.ticket_info_wrapper #ticket_history,
+.wpchill-table {
 	border-radius : 5px;
 	box-shadow    : 0 0 10px rgba(107, 114, 128, 0.5);
 }
 
 .ticket_info_wrapper #ticket_history th,
-.ticket_info_wrapper #ticket_history td {
-	border:0;
-	border-top:1px solid #f3f4f6;
+.ticket_info_wrapper #ticket_history td,
+.wpchill-table th,
+.wpchill-table td {
+	border     : 0;
+	border-top : 1px solid #f3f4f6;
 }
 
 .ticket_info_wrapper #ticket_history,
 .ticket_info_wrapper #ticket_history a:not(.button),
 .ticket_info_wrapper #ticket_history p,
-.ticket_info_wrapper #ticket_history span:not(.kbs-label-status){
+.ticket_info_wrapper #ticket_history span:not(.kbs-label-status),
+.wpchill-table a:not(.button),
+.wpchill-table p,
+.wpchill-table span {
 	color : rgb(107, 114, 128);
 }
 
-.ticket_info_wrapper #ticket_history a {
+.ticket_info_wrapper #ticket_history a,
+.wpchill-table a {
 	text-decoration:none;
 }
 
-#kbs_item_wrapper .data_section table#ticket_history tbody tr {
+#kbs_item_wrapper .data_section table#ticket_history tbody tr,
+.wpchill-table tbody tr {
 	background : #fff;
 	transition : 550ms;
 }
 
-#kbs_item_wrapper .data_section table#ticket_history tbody tr:hover {
+#kbs_item_wrapper .data_section table#ticket_history tbody tr:hover,
+.wpchill-table tbody tr:hover{
 	background-color : rgb(243, 244, 246)
 }
 
@@ -682,27 +720,29 @@ Ticket history form
 	color : red;
 }
 
-.ticket_info_wrapper #ticket_history tr#ticket_history_header {
+.ticket_info_wrapper #ticket_history tr#ticket_history_header,
+.wpchill-table thead tr{
 	background-color : rgb(243, 244, 246);
 	color            : rgb(107, 114, 128);
 }
 
-.ticket_info_wrapper #ticket_history a.button {
+.ticket_info_wrapper #ticket_history a.button,
+.wpchill-table a.button {
 	padding    : 5px 15px;
 	background : #05aae8;
 }
 
-.ticket_info_wrapper #ticket_history a:hover {
+.ticket_info_wrapper #ticket_history a:hover,
+.wpchill-table a:hover {
 	color : #05aae8;
-}
-
-.ticket_info_wrapper #ticket_history .the_ticket_id a:hover {
-	color:#05aae8;
 }
 
 html body a.kbs-hover,
 html body input.kbs-hover,
-html body button.kbs-hover {
+html body button.kbs-hover,
+.wpchill-table a.kbs-hover,
+.wpchill-table input.kbs-hover,
+.wpchill-table button.kbs-hover{
 	transition : 0.5s;
 }
 
@@ -732,3 +772,56 @@ form#kbs_ticket_reply_form #kbs-ticket-replies .kbs-replies-row-actions {
 	color : rgb(107, 114, 128);
 }
 
+
+/**
+Tooltips
+ */
+
+.wpchill-tooltip {
+	position: relative;
+	display: inline-block;
+	float: left;
+	margin-right: 10px;
+}
+
+.wpchill-tooltip > span {
+	cursor: pointer;
+	color: #0073aa;
+	text-decoration: underline;
+	margin-left: 5px;
+}
+
+.wpchill-tooltip .wpchill-tooltip-content {
+	display: none;
+	position: absolute;
+	top: 50%;
+	right: -10px;
+	transform: translate( 100% ,-50% );
+	width: 300px;
+	background: #000;
+	color: #fff;
+	padding: 10px;
+	box-sizing: border-box;
+	z-index: 99;
+}
+
+.wpchill-tooltip .wpchill-tooltip-content:before {
+	content: '';
+	width: 0px;
+	height: 0px;
+	border-style: solid;
+	border-width: 8px 8px 8px 0;
+	border-color: transparent #000 transparent transparent;
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: -8px;
+	transform: translateY( -50% );
+}
+
+.wpchill-tooltip:hover .wpchill-tooltip-content {
+	display: block;
+}
+/**
+End Tooltips
+ */

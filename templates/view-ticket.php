@@ -61,31 +61,38 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 							<div class="container-fluid ticket_manager_data text-left">
 
 								<div id="kbs-ticket-customer-date" class="row kbs_ticket_data">
-									<div class="col-sm">
-										<span class="ticket_customer_name">
-											<label><?php _e( 'Logged by', 'kb-support' ); ?>:</label> <?php echo kbs_email_tag_fullname( $ticket->ID ); ?>
-										</span>
-									</div>
+									<table id="single-ticket-table" class="wpchill-table">
+										<thead>
+										<tr>
+											<th><?php esc_html_e( 'Title', 'kb-support' ); ?></th>
+											<th><?php esc_html_e( 'Status', 'kb-support' ); ?></th>
+											<th><?php esc_html_e( 'Updated', 'kb-support' ); ?></th>
+											<th><?php esc_html_e( 'Agent', 'kb-support' ); ?></th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr>
+											<td>
+													<span class="ticket_subject"><?php echo esc_attr( $ticket->ticket_title ); ?></span>
+											</td>
+											<td>
+													<span class="ticket_status"><span
+															class="kbs-label kbs-label-status"
+															style="background-color: <?php echo kbs_get_ticket_status_colour( $ticket->post_status ); ?>;">
+															<?php echo $ticket->status_nicename; ?></span></span>
+											</td>
+											<td>
+												<div class="wpchill-tooltip"><span>[?]</span>
+													<div
+														class="wpchill-tooltip-content"><?php echo esc_html__( 'Received on ', 'kb-support' ) . date_i18n( $date_format, strtotime( $ticket->date ) ); ?></div>
+												</div>
 
-									<div class="col-sm">
-										<span class="ticket_date">
-											<label><?php _e( 'Date', 'kb-support' ); ?>:</label> <?php echo date_i18n( $date_format, strtotime( $ticket->date ) ); ?>
-										</span>
-									</div>
-								</div><!-- #kbs-ticket-customer-date -->
-
-								<?php do_action( 'kbs_single_ticket_after_date_logged_by', $ticket ); ?>
-
-								<div id="kbs-ticket-status-agent" class="row kbs_ticket_data">
-									<div class="col-sm">
-										<span class="ticket_status">
-											<label><?php _e( 'Status', 'kb-support' ); ?>:</label> <span class="kbs-label kbs-label-status" style="background-color: <?php echo kbs_get_ticket_status_colour( $ticket->post_status ); ?>;"><?php echo $ticket->status_nicename; ?></span>
-										</span>
-									</div>
-
-									<div class="col-sm">
-										<span class="ticket_agent">
-											<?php if ( ! empty( $ticket->agent_id ) ) :
+												  <span class="ticket_updated"><?php echo date_i18n( $time_format . ' \o\n ' . $date_format, strtotime( $ticket->modified_date ) ); ?> <?php printf( __( '(%s ago)', 'kb-support' ), human_time_diff( strtotime( $ticket->modified_date ), current_time( 'timestamp' ) ) ); ?> </span>
+											</td>
+											<?php do_action( 'kbs_single_ticket_after_date_logged_by', $ticket ); ?>
+											<td>
+											<span class="ticket_agent">
+											<?php if ( !empty( $ticket->agent_id ) ) :
 												$agent = get_userdata( $ticket->agent_id )->display_name;
 
 												if ( kbs_display_agent_status() ) :
@@ -102,42 +109,31 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 												$agent = __( 'No Agent Assigned', 'kb-support' );
 											endif; ?>
 
-											<label><?php _e( 'Agent', 'kb-support' ); ?>:</label> <span class="<?php echo $status_class; ?>" title="<?php echo $alt_status; ?>"><?php echo $agent; ?></span>
-										</span>
-									</div>
-								</div><!-- #kbs-ticket-status-agent -->
-
-                                <div id="kbs-ticket-last-update" class="row kbs_ticket_data">
-									<div class="col-md">
-                                        <span class="ticket_updated">
-                                            <label><?php _e( 'Last Updated', 'kb-support' ); ?>:</label> <?php echo date_i18n( $time_format . ' \o\n ' . $date_format, strtotime( $ticket->modified_date ) ); ?> <?php printf( __( '(%s ago)', 'kb-support' ), human_time_diff( strtotime( $ticket->modified_date ), current_time( 'timestamp' ) ) ); ?>
-                                        </span>
-                                    </div>
-                                </div><!-- #kbs-ticket-last-update -->
-
-								<?php do_action( 'kbs_single_ticket_before_major_items', $ticket ); ?>
-
-								<div class="major_ticket_items">
-									<div class="row kbs_ticket_subject">
-										<div class="col-md">
-											<span class="ticket_subject">
-												<label><?php _e( 'Subject', 'kb-support' ); ?>:</label> <?php echo esc_attr( $ticket->ticket_title ); ?>
+											<span class="<?php echo $status_class; ?>"
+												  title="<?php echo $alt_status; ?>">
+												<?php echo $agent; ?>
 											</span>
-										</div>
-									</div>
+										</span>
+											</td>
+										</tr>
+										</tbody>
+									</table>
 
-									<?php do_action( 'kbs_single_ticket_after_subject', $ticket ); ?>
+									<?php do_action( 'kbs_single_ticket_before_major_items', $ticket ); ?>
 
-									<div class="row kbs_ticket_subject">
-										<div class="col-md">
+									<div class="major_ticket_items">
+										<?php do_action( 'kbs_single_ticket_after_subject', $ticket ); ?>
+
+										<div class="row kbs_ticket_subject">
+											<div class="col-md">
 											<span class="ticket_content">
 												<label><?php _e( 'Content', 'kb-support' ); ?>:</label> <?php echo $ticket->get_content(); ?>
 											</span>
+											</div>
 										</div>
-									</div>
 
-									<?php do_action( 'kbs_single_ticket_after_content', $ticket ); ?>
-								</div>
+										<?php do_action( 'kbs_single_ticket_after_content', $ticket ); ?>
+									</div>
 
 								<?php if ( ! empty( $ticket->files ) ) : ?>
                                     <p>
