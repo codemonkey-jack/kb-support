@@ -398,8 +398,46 @@ class KBS_Replies_Query extends KBS_Stats {
 	 */
 	public function orderby_relevance()	{
 		if ( empty( $this->posts ) )	{
-			
+
 		}
 	} // orderby_relevance
+
+	/**
+	 *  Get non-read replies
+	 *
+	 * @return array
+	 * @since 1.6.0
+	 */
+	public static function get_non_read_replies(){
+
+		$args = array(
+			'post_type'  => 'kbs_ticket_reply',
+			'number'     => -1,
+			'orderby'    => 'date',
+			'order'      => 'DESC',
+			'status'     => 'publish',
+			'meta_query' => array(
+				array(
+					'key'     => '_kbs_reply_customer_read',
+					'compare' => 'NOT EXISTS',
+				)
+			)
+		);
+
+		$replies       = new WP_Query( $args );
+		$empty_replies = array();
+
+		if ( $replies ){
+			while ( $replies->have_posts() ){
+				$replies->the_post();
+				$empty_replies[ 'ticket-' . get_post_parent()->ID ][] = get_the_ID();
+			}
+		}
+
+		wp_reset_postdata();
+
+		return $empty_replies;
+
+	}
 
 } // KBS_Replies_Query

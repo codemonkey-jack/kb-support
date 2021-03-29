@@ -79,7 +79,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 								<div id="kbs-ticket-status-agent" class="row kbs_ticket_data">
 									<div class="col-sm">
 										<span class="ticket_status">
-											<label><?php _e( 'Status', 'kb-support' ); ?>:</label> <span class="kbs-label kbs-label-status" style="background-color: <?php echo kbs_get_ticket_status_colour( $ticket->post_status ); ?>;"></span><span><?php echo $ticket->status_nicename; ?></span>
+											<label><?php _e( 'Status', 'kb-support' ); ?>:</label> <span class="kbs-label kbs-label-status" style="background-color: <?php echo kbs_get_ticket_status_colour( $ticket->post_status ); ?>;"><?php echo $ticket->status_nicename; ?></span>
 										</span>
 									</div>
 

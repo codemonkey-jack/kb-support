@@ -20,18 +20,19 @@ if ( is_user_logged_in() )	: ?>
 	$tickets  = kbs_get_customer_tickets( $customer->id, $args, false, true ); ?>
 
 	<?php if ( ! empty( $tickets ) ) : ?>
-        <?php
-			$args['number'] = 9999999;
-			$total_tickets  = count( kbs_get_customer_tickets( $customer->id, $args, false, false ) );
+		<?php
+		$args['number'] = 9999999;
+		$total_tickets  = count( kbs_get_customer_tickets( $customer->id, $args, false, false ) );
 
-            $hide_closed = kbs_customer_maybe_hide_closed_tickets( $customer->user_id ) && kbs_customer_has_closed_tickets( $customer->id );
-            $hide_closed = ( $hide_closed && ( ! isset( $_REQUEST['show_closed'] ) || '1' != $_REQUEST['show_closed'] ) );
-            $hide_notice = sprintf(
-                __( 'Your closed %1$s are not being displayed below. <a href="%2$s">Show closed %1$s</a>.', 'kb-support' ),
-                kbs_get_ticket_label_plural( true ),
-                add_query_arg( 'show_closed', '1' )
-            );
-        ?>
+		$hide_closed = kbs_customer_maybe_hide_closed_tickets( $customer->user_id ) && kbs_customer_has_closed_tickets( $customer->id );
+		$hide_closed = ( $hide_closed && ( !isset( $_REQUEST['show_closed'] ) || '1' != $_REQUEST['show_closed'] ) );
+		$hide_notice = sprintf(
+			__( 'Your closed %1$s are not being displayed below. <a href="%2$s">Show closed %1$s</a>.', 'kb-support' ),
+			kbs_get_ticket_label_plural( true ),
+			add_query_arg( 'show_closed', '1' )
+		);
+		$new_replies = KBS_Replies_Query::get_non_read_replies();
+		?>
         <?php if ( $hide_closed ) : ?>
             <div class="kbs_alert kbs_alert_info"><?php echo $hide_notice; ?></div>
         <?php endif; ?>
@@ -48,17 +49,23 @@ if ( is_user_logged_in() )	: ?>
                             <th><?php _e( 'Actions', 'kb-support' ); ?></th>
                         </tr>
                     </thead>
+					<?php foreach ( $tickets as $ticket ) :
+						$ticket_url = kbs_get_ticket_url( $ticket->ID );
+						$replies = false;
 
-                    <?php foreach ( $tickets as $ticket ) : ?>
-
-                        <?php $ticket_url = kbs_get_ticket_url( $ticket->ID ); ?>
+						if ( isset( $new_replies[ 'ticket-' . $ticket->ID ] ) && !empty( $new_replies[ 'ticket-' . $ticket->ID ] ) ){
+							$replies = ' <sup class="ticket-history-attention ticket-history-new-replies">' . count( $new_replies[ 'ticket-' . $ticket->ID ] ) . ' ' . esc_html__('New ','kn-support') . ( count( $new_replies[ 'ticket-' . $ticket->ID ] ) > 1 ? esc_html__( 'Replies', 'kb-support' ) : esc_html__( 'Reply', 'kb-support' ) ) . '</sup>';
+						}
+						?>
                         <tr id="ticket_data_<?php echo $ticket->ID; ?>" class="ticket_data_row">
-                            <td class="the_ticket_id"><a class="kbs-hover hvr-underline-from-center" href="<?php echo esc_url( $ticket_url ); ?>"><?php echo kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ); ?></a></td>
+                            <td class="the_ticket_id"><a class="kbs-hover hvr-float-shadow" href="<?php echo esc_url( $ticket_url ); ?>"><?php echo kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ); ?></a></td>
 							<td class="title"><?php echo esc_html( $ticket->post_title ); ?></td>
-							<td class="status"><span class="kbs-label kbs-label-status" style="background-color: <?php echo kbs_get_ticket_status_colour( $ticket->post_status ); ?>;"></span><span><?php echo kbs_get_ticket_status( $ticket, true ); ?></span></td>
+							<td class="status"><span class="kbs-label kbs-label-status" style="background-color: <?php echo kbs_get_ticket_status_colour( $ticket->post_status ); ?>;"><?php echo kbs_get_ticket_status( $ticket, true ); ?></span></td>
 							<td class="date"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $ticket->post_date ) ); ?></td>
-                            <td class="actions"><a class="button view-ticket kbs-hover hvr-float-shadow" href="<?php echo esc_url( $ticket_url ); ?>"><?php _e( 'View', 'kb-support' ); ?></a></td>
-                        </tr>
+							<td class="actions"><a class="view-ticket kbs-hover hvr-float-shadow"
+												   href="<?php echo esc_url( $ticket_url ); ?>"><?php _e( 'View', 'kb-support' ); ?></a><?php  echo ($replies) ? $replies : ''; ?>
+							</td>
+						</tr>
 
                     <?php endforeach; ?>
 

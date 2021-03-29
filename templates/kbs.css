@@ -288,10 +288,12 @@ span.kbs-time    {
 	color: #fff;
 	vertical-align: baseline;
 	background-color: #999;
-	width:10px;
-	height:10px;
-	border-radius:5px;
+	border-radius:15px;
 	margin-right:5px;
+	padding:2px 10px;
+	min-width:75px;
+	font-size:13px;
+	text-align:center;
 }
 
 .kbs-label a,
@@ -323,7 +325,7 @@ span.kbs-time    {
 	background:#fff;
 }
 #kbs_item_wrapper .data_section {
-	border-bottom: 1px solid #eee;
+	/*border-bottom: 1px solid #eee;*/
 	margin-bottom: 10px;
 	overflow: auto;
 }
@@ -331,11 +333,9 @@ span.kbs-time    {
 	margin-bottom: 20px;
 	background:#fff;
 }
-#kbs_item_wrapper .data_section table#ticket_history tbody tr:nth-child(odd){
-	background:rgba(0,0,0,0.1);
-}
+
 #kbs_item_wrapper > div {
-	padding: 0px 20px;
+	padding: 0 20px;
 }
 #kbs_item_wrapper > div:first-child {
 	padding-top: 20px;
@@ -449,9 +449,10 @@ span.kbs-time    {
 }
 
 .kbs-replies-row-header {
-	clear: both;
-	background: #f1f1f1;
-	border: 1px solid #e5e5e5;
+	clear            : both;
+	background-color : rgb(243, 244, 246);
+	border-radius    : 5px;
+	box-shadow       : 0 0 3px rgba(107, 114, 128, 0.5);
 }
 
 .kbs-replies-row-header:before,
@@ -646,21 +647,53 @@ div.kbs_articles_list ul li span	{
 Ticket history form
  */
 
+.ticket_info_wrapper #ticket_history {
+	border-radius : 5px;
+	box-shadow    : 0 0 10px rgba(107, 114, 128, 0.5);
+}
+
+.ticket_info_wrapper #ticket_history th,
+.ticket_info_wrapper #ticket_history td {
+	border:0;
+	border-top:1px solid #f3f4f6;
+}
+
+.ticket_info_wrapper #ticket_history,
+.ticket_info_wrapper #ticket_history a:not(.button),
+.ticket_info_wrapper #ticket_history p,
+.ticket_info_wrapper #ticket_history span:not(.kbs-label-status){
+	color : rgb(107, 114, 128);
+}
+
 .ticket_info_wrapper #ticket_history a {
 	text-decoration:none;
 }
 
+#kbs_item_wrapper .data_section table#ticket_history tbody tr {
+	background : #fff;
+	transition : 550ms;
+}
+
+#kbs_item_wrapper .data_section table#ticket_history tbody tr:hover {
+	background-color : rgb(243, 244, 246)
+}
+
+#kbs_item_wrapper .data_section table#ticket_history sup.ticket-history-new-replies {
+	color : red;
+}
+
+.ticket_info_wrapper #ticket_history tr#ticket_history_header {
+	background-color : rgb(243, 244, 246);
+	color            : rgb(107, 114, 128);
+}
+
 .ticket_info_wrapper #ticket_history a.button {
-	padding : 5px 15px;
-	background:#05aae8;
+	padding    : 5px 15px;
+	background : #05aae8;
 }
 
 .ticket_info_wrapper #ticket_history a:hover {
-	color : #fff;
-}
-
-.ticket_info_wrapper #ticket_history .the_ticket_id a {
-	color:#000;
+	color : #05aae8;
 }
 
 .ticket_info_wrapper #ticket_history .the_ticket_id a:hover {
@@ -685,6 +718,7 @@ form#kbs_ticket_reply_form .button {
 
 form#kbs_ticket_reply_form .kbs-replies-row-header {
 	padding : 10px 25px 10px 10px;
+	border  : 0;
 }
 
 form#kbs_ticket_reply_form .kbs-replies-row-header .new-reply {
@@ -692,3 +726,9 @@ form#kbs_ticket_reply_form .kbs-replies-row-header .new-reply {
 	color    : red;
 	right    : 5px;
 }
+
+form#kbs_ticket_reply_form #kbs-ticket-replies .kbs-replies-row-title,
+form#kbs_ticket_reply_form #kbs-ticket-replies .kbs-replies-row-actions {
+	color : rgb(107, 114, 128);
+}
+

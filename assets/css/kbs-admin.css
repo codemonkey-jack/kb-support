@@ -1464,6 +1464,15 @@ p.kbs-extension-desc {
 
 }
 
+table tr.type-kbs_ticket .kbs-status {
+	padding:3px;
+	border-radius:15px;
+	color:#fff;
+	display:inline-block;
+	min-width:75px;
+	text-align:center;
+}
+
 /*
 ** Toggles
  */
