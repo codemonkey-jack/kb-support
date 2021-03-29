@@ -678,7 +678,17 @@ Reply form
  */
 
 form#kbs_ticket_reply_form .button {
-	padding : 5px 15px;
-	background:#05aae8;
-	text-decoration:none;
+	padding         : 5px 15px;
+	background      : #05aae8;
+	text-decoration : none;
+}
+
+form#kbs_ticket_reply_form .kbs-replies-row-header {
+	padding : 10px 25px 10px 10px;
+}
+
+form#kbs_ticket_reply_form .kbs-replies-row-header .new-reply {
+	position : absolute;
+	color    : red;
+	right    : 5px;
 }

@@ -184,16 +184,18 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                     <?php foreach( $replies as $reply ) : ?>
 
                                         <?php
-                                        $reply_content = apply_filters( 'the_content', $reply->post_content );
-                                        $reply_content = str_replace( ']]>', ']]&gt;', $reply_content );
-										$show          = $expand > 0 && $expand >= $count_expand ? ' show' : '';
-                                        $files         = kbs_ticket_has_files( $reply->ID );
-                                        $file_count    = ( $files ? count( $files ) : false );
-                                        $heading       = apply_filters( 'kbs_front_replies_title', sprintf(
-                                            '%s by %s',
-                                            date_i18n( $time_format . ' \o\n ' . $date_format, strtotime(  $reply->post_date ) ),
-                                            kbs_get_reply_author_name( $reply->ID, true )
-                                        ) );
+										$current_user_replay = absint( $reply->post_author ) == get_current_user_id();
+										$read_reply          = get_post_meta( $reply->ID, '_kbs_reply_customer_read', true );
+										$reply_content       = apply_filters( 'the_content', $reply->post_content );
+										$reply_content       = str_replace( ']]>', ']]&gt;', $reply_content );
+										$show                = $expand > 0 && $expand >= $count_expand ? ' show' : '';
+										$files               = kbs_ticket_has_files( $reply->ID );
+										$file_count          = ( $files ? count( $files ) : false );
+										$heading             = apply_filters( 'kbs_front_replies_title', sprintf(
+											'%s by %s',
+											date_i18n( $time_format . ' \o\n ' . $date_format, strtotime( $reply->post_date ) ),
+											kbs_get_reply_author_name( $reply->ID, true )
+										) );
                                         ?>
 
                                         <div id="kbs-reply-card" class="card kbs_replies_wrapper">
@@ -207,6 +209,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                                         <?php _e( 'View Reply', 'kb-support' ); ?>
                                                     </a>
                                                 </span>
+												<?php echo (!$current_user_replay && '' == $read_reply ) ? '<span class="new-reply"><sup>( ! )</sup></span>' : ''; ?>
                                             </div>
 
                                             <div id="kbs_ticket_reply-<?php echo esc_attr($reply->ID); ?>" class="collapse<?php echo $show; ?>" aria-labelledby="kbs_ticket_reply-<?php echo $reply->ID; ?>-heading" data-parent="#kbs-ticket-replies">

@@ -161,6 +161,12 @@ jQuery(document).ready(function ($) {
 	$( document ).on( 'click', '.ticket_reply_content, .toggle-view-reply-option-section[aria-expanded="false"]', function () {
 		var reply_id = $( this ).data( 'key' );
 		kbs_cust_read_reply( reply_id );
+		var reply_attention = $( this ).parents( '.kbs-replies-row-header' ).find( '.new-reply' );
+		if ( 'undefined' != reply_attention ) {
+			setTimeout( function () {
+				reply_attention.hide();
+			}, 600 );
+		}
 	} );
 
     // Load more replies
