@@ -692,6 +692,7 @@ Ticket history form
 .wpchill-table td {
 	border     : 0;
 	border-top : 1px solid #f3f4f6;
+	text-align : left;
 }
 
 .ticket_info_wrapper #ticket_history,

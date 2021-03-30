@@ -189,8 +189,6 @@ class KBS_Welcome {
 					);
 					?></p>
 
-				<?php kbs_get_newsletter(); ?>
-
 				<div class="feature-section wp-clearfix introduction flex">
 
 					<div class="video feature-section-item">
@@ -398,8 +396,6 @@ class KBS_Welcome {
 						), 'https://kb-support.com/support/' ) )
 					);
 					?></p>
-
-				<?php kbs_get_newsletter(); ?>
 
 				<p class="about-text"><?php _e( 'Getting started with KB Support is easy! It works right from installation but we\'ve put together this quick start guide to help first time users customize the plugin to meet the individual needs of their business. We\'ll have you up and running in no time. Let\'s begin!', 'kb-support' ); ?></p>
 
