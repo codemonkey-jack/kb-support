@@ -173,8 +173,8 @@ module.exports = function( grunt ) {
 		cssmin:	{
 			build:	{
 				files: {
-					'<%= dirs.main.css %>/kbs-admin.min.css': ['<%= dirs.main.css %>/kbs-admin.css'],
-                    '<%= dirs.main.css %>/kbs-admin-bar.min.css': ['<%= dirs.main.css %>/kbs-admin-bar.css'],
+					'<%= dirs.main.css %>/admin/kbs-admin.min.css': ['<%= dirs.main.css %>/admin/kbs-admin.css'],
+                    '<%= dirs.main.css %>/admin/kbs-admin-bar.min.css': ['<%= dirs.main.css %>/admin/kbs-admin-bar.css'],
 					'<%= dirs.templates.css %>/kbs.min.css': ['<%= dirs.templates.css %>/kbs.css']
 				}
 			}
