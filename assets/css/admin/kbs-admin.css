@@ -69,7 +69,7 @@
 	box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 .kbs-authd	{
-	background-image: url(../images/tick.png);
+	background-image: url(../../images/tick.png);
 	background-repeat: no-repeat;
 	background-position: 98% 50%;
 }
@@ -515,7 +515,7 @@ span.price_restricted:before {
 .kbs_field_wrapper .kbs_field_field_container { position: relative; }
 .kbs_remove { margin: 8px 0 0 0; cursor: pointer; width: 10px; height: 10px; display: inline-block; text-indent: -9999px; overflow: hidden; }
 .kbs_remove:active, .kbs_remove:hover { background-position: -10px 0!important }
-.kbs_draghandle { display: block; width: 20px; height: 20px; background: url(../images/kbs-cross-hair.png); cursor: move; margin: 4px 0 0 0; }
+.kbs_draghandle { display: block; width: 20px; height: 20px; background: url(../../images/kbs-cross-hair.png); cursor: move; margin: 4px 0 0 0; }
 .kbs_default_wrapper { text-align: center; width: 25px; }
 #kbs_formfields .kbs_meta_field_label_wrap p input,
 #kbs_formfields .kbs_meta_field_label_wrap p select,

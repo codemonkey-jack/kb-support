@@ -1,0 +1,116 @@
+.wpchill-about-row .wpchill-about__container {
+	max-width   : 1000px;
+	margin      : 24px auto;
+	clear       : both;
+	line-height : 1.4;
+}
+
+.wpchill-about-row div {
+	display  : block;
+	float    : none;
+	position : relative;
+}
+
+.wpchill-about-header {
+	background    : #2ebf91;
+	margin-bottom : 32px;
+	max-height    : 500px;
+}
+
+.wpchill-about-heading {
+	background      : url('../../images/kbs-icon-transparent.png') center right no-repeat;
+	background-size : contain;
+	min-height      : 24em;
+	max-height      : 32em;
+	height          : 80vh;
+	padding         : 0 32px;
+}
+
+.wpchill-about-heading h1 {
+	color     : #fff;
+	font-size : 43px;
+	position  : absolute;
+	bottom    : 0;
+	width     : 60%;
+}
+
+.wpchill-about-heading h1 span {
+	display : inline-block;
+}
+
+.wpchill-about-header .about__header-badge {
+	background-color : #472d7b;
+}
+
+.wpchill-about-header .wpchill-about__header-text {
+	background-color : #16a085;
+	padding          : 16px 32px 32px;
+	font-size        : 1.5em;
+	line-height      : 1.4;
+}
+
+.wpchill-about-header .wpchill-about__header-text p {
+	color : #fff;
+}
+
+h1.wpchill-about-heading {
+	color     : #774cce;
+	font-size : 40px;
+}
+
+.wpchill-about-row .wpchill-about__container h2 {
+	font-size : 25px;
+}
+
+.wpchill-about-row .wpchill-about__container img {
+	max-width  : 100%;
+	max-height : 100%;
+}
+
+.wpchill-about-row .wpchill-about__container .flex {
+	display       : flex;
+	flex-wrap     : wrap;
+	align-items   : center;
+	align-content : center;
+}
+
+ul.wpchill-about-list {
+	padding-left : 25px;
+	position     : relative;
+	margin-left  : 0;
+}
+
+.wpchill-about-list li {
+	position        : relative;
+	list-style-type : none;
+	font-size       : 18px;
+}
+
+.wpchill-about-list li:before {
+	font-family : Dashicons;
+	display     : block;
+	position    : absolute;
+	left        : -25px;
+}
+
+.wpchill-about-list li.fixed:before {
+	content : "\f107";
+	color   : green;
+}
+
+.wpchill-about-list li.added:before {
+	content : "\f132";
+	color   : blue;
+}
+
+.wpchill-about-list li.removed:before {
+	content : "\f182";
+	color   : red;
+}
+
+
+.wpchill-about-list li.changed:before {
+	content : "\f111";
+	color   : yellowgreen;
+}
+

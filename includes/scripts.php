@@ -245,11 +245,17 @@ function kbs_load_admin_styles( $hook ) {
 	wp_register_style( 'jquery-ui-css', $css_dir . 'jquery-ui-' . $ui_style . $suffix . '.css' );
 	wp_enqueue_style( 'jquery-ui-css' );
 
-	wp_register_style( 'kbs-admin', $css_dir . 'kbs-admin' . $suffix . '.css', array(), KBS_VERSION );
+	wp_register_style( 'kbs-admin', $css_dir . 'admin/kbs-admin' . $suffix . '.css', array(), KBS_VERSION );
 	wp_enqueue_style( 'kbs-admin' );
 
+	if ( 'dashboard_page_kbs-getting-started' == $hook || 'dashboard_page_kbs-about' == $hook ){
+
+		wp_register_style( 'kbs-about', $css_dir . 'admin/about.css', array(), KBS_VERSION );
+		wp_enqueue_style( 'kbs-about' );
+	}
+
     if ( is_admin_bar_showing() )   {
-        wp_register_style( 'kbs-admin-bar', $css_dir . 'kbs-admin-bar' . $suffix . '.css', array(), KBS_VERSION, 'all' );
+        wp_register_style( 'kbs-admin-bar', $css_dir . 'admin/kbs-admin-bar' . $suffix . '.css', array(), KBS_VERSION, 'all' );
     	wp_enqueue_style( 'kbs-admin-bar' );
     }
 
