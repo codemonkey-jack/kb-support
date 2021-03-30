@@ -1627,3 +1627,7 @@ Tooltips
 /**
 End Tooltips
  */
+
+.kbs_option_support_hours table th {
+	vertical-align:middle;
+}

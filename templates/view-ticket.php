@@ -84,7 +84,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 											<td>
 												<div class="wpchill-tooltip"><span>[?]</span>
 													<div
-														class="wpchill-tooltip-content"><?php echo esc_html__( 'Received on ', 'kb-support' ) . date_i18n( $date_format, strtotime( $ticket->date ) ); ?></div>
+														class="wpchill-tooltip-content"><?php echo esc_html__( 'Sent on ', 'kb-support' ) . date_i18n( $date_format, strtotime( $ticket->date ) ); ?></div>
 												</div>
 
 												  <span class="ticket_updated"><?php echo date_i18n( $time_format . ' \o\n ' . $date_format, strtotime( $ticket->modified_date ) ); ?> <?php printf( __( '(%s ago)', 'kb-support' ), human_time_diff( strtotime( $ticket->modified_date ), current_time( 'timestamp' ) ) ); ?> </span>

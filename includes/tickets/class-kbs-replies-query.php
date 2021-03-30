@@ -417,9 +417,18 @@ class KBS_Replies_Query extends KBS_Stats {
 			'order'      => 'DESC',
 			'status'     => 'publish',
 			'meta_query' => array(
+				'relation' => 'AND',
 				array(
 					'key'     => '_kbs_reply_customer_read',
 					'compare' => 'NOT EXISTS',
+				),
+				array(
+					'key'     => '_kbs_reply_customer_id',
+					'compare' => 'EXISTS',
+				),
+				array(
+					'key'     => '_kbs_reply_agent_id',
+					'compare' => 'EXISTS',
 				)
 			)
 		);
