@@ -260,6 +260,14 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
                 <?php do_action( 'kbs_replies_before_content', $reply ); ?>
                 <?php echo wpautop( $reply->post_content ); ?>
                 <?php do_action( 'kbs_replies_content', $reply ); ?>
+				<p class="description">
+					<?php
+					$reply_note = get_post_meta( $reply->ID, 'kbs_ticket_reply_note', true );
+					if ( is_array( $reply_note ) && ! empty( $reply_note ) ) {
+						echo esc_html__( 'Reply note: ', 'kb-support' ) . esc_html( $reply_note['note'] ) . esc_html__( ' added by: ', 'kb-support' ) . esc_html( $reply_note['user']->user_login );
+					}
+					?>
+				</p>
             </div>
             <?php do_action( 'kbs_after_reply_content_section', $reply ); ?>
             <?php if ( $files ) : ?>

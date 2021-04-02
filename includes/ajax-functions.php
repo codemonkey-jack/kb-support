@@ -250,6 +250,16 @@ function kbs_ajax_insert_ticket_reply()	{
 
 	$reply_id = $ticket->add_reply( $reply_data );
 
+	if ( isset( $_POST['note'] ) && '' != $_POST['note'] ) {
+
+		$reply_note = array(
+			'user' => wp_get_current_user(),
+			'note' => sanitize_text_field( $_POST['note'] )
+		);
+
+		update_post_meta( $reply_id, 'kbs_ticket_reply_note', $reply_note );
+	}
+
 	do_action( 'kbs_ticket_admin_reply', $ticket->ID, $reply_id );
 
 	wp_send_json( array( 'reply_id' => $reply_id ) );
@@ -430,7 +440,7 @@ add_action( 'wp_ajax_nopriv_kbs_load_front_end_replies', 'kbs_ajax_load_front_en
 function kbs_ajax_mark_reply_as_read() {
 
     $reply_id = isset( $_POST['reply_id'] )    ? $_POST['reply_id']    : 0;
-    
+
     if ( ! empty( $reply_id ) )   {
         kbs_mark_reply_as_read( $reply_id );
     }
@@ -575,7 +585,7 @@ function kbs_ajax_add_form_field()	{
 	} else	{
 		$results['message'] = 'field_add_fail';
 	}
-	
+
 	wp_send_json( $results );
 
 } // kbs_ajax_add_form_field
@@ -600,7 +610,7 @@ function kbs_ajax_save_form_field()	{
 	} else	{
 		$results['message'] = 'field_save_fail';
 	}
-	
+
 	wp_send_json( $results );
 
 } // kbs_ajax_save_form_field
@@ -613,7 +623,7 @@ add_action( 'wp_ajax_kbs_save_form_field', 'kbs_ajax_save_form_field' );
  * @return	void
  */
 function kbs_ajax_order_form_fields()	{
-	
+
 	foreach( $_POST['fields'] as $order => $id )	{
 		wp_update_post( array(
 			'ID'			=> $id,
@@ -689,14 +699,14 @@ function kbs_ajax_validate_form_submission()	{
 			 */
 			$error = apply_filters( 'kbs_validate_form_field_' . $settings['type'], $error, $field, $settings, $_POST[ $field->post_name ], $fields );
 		}
-	
+
 		if ( $error )	{
 			wp_send_json( array(
 				'error' => $error,
 				'field' => $field
 			) );
 		}
-	
+
 	}
 
 	if ( $agree_to_policy && $privacy_page && empty( $_POST['kbs_agree_privacy_policy'] ) )	{

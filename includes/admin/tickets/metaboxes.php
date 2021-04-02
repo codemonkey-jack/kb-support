@@ -925,6 +925,13 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 		</p>
 	<?php else :
 
+		$reply_note_settings = apply_filters( 'kbs_ticket_reply_note_mce_settings', array(
+			'textarea_rows' => 1,
+			'teeny'         => true,
+			'tinymce'       => false,
+			'media_buttons' => false,
+		) );
+
 		$settings = apply_filters( 'kbs_ticket_reply_mce_settings', array(
 			'textarea_rows' => 10,
 			'quicktags'     => false,
@@ -934,11 +941,18 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 		) ); ?>
 
 		<div id="kbs-ticket-reply-wrap">
-        	<p><label for="kbs_ticket_reply"><strong><?php _e( 'Add a New Reply', 'kb-support' ); ?></strong></label><br />
-            	<?php do_action( 'kbs_ticket_metabox_before_reply_content', $ticket_id );
+			<p><label for="kbs_ticket_reply"><strong><?php _e( 'Add a New Reply', 'kb-support' ); ?></strong></label><br />
+				<?php do_action( 'kbs_ticket_metabox_before_reply_content', $ticket_id );
 				wp_editor( '', 'kbs_ticket_reply', $settings ); ?>
-            </p>
-        </div>
+			</p>
+		</div>
+		<div class="kbs-ricket-reply-note-wrapper">
+			<p><label
+					for="kbs_ticket_reply_note"><strong><?php _e( 'Add a note to the reply', 'kb-support' ); ?></strong> ( <?php esc_html_e( 'Notes are only visible to support workers', 'kb-support' ); ?> )</label><br/>
+				<?php do_action( 'kbs_ticket_metabox_before_note_content', $ticket_id );
+				wp_editor( '', 'kbs_ticket_reply_note', $reply_note_settings ); ?>
+			</p>
+		</div>
 
 		<?php
 		/*
