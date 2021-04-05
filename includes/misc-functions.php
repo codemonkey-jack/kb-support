@@ -1133,3 +1133,60 @@ function kbs_get_current_promotions( $active_only = true )   {
 
     return $promotions;
 } // kbs_get_current_promotions
+
+
+/**
+ * Callback to sort tabs/fields on priority.
+ *
+ * @return bool
+ * @since 1.6.0
+ *
+ */
+function helptain_sort_data_by_priority( $a, $b ) {
+	if ( ! isset( $a['priority'], $b['priority'] ) ) {
+		return - 1;
+	}
+	if ( $a['priority'] == $b['priority'] ) {
+		return 0;
+	}
+
+	return $a['priority'] < $b['priority'] ? - 1 : 1;
+}
+
+/**
+ * Callback to sort replies and notes by post_date
+ *
+ * @return bool
+ * @since 1.6.0
+ *
+ */
+function helptain_sort_data_by_date( $a, $b ) {
+	$a_time = false;
+	$b_time = false;
+
+	if ( isset( $a->post_date ) ) {
+		$a_time = $a->post_date;
+	}
+
+	if ( isset( $a->comment_date ) ) {
+		$a_time = $a->comment_date;
+	}
+
+	if ( isset( $b->post_date ) ) {
+		$b_time = $b->post_date;
+	}
+
+	if ( isset( $b->comment_date ) ) {
+		$b_time = $b->comment_date;
+	}
+
+	if ( ! $a_time && ! $b_time ) {
+		return - 1;
+	}
+
+	if ( $a_time == $b_time ) {
+		return 0;
+	}
+
+	return $a_time > $b_time ? - 1 : 1;
+}

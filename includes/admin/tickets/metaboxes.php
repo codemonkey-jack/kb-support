@@ -133,15 +133,6 @@ function kbs_ticket_add_meta_boxes( $post )	{
 
 		}
 
-		add_meta_box(
-			'kbs-ticket-metabox-ticket-private',
-			__( 'Private Notes', 'kb-support' ),
-			'kbs_ticket_metabox_notes_callback',
-			'kbs_ticket',
-			'normal',
-			'high',
-			array()
-		);
 	}
 
 } // kbs_ticket_add_meta_boxes
@@ -293,24 +284,6 @@ function kbs_ticket_metabox_reply_callback()	{
 	do_action( 'kbs_ticket_reply_fields', $post->ID );
 } // kbs_ticket_metabox_reply_callback
 
-/**
- * The callback function for the private notes metabox.
- *
- * @since	1.0
- * @global	object	$post				WP_Post object
- * @global	object	$kbs_ticket			KBS_Ticket class object
- * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new
- */
-function kbs_ticket_metabox_notes_callback()	{
-	global $post, $kbs_ticket, $kbs_ticket_update;
-
-	/*
-	 * Output the items for the pruvate notes metabox
-	 * @since	1.0
-	 * @param	int	$post_id	The Ticket post ID
-	 */
-	do_action( 'kbs_ticket_notes_fields', $post->ID );
-} // kbs_ticket_metabox_notes_callback
 
 /**
  * Display the save ticket metabox row.
@@ -925,125 +898,113 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 		</p>
 	<?php else :
 
-		$reply_note_settings = apply_filters( 'kbs_ticket_reply_note_mce_settings', array(
-			'textarea_rows' => 1,
-			'teeny'         => true,
-			'tinymce'       => false,
-			'media_buttons' => false,
-		) );
-
 		$settings = apply_filters( 'kbs_ticket_reply_mce_settings', array(
 			'textarea_rows' => 10,
 			'quicktags'     => false,
 			'teeny'         => true,
 			'dfw'           => false,
 			'tinymce'       => true,
-		) ); ?>
+		) );
+
+		$action_buttons = apply_filters( 'helptain_action_buttons', array(
+			'reply_button'          => array(
+				'icon'        => 'dashicons-undo',
+				'description' => esc_html__( 'Reply', 'kb-support' ),
+				'priority'    => 10
+			),
+			'note_button'           => array(
+				'icon'        => 'dashicons-edit',
+				'description' => esc_html__( 'Note', 'kb-support' ),
+				'priority'    => 20
+			),
+			'canned_replies_button' => array(
+				'icon'        => 'dashicons-database-view',
+				'description' => esc_html__( 'Canned Replies', 'kb-support' ),
+				'priority'    => 30
+			),
+		) );
+
+		uasort( $action_buttons, 'helptain_sort_data_by_priority' );
+
+		?>
+
+		<div id="helptain-action-bar">
+			<ul class="helptain-action-buttons">
+				<?php
+				if ( ! empty( $action_buttons ) ) {
+					foreach ( $action_buttons as $key => $button ) {
+						echo '<li class="helptain-action-button"><a href="#' . esc_attr( $key ) . '" class="dashicons ' . esc_attr( $button['icon'] ) . '" title="' . esc_attr( $button['description'] ) . '"></a></li>';
+					}
+				}
+				?>
+			</ul>
+		</div>
 
 		<div id="kbs-ticket-reply-wrap">
-			<p><label for="kbs_ticket_reply"><strong><?php _e( 'Add a New Reply', 'kb-support' ); ?></strong></label><br />
+			<p><label
+					for="kbs_ticket_reply"><strong><?php _e( 'Add a New Reply', 'kb-support' ); ?></strong></label><br/>
 				<?php do_action( 'kbs_ticket_metabox_before_reply_content', $ticket_id );
 				wp_editor( '', 'kbs_ticket_reply', $settings ); ?>
 			</p>
-		</div>
-		<div class="kbs-ricket-reply-note-wrapper">
-			<p><label
-					for="kbs_ticket_reply_note"><strong><?php _e( 'Add a note to the reply', 'kb-support' ); ?></strong> ( <?php esc_html_e( 'Notes are only visible to support workers', 'kb-support' ); ?> )</label><br/>
-				<?php do_action( 'kbs_ticket_metabox_before_note_content', $ticket_id );
-				wp_editor( '', 'kbs_ticket_reply_note', $reply_note_settings ); ?>
-			</p>
+
+			<?php
+			/*
+			 * Fires immediately before the reply buttons are output
+			 * @since	1.0
+			 * @param	int	$post_id	The Ticket post ID
+			 */
+			do_action( 'kbs_ticket_before_reply_buttons', $ticket_id );
+
+			if ( kbs_agent_can_set_status_on_reply() ) : ?>
+				<p><label>
+						<?php printf(
+							__( '<strong>Set status to</strong> %s <strong>and</strong>&nbsp;', 'kb-support' ),
+							KBS()->html->ticket_status_dropdown( array(
+								'name'     => 'ticket_reply_status',
+								'selected' => kbs_agent_get_default_reply_status( $kbs_ticket->ID ),
+								'chosen'   => true
+							) )
+						); ?> <a id="kbs-reply-update"
+								 class="button button-primary"><?php _e( 'Reply', 'kb-support' ); ?></a></label>
+				</p>
+				<p><a id="kbs-reply-close"
+					  class="button button-secondary"><?php _e( 'Reply and Close', 'kb-support' ); ?></a></p>
+			<?php else : ?>
+				<div id="kbs-ticket-reply-container">
+					<div class="kbs-reply"><a id="kbs-reply-update"
+											  class="button button-primary"><?php _e( 'Reply', 'kb-support' ); ?></a>
+					</div>
+					<div class="kbs-reply"><a id="kbs-reply-close"
+											  class="button button-secondary"><?php _e( 'Reply and Close', 'kb-support' ); ?></a>
+					</div>
+				</div>
+			<?php endif; ?>
+			<div id="kbs-new-reply-loader"></div>
 		</div>
 
-		<?php
-		/*
-		 * Fires immediately before the reply buttons are output
-		 * @since	1.0
-		 * @param	int	$post_id	The Ticket post ID
-		 */
-		do_action( 'kbs_ticket_before_reply_buttons', $ticket_id );
-
-		if ( kbs_agent_can_set_status_on_reply() ) : ?>
-			<p><label>
-				<?php printf(
-					__( '<strong>Set status to</strong> %s <strong>and</strong>&nbsp;', 'kb-support' ),
-					KBS()->html->ticket_status_dropdown( array(
-						'name'     => 'ticket_reply_status',
-						'selected' => kbs_agent_get_default_reply_status( $kbs_ticket->ID ),
-						'chosen'   => true
-					) )
-				); ?> <a id="kbs-reply-update" class="button button-primary"><?php _e( 'Reply', 'kb-support' ); ?></a></label>
+		<div id="kbs-ticket-add-note-container">
+			<p><label for="kbs_new_note"><strong><?php _e( 'Add a New Note', 'kb-support' ); ?></strong></label><br />
+				<?php echo KBS()->html->textarea( array(
+					'name'  => 'kbs_new_note',
+					'id'    => 'kbs_new_note',
+					'desc'  => __( 'Notes are only visible to support workers', 'kb-support' ),
+					'class' => 'large-text',
+					'rows'  => 5
+				) ); ?>
 			</p>
-			<p><a id="kbs-reply-close" class="button button-secondary"><?php _e( 'Reply and Close', 'kb-support' ); ?></a></p>
-		<?php else : ?>
-			<div id="kbs-ticket-reply-container">
-				<div class="kbs-reply"><a id="kbs-reply-update" class="button button-primary"><?php _e( 'Reply', 'kb-support' ); ?></a></div>
-				<div class="kbs-reply"><a id="kbs-reply-close" class="button button-secondary"><?php _e( 'Reply and Close', 'kb-support' ); ?></a></div>
-			</div>
-		<?php endif; ?>
-        <div id="kbs-new-reply-loader"></div>
+
+			<?php
+			/*
+			 * Fires immediately before the add note button is output.
+			 * @since	1.0
+			 * @param	int	$post_id	The Ticket post ID
+			 */
+			do_action( 'kbs_ticket_before_add_note_button', $ticket_id ); ?>
+
+			<div class="kbs-add-note"><a id="kbs-add-note" class="button button-secondary"><?php _e( 'Add Note', 'kb-support' ); ?></a></div>
+			<div id="kbs-new-note-loader"></div>
+		</div>
 
 	<?php endif;
 } // kbs_ticket_metabox_details_row
 add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_reply_row', 20 );
-
-/**
- * Display the ticket add note row.
- *
- * @since	1.0
- * @global	object	$kbs_ticket			KBS_Ticket class object
- * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
- * @param	int		$ticket_id			The ticket post ID.
- */
-function kbs_ticket_metabox_notes_row( $ticket_id )	{
-	global $kbs_ticket, $kbs_ticket_update;
-
-	?>
-    <div id="kbs-notes-loader"></div>
-
-    <div id="kbs_notes_fields" class="kbs_meta_table_wrap">
-        <div class="widefat">
-            <div class="kbs-notes-option-fields"></div>
-        </div>
-    </div>
-	<?php
-} // kbs_ticket_metabox_notes_row
-add_action( 'kbs_ticket_notes_fields', 'kbs_ticket_metabox_notes_row', 10 );
-
-/**
- * Display the ticket add note row.
- *
- * @since	1.0
- * @global	object	$kbs_ticket			KBS_Ticket class object
- * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
- * @param	int		$ticket_id			The ticket post ID.
- */
-function kbs_ticket_metabox_add_note_row( $ticket_id )	{
-	global $kbs_ticket, $kbs_ticket_update; ?>
-
-	<?php $flag_label = $kbs_ticket->flagged ? __( 'Unflag', 'kb-support' ) : __( 'Flag', 'kb-support' ); ?>
-
-	<div id="kbs-ticket-add-note-container">
-    	<p><label for="kbs_new_note"><strong><?php _e( 'Add a New Note', 'kb-support' ); ?></strong></label><br />
-			<?php echo KBS()->html->textarea( array(
-                'name'  => 'kbs_new_note',
-				'id'    => 'kbs_new_note',
-                'desc'  => __( 'Notes are only visible to support workers', 'kb-support' ),
-                'class' => 'large-text',
-                'rows'  => 5
-            ) ); ?>
-        </p>
-
-        <?php
-        /*
-         * Fires immediately before the add note button is output.
-         * @since	1.0
-         * @param	int	$post_id	The Ticket post ID
-         */
-        do_action( 'kbs_ticket_before_add_note_button', $ticket_id ); ?>
-
-		<div class="kbs-add-note"><a id="kbs-add-note" class="button button-secondary"><?php _e( 'Add Note', 'kb-support' ); ?></a></div>
-        <div id="kbs-new-note-loader"></div>
-	</div>
-	<?php
-} // kbs_ticket_metabox_add_note_row
-add_action( 'kbs_ticket_notes_fields', 'kbs_ticket_metabox_add_note_row', 20 );

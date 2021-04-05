@@ -462,7 +462,6 @@ jQuery(document).ready(function ($) {
 
 				var ticket_id      = kbs_vars.post_id;
 				var ticketResponse = '';
-				var note           = '';
 				var ticketStatus   = kbs_vars.agent_set_status ? $('#ticket_reply_status').val() : kbs_vars.default_reply_status;
 				var formData       = $('#post').serialize();
 				var tinymceActive  = (typeof tinyMCE !== 'undefined') && tinyMCE.activeEditor && ! tinyMCE.activeEditor.isHidden();
@@ -472,7 +471,6 @@ jQuery(document).ready(function ($) {
 				}
 
 				ticketResponse = $('#kbs_ticket_reply' ).val();
-				note = $('#kbs_ticket_reply_note' ).val();
 
 				if ( ticketResponse.length === 0 )	{
 					window.alert( kbs_vars.no_ticket_reply_content );
@@ -487,14 +485,13 @@ jQuery(document).ready(function ($) {
 					}
 				}
 
-				var postData = {
-					ticket_id   : ticket_id,
-					response    : ticketResponse,
-					note        : note,
-					status      : ticketStatus,
-					close_ticket: ('kbs-reply-close' === event.target.id ? 1 : 0),
-					form_data   : formData,
-					action      : 'kbs_insert_ticket_reply'
+				var postData         = {
+					ticket_id    : ticket_id,
+					response     : ticketResponse,
+					status       : ticketStatus,
+					close_ticket : ( 'kbs-reply-close' === event.target.id ? 1 : 0 ),
+					form_data    : formData,
+					action       : 'kbs_insert_ticket_reply'
 				};
 
 				$.ajax({

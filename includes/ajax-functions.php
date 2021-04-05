@@ -250,16 +250,6 @@ function kbs_ajax_insert_ticket_reply()	{
 
 	$reply_id = $ticket->add_reply( $reply_data );
 
-	if ( isset( $_POST['note'] ) && '' != $_POST['note'] ) {
-
-		$reply_note = array(
-			'user' => wp_get_current_user(),
-			'note' => sanitize_text_field( $_POST['note'] )
-		);
-
-		update_post_meta( $reply_id, 'kbs_ticket_reply_note', $reply_note );
-	}
-
 	do_action( 'kbs_ticket_admin_reply', $ticket->ID, $reply_id );
 
 	wp_send_json( array( 'reply_id' => $reply_id ) );
@@ -298,9 +288,13 @@ function kbs_ajax_display_ticket_replies()	{
 		$replies       = $replies_query->get_replies();
         $latest_reply  = false;
         $auto_expand   = true;
+		$notes = kbs_get_notes( $_POST['kbs_ticket_id'] );
+		$all = array_merge($replies,$notes);
+		uasort( $all, 'helptain_sort_data_by_date' );
 
-		if ( ! empty( $replies ) )	{
-			foreach( $replies as $reply )	{
+		if ( ! empty( $all ) )	{
+			foreach( $all as $reply )	{
+
                 if ( ! $latest_reply )  {
                     $output .= sprintf( '<input type="hidden" id="kbs-latest-reply" name="kbs_latest_reply" value="%s">', $reply->ID );
                     $latest_reply = true;
@@ -308,7 +302,13 @@ function kbs_ajax_display_ticket_replies()	{
 
                 $auto_expand = ( $expand > 0 && $expand >= $count_expand ) ? true : false;
                 $output .= '<div class="kbs_historic_replies_wrapper">';
-                    $output .= kbs_get_reply_html( $reply, $_POST['kbs_ticket_id'], $auto_expand );
+
+				if ( $reply->comment_ID ) {
+					$output .= kbs_get_note_html( $reply, $_POST['kbs_ticket_id'] );
+				} else {
+					$output .= kbs_get_reply_html( $reply, $_POST['kbs_ticket_id'], $auto_expand );
+				}
+
                 $output .= '</div>';
 
                 $count_expand++;

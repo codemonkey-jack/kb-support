@@ -1635,3 +1635,56 @@ End Tooltips
 .kbs-ricket-reply-note-wrapper {
 	margin-bottom:25px;
 }
+
+/**
+** Ticket action bar
+ */
+
+#helptain-action-bar {
+	border-bottom : 1px solid #c3c4c7;
+	position      : sticky;
+	top           : 0;
+	margin-left   : -12px;
+	margin-right  : -12px;
+	padding       : 5px 0;
+}
+
+#helptain-action-bar .helptain-action-buttons {
+	margin : 0;
+}
+
+#helptain-action-bar .helptain-action-buttons .helptain-action-button {
+	list-style-type : none;
+	display         : inline-block;
+	padding         : 5px 10px;
+}
+
+#helptain-action-bar .helptain-action-buttons .helptain-action-button a {
+	font-size : 26px;
+	color     : #aeb6c0;
+}
+
+#helptain-action-bar .helptain-action-buttons .helptain-action-button a.active,
+#helptain-action-bar .helptain-action-buttons .helptain-action-button a:hover{
+	color : #556575;
+}
+
+/**
+** Ticket action bar modifications
+ */
+
+.helptain-hide {
+	display : none;
+}
+
+#kbs_historic_reply_fields {
+	padding-top : 25px;
+}
+
+.kbs-notes-row-header {
+	border-color : orange;
+}
+
+.kbs_historic_replies_wrapper .kbs-notes-content-section {
+	background-color : rgba(255, 165, 0, 0.1);
+}
