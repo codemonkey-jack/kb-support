@@ -301,7 +301,7 @@ function kbs_ajax_display_ticket_replies()	{
                 }
 
                 $auto_expand = ( $expand > 0 && $expand >= $count_expand ) ? true : false;
-                $output .= '<div class="kbs_historic_replies_wrapper">';
+				$output .= '<div class="kbs_historic_replies_wrapper ">';
 
 				if ( $reply->comment_ID ) {
 					$output .= kbs_get_note_html( $reply, $_POST['kbs_ticket_id'] );

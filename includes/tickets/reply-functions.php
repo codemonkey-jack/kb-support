@@ -180,6 +180,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 	$file_count  = ( $files ? count( $files ) : false );
     $show        = $expand ? ' style="display: block;"' : '';
 	$show_hide   = $expand ? __( 'Hide', 'kb-support' ) : __( 'View', 'kb-support' );
+	$show_hide_icons = $expand ? 'dashicons-arrow-up-alt2' : 'dashicons-arrow-down-alt2';
 
 	$create_article_link = add_query_arg( array(
 		'kbs-action' => 'create_article',
@@ -189,10 +190,10 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 
 	$create_article_link = apply_filters( 'kbs_create_article_link', $create_article_link, $ticket_id, $reply );
 
-    $actions = array(
-        'read_reply'     => '<a href="#" class="toggle-view-reply-option-section">' . sprintf( __( '%s Reply', 'kb-support' ), $show_hide ) . '</a>',
-        'create_article' => '<a href="' . $create_article_link . '" class="toggle-reply-option-create-article">' . sprintf( __( 'Create %s', 'kb-support' ), kbs_get_article_label_singular() ) . '</a>'
-    );
+	$actions = array(
+		'read_reply'     => '<a href="#" class="toggle-view-reply-option-section dashicons ' . $show_hide_icons . '" title="' . sprintf( __( '%s Reply', 'kb-support' ), $show_hide ) . '"></a>',
+		'create_article' => '<a href="' . $create_article_link . '" class="toggle-reply-option-create-article dashicons dashicons-welcome-add-page" title="' . sprintf( __( 'Create %s', 'kb-support' ), kbs_get_article_label_singular() ) . '"></a>'
+	);
 
     $actions = apply_filters( 'kbs_ticket_replies_actions', $actions, $reply );
 
@@ -222,7 +223,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
             ), admin_url() ), 'delete_ticket_reply', 'kbs_nonce' );
 
             $actions['trash'] = sprintf(
-                '<a href="%s" class="kbs-delete delete-reply">%s</a>',
+                '<a href="%s" class="kbs-delete delete-reply dashicons dashicons-trash" title="%s"></a>',
                 $delete_url,
                 __( 'Delete Reply', 'kb-support' )
             );
@@ -351,6 +352,59 @@ function kbs_get_reply_author_name( $reply, $role = false )	{
 	return apply_filters( 'kbs_reply_author_name', $author, $reply, $role, $author_role );
 
 } // kbs_get_reply_author_name
+
+/**
+ * Get reply user role based on reply id and ticket id
+ *
+ * @param bool $reply
+ * @param bool $ticket_id
+ *
+ * @return false|string|void
+ * @since 1.6.0
+ */
+function helptain_get_reply_role( $reply = false, $ticket_id = false ) {
+	// If we don't have one of the following we can't retrieve anything
+	if ( ! $ticket_id || ! $reply ) {
+		return;
+	}
+
+	// If it's not a kbs_ticket CPT bail
+	if ( 'kbs_ticket' != get_post_type( $ticket_id ) ) {
+		return;
+	}
+
+	// If post_author not present means it is a note and we don't need color representation
+	if ( ! $reply->post_author ) {
+		return;
+	}
+
+	// Now lets get the roles and responsible agent
+	$user_roles        = get_userdata( $reply->post_author )->roles;
+	$agent_responsible = get_post_meta( absint( $ticket_id ), '_kbs_ticket_agent_id', true );
+
+	// Check if admin
+	if ( in_array( 'administrator', $user_roles ) ) {
+		return 'admin_role';
+	}
+
+	// Check if support manager
+	if ( in_array( 'support_manager', $user_roles ) ) {
+		return 'support_manager_role';
+	}
+
+	// Check if agent
+	if ( in_array( 'support_agent', $user_roles ) ) {
+		if ( $reply->post_author == $agent_responsible ) {
+			return 'same_support_agent';
+		} else {
+			return 'support_agent';
+		}
+
+	}
+
+	// If none above it means it is customer
+	return 'support_customer';
+}
 
 /**
  * Retrieve ticket ID from reply.

@@ -588,12 +588,13 @@ jQuery(document).ready(function ($) {
     // Toggle display of historic ticket replies
 	$( document.body ).on( 'click', '.toggle-view-reply-option-section', function(e) {
 		e.preventDefault();
-		var show = $(this).html() === kbs_vars.view_reply ? true : false;
+
+		var show = $( this ).hasClass( 'dashicons-arrow-down-alt2' );
 
 		if ( show ) {
-			$(this).html( kbs_vars.hide_reply );
+			$( this ).removeClass( 'dashicons-arrow-down-alt2' ).addClass( 'dashicons-arrow-up-alt2' ).attr( 'title', kbs_vars.hide_reply );
 		} else {
-			$(this).html( kbs_vars.view_reply );
+			$( this ).removeClass( 'dashicons-arrow-up-alt2' ).addClass( 'dashicons-arrow-down-alt2' ).attr( 'title', kbs_vars.view_reply );
 		}
 
 		var header = $(this).parents('.kbs-replies-row-header');
@@ -604,12 +605,12 @@ jQuery(document).ready(function ($) {
 	// Toggle display of ticket notes
 	$( document.body ).on( 'click', '.toggle-view-note-option-section', function(e) {
 		e.preventDefault();
-		var show = $(this).html() === kbs_vars.view_note ? true : false;
+		var show = $( this ).hasClass( 'dashicons-arrow-down-alt2' );
 
 		if ( show ) {
-			$(this).html( kbs_vars.hide_note );
+			$( this ).removeClass( 'dashicons-arrow-down-alt2' ).addClass( 'dashicons-arrow-up-alt2' ).attr( 'title', kbs_vars.hide_note );
 		} else {
-			$(this).html( kbs_vars.view_note );
+			$( this ).removeClass( 'dashicons-arrow-up-alt2' ).addClass( 'dashicons-arrow-down-alt2' ).attr( 'title', kbs_vars.view_note );
 		}
 
 		var header = $(this).parents('.kbs-notes-row-header');

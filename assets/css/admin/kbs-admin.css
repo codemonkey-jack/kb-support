@@ -565,26 +565,39 @@ a.kbs_ticket_form_data	{
 .kbs-ticket-content-row-actions .toggle-view-submission-option-section,
 .kbs-ticket-content-row-actions .toggle-flagged-status-option-section,
 .kbs-replies-row-actions .toggle-view-reply-option-section,
-.kbs-replies-row-actions .toggle-reply-option-create-article,
 .kbs-notes-row-actions .toggle-view-note-option-section {
 	color: #777;
 }
+
+.kbs-replies-row-actions .toggle-reply-option-create-article {
+	color:green;
+}
+
+.kbs-replies-row-actions .toggle-reply-option-create-article:hover {
+	color:#009900;
+}
+
+.kbs-notes-row-actions .toggle-view-note-option-section {
+	font-size : 20px;
+}
+
 .kbs-ticket-content-row-actions .toggle-add-reply-option-section:hover,
 .kbs-ticket-content-row-actions .toggle-view-participants-option-section:hover,
 .kbs-ticket-content-row-actions .toggle-view-submission-option-section:hover,
 .kbs-ticket-content-row-actions .toggle-flagged-status-option-section:hover,
 .kbs-replies-row-actions .toggle-view-reply-option-section:hover,
-.kbs-notes-row-actions .toggle-view-note-option-section:hover,
-.kbs-replies-row-actions .toggle-reply-option-create-article:hover {
+.kbs-notes-row-actions .toggle-view-note-option-section:hover {
 	color: #444;
 }
 
 .kbs-ticket-content-row-header,
 .kbs-replies-row-header,
 .kbs-notes-row-header {
-	clear: both;
-	background: #f1f1f1;
-	border: 1px solid #e5e5e5;
+	clear             : both;
+	border-width      : 0;
+	border-left-width : 5px;
+	border-style      : solid;
+	border-color      : #93a1b0;
 }
 
 .kbs-ticket-content-row-header:before,
@@ -630,7 +643,7 @@ a.kbs_ticket_form_data	{
 .kbs-ticket-content-row-actions .kbs-remove-row,
 .kbs-replies-row-actions .kbs-remove-row,
 .kbs-notes-row-actions .kbs-remove-row {
-	font-size: 12px;
+	font-size: 20px;
 	width: auto;
 	cursor: pointer;
 }
@@ -675,9 +688,9 @@ a.kbs_ticket_form_data	{
 .kbs-replies-content-wrap,
 .kbs-notes-content-wrap {
     display: none;
-	border-width: 0 1px 1px;
+	border-width: 0 0 0 5px;
 	border-style: solid;
-	border-color: #e5e5e5;
+	border-color: #93a1b0;
 	box-sizing: border-box;
 	width: 100%;
 }
@@ -1681,10 +1694,19 @@ End Tooltips
 	padding-top : 25px;
 }
 
-.kbs-notes-row-header {
+.kbs-notes-row-header,
+.kbs_historic_replies_wrapper .kbs-notes-content-wrap {
 	border-color : orange;
 }
 
-.kbs_historic_replies_wrapper .kbs-notes-content-section {
-	background-color : rgba(255, 165, 0, 0.1);
+.kbs_historic_replies_wrapper {
+	border-bottom : 1px solid #cecece;
+}
+
+.kbs_historic_replies_wrapper:first-child {
+	border-top : 1px solid #cecece;
+}
+
+.kbs-replies-content-wrap {
+	border-color:#93a1b0;
 }

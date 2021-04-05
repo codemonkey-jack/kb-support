@@ -1580,9 +1580,9 @@ function kbs_get_note_html( $note, $ticket_id = 0 ) {
 	), admin_url() ), 'kbs_delete_ticket_note_' . $note->comment_ID, 'kbs_note_nonce' );
 
 	$actions = array(
-        'read_note'   => '<a href="#" class="toggle-view-note-option-section">' . __( 'View Note', 'kb-support' ) . '</a>',
-        'delete_note' => '<a href="' . $delete_note_url . '" class="kbs-remove-row kbs-delete">' . __( 'Delete Note', 'kb-support' ) . '</a>'
-    );
+		'read_note'   => '<a href="#" class="toggle-view-note-option-section dashicons dashicons-arrow-down-alt2" title="' . __( 'View Note', 'kb-support' ) . '"></a>',
+		'delete_note' => '<a href="' . $delete_note_url . '" class="kbs-remove-row kbs-delete dashicons dashicons-trash" title="' . esc_attr__( 'Delete Note', 'kb-support' ) . '"></a>'
+	);
 
 	if ( $note->user_id != get_current_user_id() && ! current_user_can( $delete_note_cap ) )	{
 		unset( $actions['delete_note'] );
