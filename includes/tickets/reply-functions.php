@@ -174,13 +174,13 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 		$reply = get_post( $reply );
 	}
 
-	$author      = kbs_get_reply_author_name( $reply, true );
-	$date_format = get_option( 'date_format' ) . ', ' . get_option( 'time_format' );
-	$files       = kbs_ticket_has_files( $reply->ID );
-	$file_count  = ( $files ? count( $files ) : false );
-    $show        = $expand ? ' style="display: block;"' : '';
-	$show_hide   = $expand ? __( 'Hide', 'kb-support' ) : __( 'View', 'kb-support' );
-	$show_hide_icons = $expand ? 'dashicons-arrow-up-alt2' : 'dashicons-arrow-down-alt2';
+	$author          = kbs_get_reply_author_name( $reply, true );
+	$date_format     = get_option( 'date_format' ) . ', ' . get_option( 'time_format' );
+	$files           = kbs_ticket_has_files( $reply->ID );
+	$file_count      = ( $files ? count( $files ) : false );
+	$show            = $expand ? ' style="display: block;"' : '';
+	$show_hide       = $expand ? __( 'Hide', 'kb-support' ) : __( 'View', 'kb-support' );
+	$show_hide_icons = $expand ? 'dashicons-arrow-up' : 'dashicons-arrow-down';
 
 	$create_article_link = add_query_arg( array(
 		'kbs-action' => 'create_article',
@@ -191,8 +191,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 	$create_article_link = apply_filters( 'kbs_create_article_link', $create_article_link, $ticket_id, $reply );
 
 	$actions = array(
-		'read_reply'     => '<a href="#" class="toggle-view-reply-option-section dashicons ' . $show_hide_icons . '" title="' . sprintf( __( '%s Reply', 'kb-support' ), $show_hide ) . '"></a>',
-		'create_article' => '<a href="' . $create_article_link . '" class="toggle-reply-option-create-article dashicons dashicons-welcome-add-page" title="' . sprintf( __( 'Create %s', 'kb-support' ), kbs_get_article_label_singular() ) . '"></a>'
+		'create_article' => '<a href="' . $create_article_link . '" class="toggle-reply-option-create-article dashicons dashicons-welcome-add-page" title="' . sprintf( __( 'Create %s', 'kb-support' ), kbs_get_article_label_singular() ) . '"></a>',
 	);
 
     $actions = apply_filters( 'kbs_ticket_replies_actions', $actions, $reply );
@@ -239,7 +238,8 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
         );
     }
 
-    $icons   = apply_filters( 'kbs_ticket_replies_icons', $icons, $reply );
+	$icons                 = apply_filters( 'kbs_ticket_replies_icons', $icons, $reply );
+	$actions['read_reply'] = '<a href="#" class="toggle-view-reply-option-section dashicons ' . $show_hide_icons . '" title="' . sprintf( __( '%s Reply', 'kb-support' ), $show_hide ) . '"></a>';
 
     ob_start(); ?>
 
@@ -250,11 +250,11 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 
         <span class="kbs-replies-row-actions">
             <?php echo implode( ' ', $icons ); ?>
-			<?php echo implode( '&nbsp;&#124;&nbsp;', $actions ); ?>
+			<?php echo implode( ' ', $actions ); ?>
         </span>
     </div>
 
-    <div class="kbs-replies-content-wrap"<?php echo $show; ?></div>
+    <div class="kbs-replies-content-wrap" <?php echo $show; ?></div>
         <div class="kbs-replies-content-sections">
         	<?php do_action( 'kbs_before_reply_content_section', $reply ); ?>
             <div id="kbs-reply-option-section-<?php echo $reply->ID; ?>" class="kbs-replies-content-section">

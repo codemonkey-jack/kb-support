@@ -1557,7 +1557,11 @@ function kbs_delete_note( $comment_id = 0, $ticket_id = 0 ) {
  * @param	int		$ticket_id	The ticket ID the note is connected to
  * @return	str
  */
-function kbs_get_note_html( $note, $ticket_id = 0 ) {
+function kbs_get_note_html( $note, $ticket_id = 0, $expand = false ) {
+
+	$show            = $expand ? ' style="display: block;"' : '';
+	$show_hide       = $expand ? __( 'Hide', 'kb-support' ) : __( 'View', 'kb-support' );
+	$show_hide_icons = $expand ? 'dashicons-arrow-up' : 'dashicons-arrow-down';
 
 	if ( is_numeric( $note ) ) {
 		$note = get_comment( $note );
@@ -1580,8 +1584,8 @@ function kbs_get_note_html( $note, $ticket_id = 0 ) {
 	), admin_url() ), 'kbs_delete_ticket_note_' . $note->comment_ID, 'kbs_note_nonce' );
 
 	$actions = array(
-		'read_note'   => '<a href="#" class="toggle-view-note-option-section dashicons dashicons-arrow-down-alt2" title="' . __( 'View Note', 'kb-support' ) . '"></a>',
-		'delete_note' => '<a href="' . $delete_note_url . '" class="kbs-remove-row kbs-delete dashicons dashicons-trash" title="' . esc_attr__( 'Delete Note', 'kb-support' ) . '"></a>'
+		'delete_note' => '<a href="' . $delete_note_url . '" class="kbs-remove-row kbs-delete dashicons dashicons-trash" title="' . esc_attr__( 'Delete Note', 'kb-support' ) . '"></a>',
+		'read_note'   => '<a href="#" class="toggle-view-note-option-section dashicons ' . $show_hide_icons . '" title="' . sprintf( __( '%s Note', 'kb-support' ), $show_hide ) . '"></a>',
 	);
 
 	if ( $note->user_id != get_current_user_id() && ! current_user_can( $delete_note_cap ) )	{
@@ -1598,11 +1602,11 @@ function kbs_get_note_html( $note, $ticket_id = 0 ) {
         </span>
 
         <span class="kbs-notes-row-actions">
-			<?php echo implode( '&nbsp;&#124;&nbsp;', $actions ); ?>
+			<?php echo implode( ' ', $actions ); ?>
         </span>
     </div>
 
-    <div class="kbs-notes-content-wrap">
+    <div class="kbs-notes-content-wrap" <?php echo $show; ?>>
         <div class="kbs-notes-content-sections">
             <div class="kbs-notes-content-section">
                 <?php do_action( 'kbs_ticket_notes_before_content', $note ); ?>

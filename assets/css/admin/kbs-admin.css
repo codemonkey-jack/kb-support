@@ -1654,12 +1654,11 @@ End Tooltips
  */
 
 #helptain-action-bar {
-	border-bottom : 1px solid #c3c4c7;
-	position      : sticky;
-	top           : 0;
-	margin-left   : -12px;
-	margin-right  : -12px;
-	padding       : 5px 0;
+	border       : 1px solid #c3c4c7;
+	position     : sticky;
+	top          : 0;
+	padding      : 5px 0;
+	background   : #fff;
 }
 
 #helptain-action-bar .helptain-action-buttons {
@@ -1670,21 +1669,30 @@ End Tooltips
 	list-style-type : none;
 	display         : inline-block;
 	padding         : 5px 10px;
+	position        : relative;
 }
 
 #helptain-action-bar .helptain-action-buttons .helptain-action-button a {
-	font-size : 26px;
-	color     : #aeb6c0;
+	font-size  : 26px;
+	color      : #aeb6c0;
+	outline    : none;
+	box-shadow : none;
 }
 
 #helptain-action-bar .helptain-action-buttons .helptain-action-button a.active,
-#helptain-action-bar .helptain-action-buttons .helptain-action-button a:hover{
+#helptain-action-bar .helptain-action-buttons .helptain-action-button a:hover {
 	color : #556575;
 }
 
 /**
 ** Ticket action bar modifications
  */
+
+.helptain-action-wrapper {
+	position   : sticky;
+	top        : 32px;
+	box-shadow : 0 3px 3px rgba(0, 0, 0, 0.2);
+}
 
 .helptain-hide {
 	display : none;
@@ -1694,19 +1702,73 @@ End Tooltips
 	padding-top : 25px;
 }
 
+.kbs_historic_replies_wrapper[expanded="false"]  .kbs-notes-row-actions a:not(.toggle-view-note-option-section),
+.kbs_historic_replies_wrapper[expanded="false"]  .kbs-replies-row-actions a:not(.toggle-view-reply-option-section){
+	display : none;
+}
+
 .kbs-notes-row-header,
 .kbs_historic_replies_wrapper .kbs-notes-content-wrap {
 	border-color : orange;
 }
 
 .kbs_historic_replies_wrapper {
-	border-bottom : 1px solid #cecece;
-}
-
-.kbs_historic_replies_wrapper:first-child {
-	border-top : 1px solid #cecece;
+	border : 1px solid #cecece;
+	background:#fff;
 }
 
 .kbs-replies-content-wrap {
 	border-color:#93a1b0;
+}
+
+ul#helptain_status_select {
+	position      : absolute;
+	display       : block;
+	background    : #fff;
+	width         : 200px;
+	top           : 42px;
+	border        : 1px solid #cecece;
+	border-radius : 5px;
+	left          : 0;
+	z-index       : 999;
+}
+
+ul#helptain_status_select.helptain-hide {
+	display : none;
+}
+
+ul#helptain_status_select li {
+	padding : 5px 10px;
+	cursor  : pointer;
+	margin  : 0 auto;
+}
+
+ul#helptain_status_select li:hover {
+	background : #93a1b0;
+	color      : #fff;
+}
+
+/**
+** Metaboxes
+ */
+
+#kbs-ticket-metabox-ticket-reply {
+	background : transparent;
+	border     : 0;
+}
+
+#kbs-ticket-reply-wrap,
+#kbs-ticket-add-note-container {
+	background : #fff;
+	padding    : 12px;
+	border     : 1px solid #c3c4c7;
+	border-top : 0;
+}
+
+#kbs-ticket-metabox-ticket-reply > .postbox-header {
+	display : none;
+}
+
+#kbs-ticket-metabox-ticket-reply > .inside {
+	padding : 0;
 }

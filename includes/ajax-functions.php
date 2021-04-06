@@ -291,6 +291,7 @@ function kbs_ajax_display_ticket_replies()	{
 		$notes = kbs_get_notes( $_POST['kbs_ticket_id'] );
 		$all = array_merge($replies,$notes);
 		uasort( $all, 'helptain_sort_data_by_date' );
+		$i = 0;
 
 		if ( ! empty( $all ) )	{
 			foreach( $all as $reply )	{
@@ -300,11 +301,11 @@ function kbs_ajax_display_ticket_replies()	{
                     $latest_reply = true;
                 }
 
-                $auto_expand = ( $expand > 0 && $expand >= $count_expand ) ? true : false;
-				$output .= '<div class="kbs_historic_replies_wrapper ">';
 
+                $auto_expand = ( $expand > 0 && $expand >= $count_expand ) ? true : false;
+				$output .= '<div class="kbs_historic_replies_wrapper " expanded="' . esc_attr( ($auto_expand ? 'true' : 'false') ) . '">';
 				if ( $reply->comment_ID ) {
-					$output .= kbs_get_note_html( $reply, $_POST['kbs_ticket_id'] );
+					$output .= kbs_get_note_html( $reply, $_POST['kbs_ticket_id'], $auto_expand );
 				} else {
 					$output .= kbs_get_reply_html( $reply, $_POST['kbs_ticket_id'], $auto_expand );
 				}

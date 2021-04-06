@@ -589,12 +589,14 @@ jQuery(document).ready(function ($) {
 	$( document.body ).on( 'click', '.toggle-view-reply-option-section', function(e) {
 		e.preventDefault();
 
-		var show = $( this ).hasClass( 'dashicons-arrow-down-alt2' );
+		var show = $( this ).hasClass( 'dashicons-arrow-down' );
 
 		if ( show ) {
-			$( this ).removeClass( 'dashicons-arrow-down-alt2' ).addClass( 'dashicons-arrow-up-alt2' ).attr( 'title', kbs_vars.hide_reply );
+			$(this).parents('.kbs_historic_replies_wrapper ').attr('expanded','true');
+			$( this ).removeClass( 'dashicons-arrow-down' ).addClass( 'dashicons-arrow-up' ).attr( 'title', kbs_vars.hide_reply );
 		} else {
-			$( this ).removeClass( 'dashicons-arrow-up-alt2' ).addClass( 'dashicons-arrow-down-alt2' ).attr( 'title', kbs_vars.view_reply );
+			$(this).parents('.kbs_historic_replies_wrapper ').attr('expanded','false');
+			$( this ).removeClass( 'dashicons-arrow-up' ).addClass( 'dashicons-arrow-down' ).attr( 'title', kbs_vars.view_reply );
 		}
 
 		var header = $(this).parents('.kbs-replies-row-header');
@@ -605,12 +607,14 @@ jQuery(document).ready(function ($) {
 	// Toggle display of ticket notes
 	$( document.body ).on( 'click', '.toggle-view-note-option-section', function(e) {
 		e.preventDefault();
-		var show = $( this ).hasClass( 'dashicons-arrow-down-alt2' );
+		var show = $( this ).hasClass( 'dashicons-arrow-down' );
 
 		if ( show ) {
-			$( this ).removeClass( 'dashicons-arrow-down-alt2' ).addClass( 'dashicons-arrow-up-alt2' ).attr( 'title', kbs_vars.hide_note );
+			$(this).parents('.kbs_historic_replies_wrapper ').attr('expanded','true');
+			$( this ).removeClass( 'dashicons-arrow-down' ).addClass( 'dashicons-arrow-up' ).attr( 'title', kbs_vars.hide_note );
 		} else {
-			$( this ).removeClass( 'dashicons-arrow-up-alt2' ).addClass( 'dashicons-arrow-down-alt2' ).attr( 'title', kbs_vars.view_note );
+			$(this).parents('.kbs_historic_replies_wrapper ').attr('expanded','false');
+			$( this ).removeClass( 'dashicons-arrow-up' ).addClass( 'dashicons-arrow-down' ).attr( 'title', kbs_vars.view_note );
 		}
 
 		var header = $(this).parents('.kbs-notes-row-header');
@@ -1389,6 +1393,39 @@ jQuery(document).ready(function ($) {
 			$( '#kbs_form_redirect_wrapper' ).hide();
 		}
 	} );
+
+	$('#helptain-action-bar').on('click','li.helptain-action-button a',function(event){
+
+		event.preventDefault();
+
+		var action        = $( this ).data( 'action' ),
+		    reply_wrapper = $( '#kbs-ticket-reply-wrap' ),
+		    note_wrapper  = $( '#kbs-ticket-add-note-container' ),
+		    status_select = $( '#helptain_status_select' ),
+			other_action_buttons = $(this).parents('#helptain-action-bar').find('li.helptain-action-button a').not($(this));
+
+		$( this ).toggleClass( 'active' );
+		other_action_buttons.removeClass( 'active' );
+
+		switch ( action ) {
+			case 'show_reply_editor':
+				reply_wrapper.toggleClass( 'helptain-hide' );
+				note_wrapper.addClass( 'helptain-hide' );
+				status_select.addClass('helptain-hide');
+				break;
+			case 'show_note_editor':
+				note_wrapper.toggleClass( 'helptain-hide' );
+				reply_wrapper.addClass( 'helptain-hide' );
+				status_select.addClass('helptain-hide');
+				break;
+			case 'set_status':
+				status_select.toggleClass( 'helptain-hide' );
+				break;
+			default:
+				jQuery( document ).trigger( 'helptain_action_bar_action_' + action, $( this ) );
+				break;
+		}
+	});
 
 });
 
