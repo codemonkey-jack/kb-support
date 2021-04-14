@@ -294,8 +294,13 @@ function kbs_load_admin_scripts( $hook ) {
 		$admin_deps = array( 'jquery' );
 	}
 
-	wp_register_script( 'kbs-admin-scripts', $js_dir . 'admin-scripts' . $suffix . '.js', $admin_deps, KBS_VERSION, false );
+	wp_register_script( 'kbs-admin-scripts', $js_dir . 'admin/admin-scripts' . $suffix . '.js', $admin_deps, KBS_VERSION, false );
+	// @todo: reput the minified file after development
+	$admin_deps[] = 'kbs-admin-scripts';
+	//wp_register_script( 'kbs-admin-ticket', $js_dir . '/admin/ticket-actions' . $suffix . '.js', $admin_deps, KBS_VERSION, true );
+	wp_register_script( 'kbs-admin-ticket', $js_dir . 'admin/ticket-actions.js', $admin_deps, KBS_VERSION, true );
 	wp_enqueue_script( 'kbs-admin-scripts' );
+	wp_enqueue_script( 'kbs-admin-ticket' );
 
 	$editing_field_type = false;
 
@@ -356,7 +361,8 @@ function kbs_load_admin_scripts( $hook ) {
         'view_reply'              => __( 'View Reply', 'kb-support' ),
 		'view_note'               => __( 'View Note', 'kb-support' ),
 		'view_participants'       => __( 'View participants', 'kb-support' ),
-        'view_submission'         => __( 'View submission data', 'kb-support' )
+        'view_submission'         => __( 'View submission data', 'kb-support' ),
+		'ajax_url' 				  => kbs_get_ajax_url()
 	) );
 
 	if ( function_exists( 'wp_enqueue_media' ) && version_compare( $wp_version, '3.5', '>=' ) ) {

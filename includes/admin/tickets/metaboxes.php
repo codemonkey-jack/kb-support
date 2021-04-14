@@ -950,10 +950,11 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 										   class="dashicons <?php echo esc_attr( $button['icon'] ); ?>"
 										   title="<?php echo esc_attr( $button['description'] ); ?>'"
 										   data-action="<?php echo esc_attr( $button['action'] ); ?>"></a>
-										<ul id="helptain_status_select" name="ticket_status" class="helptain-hide">
+										<ul id="helptain_status_select" name="ticket_status" class="helptain-hide"
+											nonce="<?php echo wp_create_nonce( 'set_status_nonce_' . $ticket_id ); ?>">
 											<?php foreach ( kbs_get_post_statuses( 'labels', true ) as $ticket_status ) : ?>
 												<li
-													value="<?php echo esc_attr( $ticket_status->name ); ?>"><?php echo esc_html( $ticket_status->label ); ?></li>
+													status="<?php echo esc_attr( $ticket_status->name ); ?>"><?php echo esc_html( $ticket_status->label ); ?></li>
 											<?php endforeach; ?>
 										</ul>
 									</li>

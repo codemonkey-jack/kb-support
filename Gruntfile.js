@@ -184,7 +184,8 @@ module.exports = function( grunt ) {
 		uglify: {
 			dist: {
 				files: {
-					'<%= dirs.main.js %>/admin-scripts.min.js': ['<%= dirs.main.js %>/admin-scripts.js'],
+					'<%= dirs.main.js %>/admin/admin-scripts.min.js': ['<%= dirs.main.js %>/admin/admin-scripts.js'],
+					'<%= dirs.main.js %>/admin/ticket-actions.min.js': ['<%= dirs.main.js %>/admin/ticket-actions.js'],
 					'<%= dirs.main.js %>/kbs-ajax.min.js': ['<%= dirs.main.js %>/kbs-ajax.js'],
 					'<%= dirs.main.js %>/kbs-live-search.min.js': ['<%= dirs.main.js %>/kbs-live-search.js']
 				}

@@ -1394,39 +1394,6 @@ jQuery(document).ready(function ($) {
 		}
 	} );
 
-	$('#helptain-action-bar').on('click','li.helptain-action-button a',function(event){
-
-		event.preventDefault();
-
-		var action        = $( this ).data( 'action' ),
-		    reply_wrapper = $( '#kbs-ticket-reply-wrap' ),
-		    note_wrapper  = $( '#kbs-ticket-add-note-container' ),
-		    status_select = $( '#helptain_status_select' ),
-			other_action_buttons = $(this).parents('#helptain-action-bar').find('li.helptain-action-button a').not($(this));
-
-		$( this ).toggleClass( 'active' );
-		other_action_buttons.removeClass( 'active' );
-
-		switch ( action ) {
-			case 'show_reply_editor':
-				reply_wrapper.toggleClass( 'helptain-hide' );
-				note_wrapper.addClass( 'helptain-hide' );
-				status_select.addClass('helptain-hide');
-				break;
-			case 'show_note_editor':
-				note_wrapper.toggleClass( 'helptain-hide' );
-				reply_wrapper.addClass( 'helptain-hide' );
-				status_select.addClass('helptain-hide');
-				break;
-			case 'set_status':
-				status_select.toggleClass( 'helptain-hide' );
-				break;
-			default:
-				jQuery( document ).trigger( 'helptain_action_bar_action_' + action, $( this ) );
-				break;
-		}
-	});
-
 });
 
 // Retrieve ticket replies
