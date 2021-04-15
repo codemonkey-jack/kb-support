@@ -267,7 +267,7 @@ function kbs_ajax_display_ticket_replies()	{
 	$output = '';
 
 	if ( ! empty( $_POST['kbs_reply_id'] ) )	{
-		$output .= kbs_get_reply_html( $_POST['kbs_reply_id'], $_POST['kbs_ticket_id'] );
+		$output .= kbs_get_reply_html( $_POST['kbs_reply_id'], $_POST['kbs_ticket_id'], isset( $_POST['expand'] ) );
 	} else	{
         $user_id       = get_current_user_id();
 		$number        = get_user_meta( $user_id, '_kbs_load_replies', true );
@@ -292,7 +292,6 @@ function kbs_ajax_display_ticket_replies()	{
 		$all = array_merge($replies,$notes);
 		uasort( $all, 'helptain_sort_data_by_date' );
 		$i = 0;
-
 		if ( ! empty( $all ) )	{
 			foreach( $all as $reply )	{
 
@@ -547,7 +546,7 @@ function kbs_ajax_display_ticket_notes()	{
 	$output = '';
 
 	if ( ! empty( $_POST['kbs_note_id'] ) )	{
-		$output .= kbs_get_note_html( $_POST['kbs_note_id'], $_POST['kbs_ticket_id'] );
+		$output .= kbs_get_note_html( $_POST['kbs_note_id'], $_POST['kbs_ticket_id'], isset($_POST['expand']) );
 	} else	{
 
 		$notes  = kbs_get_notes( $_POST['kbs_ticket_id'] );

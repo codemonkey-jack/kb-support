@@ -254,7 +254,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
         </span>
     </div>
 
-    <div class="kbs-replies-content-wrap" <?php echo $show; ?></div>
+    <div class="kbs-replies-content-wrap" <?php echo $show; ?>>
         <div class="kbs-replies-content-sections">
         	<?php do_action( 'kbs_before_reply_content_section', $reply ); ?>
             <div id="kbs-reply-option-section-<?php echo $reply->ID; ?>" class="kbs-replies-content-section">

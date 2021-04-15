@@ -505,8 +505,7 @@ jQuery(document).ready(function ($) {
 					},
 					success: function (response) {
 						if (response.reply_id)	{
-							kbs_load_ticket_replies( ticket_id, response.reply_id, 1 );
-							window.location.href = kbs_vars.admin_url + '?kbs-action=ticket_reply_added&ticket_id=' + ticket_id;
+							kbs_load_ticket_reply( ticket_id, response.reply_id, 1 );
 							return true;
 						} else	{
 							window.alert(kbs_vars.reply_not_added);
@@ -559,7 +558,7 @@ jQuery(document).ready(function ($) {
 					},
 					success: function (response) {
 						if (response.note_id)	{
-							kbs_load_ticket_notes(ticket_id, response.note_id);
+							kbs_load_ticket_note(ticket_id, response.note_id);
 							$('#kbs_new_note').val('');
 						} else	{
 							window.alert(kbs_vars.note_not_added);
@@ -1409,8 +1408,48 @@ function kbs_load_ticket_replies( ticket_id, reply_id, page )	{
 			kbs_page: page
 		},
 		function(response)	{
-			jQuery('.kbs-historic-reply-option-fields').append(response);
+			jQuery( '.kbs-historic-reply-option-fields' ).prepend( response );
 			jQuery('#kbs-replies-loader').html('');
+		}
+	);
+}
+
+function kbs_load_ticket_reply( ticket_id, reply_id, page ) {
+
+	jQuery( '#kbs-replies-loader' ).html( '<img src="' + kbs_vars.ajax_loader + '" />' );
+
+	jQuery.post( ajaxurl,
+		{
+			action       : 'kbs_display_ticket_replies',
+			kbs_ticket_id: ticket_id,
+			kbs_reply_id : reply_id,
+			kbs_page     : page,
+			expand : 'true'
+		},
+		function ( response ) {
+			jQuery( '.kbs-historic-reply-option-fields' ).prepend( '<div class="kbs_historic_replies_wrapper " expanded="true">' + response + '</div>' );
+			jQuery( '#kbs-replies-loader' ).html( '' );
+			jQuery( '#kbs-new-reply-loader' ).html( '' );
+			jQuery( 'iframe#kbs_ticket_reply_ifr' ).contents().find( 'body#tinymce' ).html( '' );
+			jQuery( '#kbs-ticket-reply-wrap' ).addClass( 'helptain-hide' );
+		}
+	);
+}
+
+// Retrieve ticket note
+function kbs_load_ticket_note( ticket_id, note_id )	{
+	jQuery('#kbs-notes-loader').html('<img src="' + kbs_vars.ajax_loader + '" />');
+
+	jQuery.post( ajaxurl, {
+			action       : 'kbs_display_ticket_notes',
+			kbs_ticket_id: ticket_id,
+			kbs_note_id  : note_id,
+			expand       : 'true'
+		},
+		function ( response ) {
+			jQuery( '.kbs-historic-reply-option-fields' ).prepend( '<div class="kbs_historic_replies_wrapper " expanded="true">' + response + '</div>' );
+			jQuery( '#kbs-notes-loader' ).html( '' );
+			jQuery( '#kbs-ticket-add-note-container' ).addClass( 'helptain-hide' );
 		}
 	);
 }

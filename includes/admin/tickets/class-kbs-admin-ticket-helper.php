@@ -19,6 +19,7 @@ class KBS_Admin_Ticket_Helper {
 	public function __construct() {
 
 		add_action( 'wp_ajax_kbs_ajax_update_ticket_status', array( $this, 'actionbar_ticket_status' ) );
+		add_action( 'wp_ajax_kbs_ajax_update_ticket_agent', array( $this, 'actionbar_ticket_agent' ) );
 	}
 
 	/**
@@ -37,6 +38,13 @@ class KBS_Admin_Ticket_Helper {
 
 	}
 
+	/**
+	 * Set ticket status
+	 *
+	 * @return false
+	 *
+	 * @since 1.6.0
+	 */
 	public function actionbar_ticket_status() {
 
 		$data = $_POST;
@@ -70,7 +78,50 @@ class KBS_Admin_Ticket_Helper {
 		}
 
 		update_post_meta( $data['ticket_id'], '_kbs_ticket_last_status_change', current_time( 'timestamp' ) );
-		echo 'made it';
+
+		$response = array(
+			'status_color' => kbs_get_ticket_status_colour( $data['status'], true ),
+			'status'       => $data['status']
+		);
+
+		echo json_encode( $response );
+		die();
+	}
+
+
+	/**
+	 * Set ticket agent
+	 *
+	 * @return false
+	 *
+	 * @since 1.6.0
+	 */
+	public function actionbar_ticket_agent() {
+
+		$data = $_POST;
+
+		wp_verify_nonce( $data['nonce'], 'set_agent_nonce_' . $data['ticket_id'] );
+
+		if ( empty( $data ) || ! isset( $data['ticket_id'] ) || ! isset( $data['nonce'] ) || ! isset( $data['agent'] ) ) {
+			return false;
+		}
+
+		if ( 'kbs_ticket' != get_post_type( $data['ticket_id'] ) ) {
+			return false;
+		}
+
+		if ( ! get_userdata( $data['agent'] ) ) {
+			return false;
+		}
+
+		update_post_meta( absint( $data['ticket_id'] ), '_kbs_ticket_agent_id', absint( $data['agent'] ) );
+
+		$response = array(
+			'agent_id' => $data['agent']
+		);
+
+		echo json_encode( $response );
+
 		die();
 	}
 }

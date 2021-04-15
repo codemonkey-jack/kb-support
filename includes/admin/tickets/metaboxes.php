@@ -98,15 +98,17 @@ function kbs_ticket_add_meta_boxes( $post )	{
 		array()
 	);
 
-    add_meta_box(
-		'kbs-ticket-metabox-agents',
-		__( 'Assignment', 'kb-support' ),
-		'kbs_ticket_metabox_agents_callback',
-		'kbs_ticket',
-		'side',
-		'high',
-		array()
-	);
+	if ( kbs_multiple_agents() )  {
+		add_meta_box(
+			'kbs-ticket-metabox-agents',
+			__( 'Assisting agents', 'kb-support' ),
+			'kbs_ticket_metabox_agents_callback',
+			'kbs_ticket',
+			'side',
+			'high',
+			array()
+		);
+	}
 
 	if ( $kbs_ticket_update )	{
 
@@ -321,18 +323,12 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
 
 				<?php endif; ?>
 
-                <?php do_action( 'kbs_ticket_metabox_save_before_status', $ticket_id ); ?>
+				<!--@todo: Remove these actions, status is now selected from action bar -->
+				<?php /*do_action( 'kbs_ticket_metabox_save_before_status', $ticket_id ); */ ?>
 
-				<div id="kbs-ticket-status-select">
-					<?php echo KBS()->html->ticket_status_dropdown( array(
-						'name'     => 'ticket_status',
-						'selected' => $ticket_status,
-						'chosen'   => true
-					) ); ?>
-				</div>
+				<?php /*do_action( 'kbs_ticket_metabox_save_after_status', $ticket_id ); */ ?>
 
-                <?php do_action( 'kbs_ticket_metabox_save_after_status', $ticket_id ); ?>
-
+				<!--@todo: Customer selection will remain for now, but will be deleted in future-->
                 <div id="kbs-customer-select">
 					<?php echo KBS()->html->customer_dropdown( array(
 						'name'     => 'kbs_customer_id',
@@ -425,30 +421,6 @@ function kbs_ticket_metabox_sla_row( $ticket_id )	{
 } // kbs_ticket_metabox_sla_row
 add_action( 'kbs_ticket_metabox_save_after_customer', 'kbs_ticket_metabox_sla_row', 10 );
 
-/**
- * Display the agent ticket metabox row.
- *
- * @since	1.0
- * @global	object	$kbs_ticket			KBS_Ticket class object
- * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
- * @param	int		$ticket_id			The ticket post ID.
- */
-function kbs_ticket_metabox_agent_row( $ticket_id )	{
-
-	global $kbs_ticket, $kbs_ticket_update;
-
-    ?>
-    <div id="kbs-agent-options">
-		<?php echo KBS()->html->agent_dropdown( array(
-			'name'     => 'kbs_agent_id',
-			'selected' => ( ! empty( $kbs_ticket->agent_id ) ? $kbs_ticket->agent_id : get_current_user_id() ),
-			'chosen'   => true
-		) ); ?>
-    </div>
-    <?php
-
-} // kbs_ticket_metabox_agent_row
-add_action( 'kbs_ticket_agent_fields', 'kbs_ticket_metabox_agent_row', 10 );
 
 /**
  * Display the additional agents ticket metabox row.
@@ -462,13 +434,8 @@ function kbs_ticket_metabox_additional_agents_row( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update;
 
-    if ( ! kbs_multiple_agents() )  {
-        return;
-    }
-
     ?>
     <div id="kbs-multi-agent-options">
-        <label for="kbs_assigned_agents"><?php _e( 'Additional Agents', 'kb-support' ); ?>:</label>
 		<?php echo KBS()->html->agent_dropdown( array(
 			'name'            => 'kbs_assigned_agents',
 			'selected'        => $kbs_ticket->agents,
@@ -929,10 +896,20 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 				'action' => 'set_status',
 				'priority'    => 30
 			),
+			'assign_button' => array(
+				'icon' => 'dashicons-admin-users',
+				'description' => esc_html__('Assign','kb-support'),
+				'link_content' => '',
+				'action' => 'assign_ticket',
+				'priority'    => 40
+			)
 		) );
 
 		uasort( $action_buttons, 'helptain_sort_data_by_priority' );
 
+		$kbs_ticket_status = kbs_get_ticket_status( $kbs_ticket, true );
+		$kbs_agents        = kbs_get_agents();
+		$ticket_agent_id   = get_post_meta( $ticket_id, '_kbs_ticket_agent_id', true );
 		?>
 
 		<div class="helptain-action-wrapper">
@@ -941,7 +918,6 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 					<?php
 					if ( ! empty( $action_buttons ) ) {
 						foreach ( $action_buttons as $key => $button ) {
-
 							switch ( $key ) {
 								case 'status_button':
 									?>
@@ -950,12 +926,33 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 										   class="dashicons <?php echo esc_attr( $button['icon'] ); ?>"
 										   title="<?php echo esc_attr( $button['description'] ); ?>'"
 										   data-action="<?php echo esc_attr( $button['action'] ); ?>"></a>
-										<ul id="helptain_status_select" name="ticket_status" class="helptain-hide"
+										<ul id="helptain_status_select"
+											class="helptain-actionbar-sub-menu helptain-hide" name="ticket_status"
 											nonce="<?php echo wp_create_nonce( 'set_status_nonce_' . $ticket_id ); ?>">
 											<?php foreach ( kbs_get_post_statuses( 'labels', true ) as $ticket_status ) : ?>
 												<li
 													status="<?php echo esc_attr( $ticket_status->name ); ?>"><?php echo esc_html( $ticket_status->label ); ?></li>
 											<?php endforeach; ?>
+										</ul>
+									</li>
+									<?php
+									break;
+								case 'assign_button':
+									?>
+									<li class="helptain-action-button">
+										<a href="#<?php echo esc_attr( $key ); ?>"
+										   class="dashicons <?php echo esc_attr( $button['icon'] ); ?>"
+										   title="<?php echo esc_attr( $button['description'] ); ?>'"
+										   data-action="<?php echo esc_attr( $button['action'] ); ?>"></a>
+										<ul id="helptain_agent_select" class="helptain-actionbar-sub-menu helptain-hide"
+											name="kbs_agent_id"
+											nonce="<?php echo wp_create_nonce( 'set_agent_nonce_' . $ticket_id ); ?>">
+											<?php foreach ( $kbs_agents as $kbs_agent ) {
+												?>
+												<li
+													agent_id="<?php echo esc_attr( $kbs_agent->data->ID ); ?>"
+													class="<?php echo ( $ticket_agent_id == $kbs_agent->data->ID ) ? 'active' : ''; ?>"><?php echo esc_html( $kbs_agent->display_name ); ?></li>
+											<?php } ?>
 										</ul>
 									</li>
 									<?php
@@ -969,6 +966,8 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 						}
 					}
 					?>
+					<li class="helptain-action-button ticket-status "
+						style="background-color:<?php echo esc_attr( kbs_get_ticket_status_colour( $kbs_ticket_status, true ) ); ?>"><?php echo esc_html__( 'Status: ', 'kb-support' ) . esc_html( $kbs_ticket_status ); ?></li>
 				</ul>
 			</div>
 

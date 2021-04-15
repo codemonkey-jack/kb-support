@@ -1670,10 +1670,11 @@ End Tooltips
 	display         : inline-block;
 	padding         : 5px 10px;
 	position        : relative;
+	margin-bottom   : 0;
 }
 
 #helptain-action-bar .helptain-action-buttons .helptain-action-button a {
-	font-size  : 26px;
+	font-size  : 20px;
 	color      : #aeb6c0;
 	outline    : none;
 	box-shadow : none;
@@ -1684,6 +1685,17 @@ End Tooltips
 	color : #556575;
 }
 
+#helptain-action-bar .helptain-action-buttons li.ticket-status {
+	float         : right;
+	border-radius : 30px;
+	color         : #fff;
+	margin-right  : 15px;
+}
+
+#helptain-action-bar .helptain-action-button ul#helptain_agent_select li.active {
+	font-weight : bold;
+}
+
 /**
 ** Ticket action bar modifications
  */
@@ -1692,6 +1704,7 @@ End Tooltips
 	position   : sticky;
 	top        : 32px;
 	box-shadow : 0 3px 3px rgba(0, 0, 0, 0.2);
+	z-index    : 9999;
 }
 
 .helptain-hide {
@@ -1721,7 +1734,7 @@ End Tooltips
 	border-color:#93a1b0;
 }
 
-ul#helptain_status_select {
+.helptain-action-button ul.helptain-actionbar-sub-menu {
 	position      : absolute;
 	display       : block;
 	background    : #fff;
@@ -1730,20 +1743,20 @@ ul#helptain_status_select {
 	border        : 1px solid #cecece;
 	border-radius : 5px;
 	left          : 0;
-	z-index       : 999;
+	z-index       : 9999;
 }
 
-ul#helptain_status_select.helptain-hide {
+.helptain-action-button ul.helptain-actionbar-sub-menu.helptain-hide {
 	display : none;
 }
 
-ul#helptain_status_select li {
+.helptain-action-button ul.helptain-actionbar-sub-menu li {
 	padding : 5px 10px;
 	cursor  : pointer;
 	margin  : 0 auto;
 }
 
-ul#helptain_status_select li:hover {
+.helptain-action-button ul.helptain-actionbar-sub-menu li:hover {
 	background : #93a1b0;
 	color      : #fff;
 }

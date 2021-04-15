@@ -11,6 +11,7 @@ jQuery( document ).ready( function ( $ ) {
 		    reply_wrapper        = $( '#kbs-ticket-reply-wrap' ),
 		    note_wrapper         = $( '#kbs-ticket-add-note-container' ),
 		    status_select        = $( '#helptain_status_select' ),
+		    agent_select         = $( '#helptain_agent_select' ),
 		    other_action_buttons = $( this ).parents( '#helptain-action-bar' ).find( 'li.helptain-action-button a' ).not( $( this ) );
 
 		$( this ).toggleClass( 'active' );
@@ -21,14 +22,21 @@ jQuery( document ).ready( function ( $ ) {
 				reply_wrapper.toggleClass( 'helptain-hide' );
 				note_wrapper.addClass( 'helptain-hide' );
 				status_select.addClass( 'helptain-hide' );
+				agent_select.addClass( 'helptain-hide' );
 				break;
 			case 'show_note_editor':
 				note_wrapper.toggleClass( 'helptain-hide' );
 				reply_wrapper.addClass( 'helptain-hide' );
 				status_select.addClass( 'helptain-hide' );
+				agent_select.addClass( 'helptain-hide' );
 				break;
 			case 'set_status':
 				status_select.toggleClass( 'helptain-hide' );
+				agent_select.addClass( 'helptain-hide' );
+				break;
+			case 'assign_ticket':
+				agent_select.toggleClass( 'helptain-hide' );
+				status_select.addClass( 'helptain-hide' );
 				break;
 			default:
 				jQuery( document ).trigger( 'helptain_action_bar_action_' + action, $( this ) );
@@ -44,7 +52,7 @@ jQuery( document ).ready( function ( $ ) {
 		    $action = 'kbs_ajax_update_ticket_status',
 		    $nonce  = $( this ).parent().attr( 'nonce' ),
 		    $id     = $( 'input#post_ID' ).val(),
-			$list = $(this);
+		    $list   = $( this );
 
 
 		$.ajax( {
@@ -58,20 +66,55 @@ jQuery( document ).ready( function ( $ ) {
 			},
 			url     : kbs_vars.ajax_url,
 			success : function ( response ) {
-				console.log(response.error);
-				if ( response.error ) {
-
+				if ( 'undefined' == typeof response || !response || response.error ) {
+					console.log( 'php function returned false' );
 				} else {
-					$list.parent().after('<p class="test">test</p>');
-					setTimeout(function(){
-						$list.parent().find('p.test').remove();
-					},1000);
+					$list.parents( 'ul.helptain-action-buttons' ).find( 'li.ticket-status' ).html( 'Status: ' + response.status ).css( 'background-color', response.status_color );
 				}
 			}
 		} ).fail( function ( data ) {
 			if ( window.console && window.console.log ) {
-				//console.log( data );
+				console.log( data );
 			}
 		} );
 	} );
+
+	// Set ticket agent
+	action_bar.on( 'click', 'ul#helptain_agent_select li', function ( e ) {
+		e.preventDefault;
+
+		var $agent  = $( this ).attr( 'agent_id' ),
+		    $action = 'kbs_ajax_update_ticket_agent',
+		    $nonce  = $( this ).parent().attr( 'nonce' ),
+		    $id     = $( 'input#post_ID' ).val(),
+		    $list   = $( this );
+
+
+		$.ajax( {
+			type    : 'POST',
+			dataType: 'json',
+			data    : {
+				action   : $action,
+				agent    : $agent,
+				nonce    : $nonce,
+				ticket_id: $id
+			},
+			url     : kbs_vars.ajax_url,
+			success : function ( response ) {
+
+				if ( 'undefined' == typeof response || !response || response.error ) {
+					console.log( 'php function returned false' );
+				} else {
+					$list.parent().find( 'li' ).removeClass( 'active' );
+					$list.addClass('active');
+
+				}
+			}
+		} ).fail( function ( data ) {
+			if ( window.console && window.console.log ) {
+				console.log( data );
+			}
+		} );
+	} );
+
 } );
