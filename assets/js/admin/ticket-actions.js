@@ -23,12 +23,22 @@ jQuery( document ).ready( function ( $ ) {
 				note_wrapper.addClass( 'helptain-hide' );
 				status_select.addClass( 'helptain-hide' );
 				agent_select.addClass( 'helptain-hide' );
+
+				$( 'html,body' ).animate( {
+					scrollTop: (reply_wrapper.offset().top - 80)
+				}, 600 );
+
 				break;
 			case 'show_note_editor':
 				note_wrapper.toggleClass( 'helptain-hide' );
 				reply_wrapper.addClass( 'helptain-hide' );
 				status_select.addClass( 'helptain-hide' );
 				agent_select.addClass( 'helptain-hide' );
+
+				$( 'html,body' ).animate( {
+					scrollTop: (note_wrapper.offset().top - 80)
+				}, 600 );
+
 				break;
 			case 'set_status':
 				status_select.toggleClass( 'helptain-hide' );
