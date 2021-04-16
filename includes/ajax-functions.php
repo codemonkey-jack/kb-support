@@ -267,13 +267,12 @@ function kbs_ajax_display_ticket_replies()	{
 	$output = '';
 
 	if ( ! empty( $_POST['kbs_reply_id'] ) )	{
-		$output .= kbs_get_reply_html( $_POST['kbs_reply_id'], $_POST['kbs_ticket_id'], isset( $_POST['expand'] ) );
+		$output .= kbs_get_reply_html( $_POST['kbs_reply_id'], $_POST['kbs_ticket_id'], true );
 	} else	{
         $user_id       = get_current_user_id();
 		$number        = get_user_meta( $user_id, '_kbs_load_replies', true );
 		$number        = ! empty( $number ) ? (int)$number : 0;
         $count_expand  = 1;
-        $expand        = get_user_meta( $user_id, '_kbs_expand_replies', true );
         $expand        = ! empty( $expand ) && $expand > 0 ? (int)$expand : 0;
 
 		$args = array(
@@ -301,12 +300,11 @@ function kbs_ajax_display_ticket_replies()	{
                 }
 
 
-                $auto_expand = ( $expand > 0 && $expand >= $count_expand ) ? true : false;
-				$output .= '<div class="kbs_historic_replies_wrapper " expanded="' . esc_attr( ($auto_expand ? 'true' : 'false') ) . '">';
+				$output      .= '<div class="kbs_historic_replies_wrapper " expanded="true">';
 				if ( $reply->comment_ID ) {
-					$output .= kbs_get_note_html( $reply, $_POST['kbs_ticket_id'], $auto_expand );
+					$output .= kbs_get_note_html( $reply, $_POST['kbs_ticket_id'] );
 				} else {
-					$output .= kbs_get_reply_html( $reply, $_POST['kbs_ticket_id'], $auto_expand );
+					$output .= kbs_get_reply_html( $reply, $_POST['kbs_ticket_id'], true );
 				}
 
                 $output .= '</div>';

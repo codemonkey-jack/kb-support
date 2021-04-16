@@ -174,13 +174,24 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 		$reply = get_post( $reply );
 	}
 
-	$author          = kbs_get_reply_author_name( $reply, true );
-	$date_format     = get_option( 'date_format' ) . ', ' . get_option( 'time_format' );
-	$files           = kbs_ticket_has_files( $reply->ID );
-	$file_count      = ( $files ? count( $files ) : false );
-	$show            = $expand ? ' style="display: block;"' : '';
-	$show_hide       = $expand ? __( 'Hide', 'kb-support' ) : __( 'View', 'kb-support' );
-	$show_hide_icons = $expand ? 'dashicons-arrow-up' : 'dashicons-arrow-down';
+	$roles         = get_userdata( $reply->post_author )->roles;
+	$support_roles = kbs_get_agent_user_roles();
+	$_is_support   = '';
+
+	if ( is_array( $roles ) ) {
+		if ( ! empty( array_intersect( $roles, $support_roles ) ) ) {
+			$_is_support = 'is-support';
+		}
+	} else {
+		if ( in_array( $roles, $support_roles ) ) {
+			$_is_support = 'is-support';
+		}
+	}
+	$author        = kbs_get_reply_author_name( $reply, true );
+
+	$date_format = get_option( 'date_format' ) . ', ' . get_option( 'time_format' );
+	$files       = kbs_ticket_has_files( $reply->ID );
+	$file_count  = ( $files ? count( $files ) : false );
 
 	$create_article_link = add_query_arg( array(
 		'kbs-action' => 'create_article',
@@ -191,7 +202,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 	$create_article_link = apply_filters( 'kbs_create_article_link', $create_article_link, $ticket_id, $reply );
 
 	$actions = array(
-		'create_article' => '<a href="' . $create_article_link . '" class="toggle-reply-option-create-article dashicons dashicons-welcome-add-page" title="' . sprintf( __( 'Create %s', 'kb-support' ), kbs_get_article_label_singular() ) . '"></a>',
+		'create_article' => '<a href="' . $create_article_link . '" class="toggle-reply-option-create-article" title="' . sprintf( __( 'Create %s', 'kb-support' ), kbs_get_article_label_singular() ) . '">' . sprintf( __( 'Create %s', 'kb-support' ), kbs_get_article_label_singular() ) . '</a>',
 	);
 
     $actions = apply_filters( 'kbs_ticket_replies_actions', $actions, $reply );
@@ -222,7 +233,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
             ), admin_url() ), 'delete_ticket_reply', 'kbs_nonce' );
 
             $actions['trash'] = sprintf(
-                '<a href="%s" class="kbs-delete delete-reply dashicons dashicons-trash" title="%s"></a>',
+                '<a href="%1$s" class="kbs-delete delete-reply" title="%2$s">%2$s</a>',
                 $delete_url,
                 __( 'Delete Reply', 'kb-support' )
             );
@@ -238,23 +249,31 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
         );
     }
 
-	$icons                 = apply_filters( 'kbs_ticket_replies_icons', $icons, $reply );
-	$actions['read_reply'] = '<a href="#" class="toggle-view-reply-option-section dashicons ' . $show_hide_icons . '" title="' . sprintf( __( '%s Reply', 'kb-support' ), $show_hide ) . '"></a>';
+    //@todo: delete commented lines after testing with other extensions. icons no longer used
+	//$icons                 = apply_filters( 'kbs_ticket_replies_icons', $icons, $reply );
+
 
     ob_start(); ?>
 
-    <div class="kbs-replies-row-header">
+	<div class="kbs-replies-row-header <?php echo esc_attr($_is_support); ?>">
         <span class="kbs-replies-row-title">
-            <?php echo apply_filters( 'kbs_replies_title', sprintf( __( '%s by %s', 'kb-support' ), date_i18n( $date_format, strtotime( $reply->post_date ) ), $author ), $reply ); ?>
+			<?php echo '<strong>' . esc_html( $author ) . '</strong> ' . esc_html__( 'replied', 'kb-support' ); ?>
         </span>
 
-        <span class="kbs-replies-row-actions">
-            <?php echo implode( ' ', $icons ); ?>
-			<?php echo implode( ' ', $actions ); ?>
+		<span class="kbs-replies-row-actions">
+			<?php echo date_i18n( $date_format, strtotime( $reply->post_date ) ); ?>
+			<a href="#" class="helptain-admin-row-actions-toggle dashicons dashicons-ellipsis"></a>
+			<ul class="helptain-admin-row-actions helptain-actions-sub-menu helptain-hide">
+				<?php
+				foreach($actions as $action){
+					echo '<li>'.$action.'</li>';
+				}
+				?>
+			</ul>
         </span>
     </div>
 
-    <div class="kbs-replies-content-wrap" <?php echo $show; ?>>
+    <div class="kbs-replies-content-wrap <?php echo esc_attr($_is_support); ?>" expanded="true">
         <div class="kbs-replies-content-sections">
         	<?php do_action( 'kbs_before_reply_content_section', $reply ); ?>
             <div id="kbs-reply-option-section-<?php echo $reply->ID; ?>" class="kbs-replies-content-section">

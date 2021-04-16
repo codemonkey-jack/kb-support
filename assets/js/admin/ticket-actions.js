@@ -2,7 +2,9 @@ jQuery( document ).ready( function ( $ ) {
 
 	var action_bar = $( '#helptain-action-bar' );
 
-	// Admin ticket action bar action clicks
+	/**
+	 * Admin ticket action bar action clicks
+	 */
 	action_bar.on( 'click', 'li.helptain-action-button a', function ( event ) {
 
 		event.preventDefault();
@@ -54,7 +56,9 @@ jQuery( document ).ready( function ( $ ) {
 		}
 	} );
 
-	// Set ticket status
+	/**
+	 * Set ticket status
+	 */
 	action_bar.on( 'click', 'ul#helptain_status_select li', function ( e ) {
 		e.preventDefault;
 
@@ -89,7 +93,9 @@ jQuery( document ).ready( function ( $ ) {
 		} );
 	} );
 
-	// Set ticket agent
+	/**
+	 * Set ticket agent
+	 */
 	action_bar.on( 'click', 'ul#helptain_agent_select li', function ( e ) {
 		e.preventDefault;
 
@@ -116,7 +122,7 @@ jQuery( document ).ready( function ( $ ) {
 					console.log( 'php function returned false' );
 				} else {
 					$list.parent().find( 'li' ).removeClass( 'active' );
-					$list.addClass('active');
+					$list.addClass( 'active' );
 
 				}
 			}
@@ -127,4 +133,15 @@ jQuery( document ).ready( function ( $ ) {
 		} );
 	} );
 
+	/**
+	 * Toggle the reply/note row actions
+	 */
+	$( 'html body' ).on( 'click', '.kbs_historic_replies_wrapper a.helptain-admin-row-actions-toggle', function ( e ) {
+		e.preventDefault();
+
+		var toggle          = $( this ),
+		    actions_wrapper = toggle.parent().find( '.helptain-admin-row-actions' );
+
+		actions_wrapper.toggleClass( 'helptain-hide' );
+	} );
 } );

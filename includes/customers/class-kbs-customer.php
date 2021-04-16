@@ -494,15 +494,6 @@ class KBS_Customer {
         return kbs_get_customer_replies_to_load( $this->user_id );
 	} // get_replies_to_load
 
-	/**
-	 * Retrieve the number of replies the customer wants to expand
-	 *
-	 * @since	1.3.4
-	 * @return	int		Number of replies to expand
-	 */
-	public function get_replies_to_expand()	{
-        return kbs_get_customer_replies_to_expand( $this->user_id );
-	} // get_replies_to_expand
 
 	/*
 	 * Get the ticket ids of the customer in an array.

@@ -584,43 +584,6 @@ jQuery(document).ready(function ($) {
 		}
 	};
 
-    // Toggle display of historic ticket replies
-	$( document.body ).on( 'click', '.toggle-view-reply-option-section', function(e) {
-		e.preventDefault();
-
-		var show = $( this ).hasClass( 'dashicons-arrow-down' );
-
-		if ( show ) {
-			$(this).parents('.kbs_historic_replies_wrapper ').attr('expanded','true');
-			$( this ).removeClass( 'dashicons-arrow-down' ).addClass( 'dashicons-arrow-up' ).attr( 'title', kbs_vars.hide_reply );
-		} else {
-			$(this).parents('.kbs_historic_replies_wrapper ').attr('expanded','false');
-			$( this ).removeClass( 'dashicons-arrow-up' ).addClass( 'dashicons-arrow-down' ).attr( 'title', kbs_vars.view_reply );
-		}
-
-		var header = $(this).parents('.kbs-replies-row-header');
-		header.siblings('.kbs-replies-content-wrap').slideToggle();
-
-	});
-
-	// Toggle display of ticket notes
-	$( document.body ).on( 'click', '.toggle-view-note-option-section', function(e) {
-		e.preventDefault();
-		var show = $( this ).hasClass( 'dashicons-arrow-down' );
-
-		if ( show ) {
-			$(this).parents('.kbs_historic_replies_wrapper ').attr('expanded','true');
-			$( this ).removeClass( 'dashicons-arrow-down' ).addClass( 'dashicons-arrow-up' ).attr( 'title', kbs_vars.hide_note );
-		} else {
-			$(this).parents('.kbs_historic_replies_wrapper ').attr('expanded','false');
-			$( this ).removeClass( 'dashicons-arrow-up' ).addClass( 'dashicons-arrow-down' ).attr( 'title', kbs_vars.view_note );
-		}
-
-		var header = $(this).parents('.kbs-notes-row-header');
-		header.siblings('.kbs-notes-content-wrap').slideToggle();
-
-	});
-
 	KBS_Tickets.init();
 
 	/**
@@ -1424,7 +1387,6 @@ function kbs_load_ticket_reply( ticket_id, reply_id, page ) {
 			kbs_ticket_id: ticket_id,
 			kbs_reply_id : reply_id,
 			kbs_page     : page,
-			expand : 'true'
 		},
 		function ( response ) {
 			jQuery( '.kbs-historic-reply-option-fields' ).prepend( '<div class="kbs_historic_replies_wrapper " expanded="true">' + response + '</div>' );
@@ -1444,7 +1406,6 @@ function kbs_load_ticket_note( ticket_id, note_id )	{
 			action       : 'kbs_display_ticket_notes',
 			kbs_ticket_id: ticket_id,
 			kbs_note_id  : note_id,
-			expand       : 'true'
 		},
 		function ( response ) {
 			jQuery( '.kbs-historic-reply-option-fields' ).prepend( '<div class="kbs_historic_replies_wrapper " expanded="true">' + response + '</div>' );

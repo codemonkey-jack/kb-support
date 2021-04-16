@@ -283,38 +283,6 @@ function kbs_render_user_profile_tickets_order_field( $user )  {
 add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_user_profile_tickets_order_field', 5 );
 add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile_tickets_order_field', 5 );
 
-/**
- * Adds the replies position option field to the user profile for agents.
- *
- * @since	1.5.3
- * @param   object	$user	The WP_User object
- */
-function kbs_render_user_profile_replies_location_field( $user )  {
-	$location = get_user_meta( $user->ID, '_kbs_replies_location', true );
-    $location = '' == $location ? 25 : esc_attr( $location );
-
-	ob_start(); ?>
-
-    <tr>
-        <th scope="row">
-            <label for="kbs-agent-replies-location"><?php _e( 'Display Replies', 'kb-support' ); ?></label>
-        </th>
-        <td>
-            <select name="kbs_replies_location" id="kbs-agent-replies-location">
-                <option value="10"<?php selected( 10, $location ); ?>>
-                    <?php _e( 'Above Reply Field', 'kb-support' ); ?>
-                </option>
-				<option value="25"<?php selected( 25, $location ); ?>>
-					<?php _e( 'Below Reply Field', 'kb-support' ); ?>
-				</option>
-            </select>
-            <p class="description"><?php printf( __( 'Choose where you would like %s replies displayed.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></p>
-        </td>
-    </tr>
-
-	<?php echo ob_get_clean();
-} // kbs_render_user_profile_replies_to_load_field
-add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_user_profile_replies_location_field', 5 );
 
 /**
  * Adds the Replies to Load option field to the user profile for agents.
@@ -345,36 +313,6 @@ function kbs_render_user_profile_replies_to_load_field( $user )  {
 } // kbs_render_user_profile_replies_to_load_field
 add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_user_profile_replies_to_load_field', 5 );
 add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile_replies_to_load_field', 5 );
-
-/**
- * Adds the Replies to Expand option field to the user profile.
- *
- * @since	1.2
- * @param   obj		$user	The WP_User object
- */
-function kbs_render_user_profile_replies_to_expand_field( $user )  {
-	$replies_to_expand = get_user_meta( $user->ID, '_kbs_expand_replies', true );
-
-	if ( '' == $replies_to_expand )	{
-		$replies_to_expand = kbs_is_agent( $user->ID ) ? 0 : kbs_get_option( 'replies_to_expand' );
-	}
-
-	ob_start(); ?>
-
-    <tr>
-        <th scope="row">
-            <label for="kbs-agent-expand-replies"><?php _e( 'Replies to Expand', 'kb-support' ); ?></label>
-        </th>
-        <td>
-            <input class="small-text" type="number" name="kbs_expand_replies" id="kbs-expand-replies" value="<?php echo (int)$replies_to_expand; ?>" step="1" min="0" />
-            <p class="description"><?php printf( __( 'Choose the number of replies to auto expand when the %s page loads. <code>0</code> expands none.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></p>
-        </td>
-    </tr>
-
-	<?php echo ob_get_clean();
-} // kbs_render_user_profile_replies_to_expand_field
-add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_user_profile_replies_to_expand_field', 5 );
-add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile_replies_to_expand_field', 5 );
 
 /**
  * Adds the Redirect After Reply option field to the user profile for agents.
@@ -619,24 +557,6 @@ add_action( 'personal_options_update', 'kbs_save_user_tickets_order' );
 add_action( 'edit_user_profile_update', 'kbs_save_user_tickets_order' );
 
 /**
- * Saves the replies location field.
- *
- * @since	1.5.3
- * @param	int		$user_id	WP User ID
- */
-function kbs_save_user_replies_location( $user_id ) {
-	if ( ! kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
-		return;
-	}
-
-	$location = absint( $_POST['kbs_replies_location'] );
-
-	update_user_meta( $user_id, '_kbs_replies_location', $location );
-} // kbs_save_user_replies_location
-add_action( 'personal_options_update', 'kbs_save_user_replies_location' );
-add_action( 'edit_user_profile_update', 'kbs_save_user_replies_location' );
-
-/**
  * Saves the load replies field.
  *
  * @since	1.2
@@ -653,24 +573,6 @@ function kbs_save_user_load_replies( $user_id ) {
 } // kbs_save_user_load_replies
 add_action( 'personal_options_update', 'kbs_save_user_load_replies' );
 add_action( 'edit_user_profile_update', 'kbs_save_user_load_replies' );
-
-/**
- * Saves the expand replies field.
- *
- * @since	1.3.4
- * @param	int		$user_id	WP User ID
- */
-function kbs_save_user_expand_replies( $user_id ) {
-	if ( ! current_user_can( 'edit_user', $user_id ) )	{
-		return;
-	}
-
-	$number = absint( $_POST['kbs_expand_replies'] );
-
-	update_user_meta( $user_id, '_kbs_expand_replies', $number );
-} // kbs_save_user_expand_replies
-add_action( 'personal_options_update', 'kbs_save_user_expand_replies' );
-add_action( 'edit_user_profile_update', 'kbs_save_user_expand_replies' );
 
 /**
  * Saves the redirect option when replying to a ticket.
@@ -945,13 +847,6 @@ function kbs_process_profile_editor_updates( $data ) {
 
 	if ( $new_load_replies != $old_load_replies )	{
 		update_user_meta( $user_id, '_kbs_load_replies', $new_load_replies );
-	}
-
-	$old_expand_replies = kbs_get_customer_replies_to_expand( $user_id );
-	$new_expand_replies = empty( $_POST['kbs_expand_replies'] ) ? 0 : absint( $_POST['kbs_expand_replies'] );
-
-	if ( $new_expand_replies != $old_expand_replies )	{
-		update_user_meta( $user_id, '_kbs_expand_replies', $new_expand_replies );
 	}
 
 	if ( $customer->email === $email || ( is_array( $customer->emails ) && in_array( $email, $customer->emails ) ) ) {

@@ -72,18 +72,18 @@ if ( ! is_user_logged_in() ) : ?>
                             <p>
                                 <label for="kbs_email"><?php _e( 'Primary Email', 'kb-support' ); ?></label>
                                 <?php if ( $customer->id > 0 ) : ?>
-                
+
                                     <?php if ( 1 === count( $customer->emails ) ) : ?>
                                         <input name="kbs_email" id="kbs_email" class="text kbs-input required" type="email" value="<?php echo esc_attr( $customer->email ); ?>" />
                                     <?php else: ?>
                                         <?php
                                             $emails           = array();
                                             $customer->emails = array_reverse( $customer->emails, true );
-                
+
                                             foreach ( $customer->emails as $email ) {
                                                 $emails[ $email ] = $email;
                                             }
-                
+
                                             $email_select_args = array(
                                                 'options'          => $emails,
                                                 'name'             => 'kbs_email',
@@ -92,7 +92,7 @@ if ( ! is_user_logged_in() ) : ?>
                                                 'show_option_none' => false,
                                                 'show_option_all'  => false,
                                             );
-                
+
                                             echo KBS()->html->select( $email_select_args );
                                         ?>
                                     <?php endif; ?>
@@ -100,9 +100,9 @@ if ( ! is_user_logged_in() ) : ?>
                                 <?php else: ?>
                                     <input name="kbs_email" id="kbs_email" class="text kbs-input " type="email" value="<?php echo esc_attr( $current_user->user_email ); ?>" />
                                 <?php endif; ?>
-                
+
                                 <?php do_action( 'kbs_profile_editor_email' ); ?>
-                
+
                             </p>
 						</div>
 
@@ -234,14 +234,7 @@ if ( ! is_user_logged_in() ) : ?>
                         </div>
 
                         <?php do_action( 'kbs_profile_editor_after_replies_to_load' ); ?>
-
-						<div class="kbs_profile_editor_replies_to_expand">
-                            <p>
-                            	<label for="kbs_expand_replies"><?php _e( 'Replies to Expand', 'kb-support' ); ?></label>
-                                <input type="number" class="kbs-input" name="kbs_expand_replies" id="kbs-expand-replies" value="<?php echo esc_attr( $customer->get_replies_to_expand() ); ?>" min="0" max="50" step="1" /><span class="kbs-description"><?php printf( __( 'How many replies do you want to initially expand on the %s Manager page? <code>0</code> expands none.', 'kb-support' ), kbs_get_ticket_label_singular() ); ?></span>
-                            </p>
-                        </div>
-
+						<!-- @todo: Delete  action "kbs_profile_editor_after_replies_to_expand" ; For now we will keep it-->
                         <?php do_action( 'kbs_profile_editor_after_replies_to_expand' ); ?>
 
                         <p class="kbs_form_section_heading"><?php _e( 'Change Password', 'kb-support' ); ?></p>

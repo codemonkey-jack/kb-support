@@ -804,46 +804,28 @@ function kbs_ticket_metabox_form_data_row( $ticket_id )	{
 add_action( 'kbs_ticket_metabox_custom_sections', 'kbs_ticket_metabox_form_data_row', 20 );
 
 /**
- * Determines where to display the existing replies row.
- *
- * @since   1.5.3
- * @param
- * @global	object	$kbs_ticket			KBS_Ticket class object
- * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
- * @param	int		$ticket_id			The ticket post ID.
- */
-function kbs_ticket_determine_existing_replies_location( $ticket_id )   {
-    global $kbs_ticket, $kbs_ticket_update;
-
-    $user_id  = get_current_user_id();
-    $priority = get_user_meta( $user_id, '_kbs_replies_location', true );
-    $priority = '' == $priority ? 25 : absint( $priority );
-
-    add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_existing_replies_row', $priority );
-} // kbs_ticket_determine_existing_replies_location
-add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_determine_existing_replies_location', 1 );
-
-/**
  * Display the ticket replies row.
  *
- * @since	1.0
- * @global	object	$kbs_ticket			KBS_Ticket class object
- * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
- * @param	int		$ticket_id			The ticket post ID.
+ * @param int        $ticket_id         The ticket post ID.
+ *
+ * @global    object $kbs_ticket        KBS_Ticket class object
+ * @global    bool   $kbs_ticket_update True if this ticket is being updated, false if new.
+ * @since    1.0
  */
-function kbs_ticket_metabox_existing_replies_row( $ticket_id )	{
+function kbs_ticket_metabox_existing_replies_row( $ticket_id ) {
 	global $kbs_ticket, $kbs_ticket_update;
 
 	?>
-    <div id="kbs-replies-loader"></div>
+	<div id="kbs-replies-loader"></div>
 
-    <div id="kbs_historic_reply_fields" class="kbs_meta_table_wrap">
-        <div class="widefat">
-            <div class="kbs-historic-reply-option-fields"></div>
-        </div>
-    </div>
+	<div id="kbs_historic_reply_fields" class="kbs_meta_table_wrap">
+		<div class="widefat">
+			<div class="kbs-historic-reply-option-fields"></div>
+		</div>
+	</div>
 	<?php
 } // kbs_ticket_metabox_replies_row
+add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_existing_replies_row', 25 );
 
 /**
  * Display the ticket reply row.

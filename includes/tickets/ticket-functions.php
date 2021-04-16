@@ -1557,11 +1557,7 @@ function kbs_delete_note( $comment_id = 0, $ticket_id = 0 ) {
  * @param	int		$ticket_id	The ticket ID the note is connected to
  * @return	str
  */
-function kbs_get_note_html( $note, $ticket_id = 0, $expand = false ) {
-
-	$show            = $expand ? ' style="display: block;"' : '';
-	$show_hide       = $expand ? __( 'Hide', 'kb-support' ) : __( 'View', 'kb-support' );
-	$show_hide_icons = $expand ? 'dashicons-arrow-up' : 'dashicons-arrow-down';
+function kbs_get_note_html( $note, $ticket_id = 0 ) {
 
 	if ( is_numeric( $note ) ) {
 		$note = get_comment( $note );
@@ -1584,8 +1580,7 @@ function kbs_get_note_html( $note, $ticket_id = 0, $expand = false ) {
 	), admin_url() ), 'kbs_delete_ticket_note_' . $note->comment_ID, 'kbs_note_nonce' );
 
 	$actions = array(
-		'delete_note' => '<a href="' . $delete_note_url . '" class="kbs-remove-row kbs-delete dashicons dashicons-trash" title="' . esc_attr__( 'Delete Note', 'kb-support' ) . '"></a>',
-		'read_note'   => '<a href="#" class="toggle-view-note-option-section dashicons ' . $show_hide_icons . '" title="' . sprintf( __( '%s Note', 'kb-support' ), $show_hide ) . '"></a>',
+		'delete_note' => '<a href="' . $delete_note_url . '" class="kbs-remove-row kbs-delete" title="' . esc_attr__( 'Delete Note', 'kb-support' ) . '">' . esc_html__( 'Delete Note', 'kb-support' ) . '</a>',
 	);
 
 	if ( $note->user_id != get_current_user_id() && ! current_user_can( $delete_note_cap ) )	{
@@ -1598,15 +1593,23 @@ function kbs_get_note_html( $note, $ticket_id = 0, $expand = false ) {
 
     <div class="kbs-notes-row-header">
         <span class="kbs-notes-row-title">
-            <?php echo apply_filters( 'kbs_notes_title', sprintf( __( '%s by %s', 'kb-support' ), date_i18n( $date_format, strtotime( $note->comment_date ) ), $user ), $note ); ?>
+			<?php echo '<strong>' . esc_html( $user ) . '</strong>' . esc_html__( ' created a note' ); ?>
         </span>
 
         <span class="kbs-notes-row-actions">
-			<?php echo implode( ' ', $actions ); ?>
+			<?php echo date_i18n( $date_format, strtotime( $note->comment_date ) ); ?>
+			<a href="#" class="helptain-admin-row-actions-toggle dashicons dashicons-ellipsis"></a>
+			<ul class="helptain-admin-row-actions helptain-actions-sub-menu helptain-hide">
+				<?php
+				foreach($actions as $action){
+					echo '<li>'.$action.'</li>';
+				}
+				?>
+			</ul>
         </span>
     </div>
 
-    <div class="kbs-notes-content-wrap" <?php echo $show; ?>>
+    <div class="kbs-notes-content-wrap">
         <div class="kbs-notes-content-sections">
             <div class="kbs-notes-content-section">
                 <?php do_action( 'kbs_ticket_notes_before_content', $note ); ?>
