@@ -1636,6 +1636,10 @@ Tooltips
 End Tooltips
  */
 
+.wpchill-no-float {
+	float:none;
+}
+
 .kbs_option_support_hours table th {
 	vertical-align:middle;
 }
@@ -1785,7 +1789,8 @@ End Tooltips
 	width      : 150px;
 	text-align : center;
 	margin     : 0 auto;
-	right      : -10px;
+	right      : 0;
+	left       : auto;
 }
 
 .helptain-action-button ul.helptain-actionbar-sub-menu.helptain-hide,
@@ -1821,23 +1826,37 @@ End Tooltips
 ** Metaboxes
  */
 
-#kbs-ticket-metabox-ticket-reply {
+#kbs-ticket-metabox-ticket-reply,
+#kbs-ticket-metabox-ticket-details {
 	background : transparent;
 	border     : 0;
 }
 
 #kbs-ticket-reply-wrap,
-#kbs-ticket-add-note-container {
+#kbs-ticket-add-note-container{
 	background : #fff;
 	padding    : 12px;
 	border     : 1px solid #c3c4c7;
 	border-top : 0;
 }
 
-#kbs-ticket-metabox-ticket-reply > .postbox-header {
+#kbs-ticket-metabox-ticket-reply > .postbox-header,
+#kbs-ticket-metabox-ticket-details > .postbox-header {
 	display : none;
 }
 
-#kbs-ticket-metabox-ticket-reply > .inside {
+#kbs-ticket-metabox-ticket-reply > .inside,
+#kbs-ticket-metabox-ticket-details > .inside {
 	padding : 0;
+}
+
+
+#kbs-ticket-metabox-ticket-details .kbs_ticket_content_wrapper {
+	border: 1px solid #cecece;
+	background: #fff;
+}
+
+#kbs-ticket-metabox-ticket-details .kbs_ticket_content_wrapper .kbs-ticket-content-row-standard-fields {
+	border-left: 5px solid #93a1b0;
+	background:#fff;
 }

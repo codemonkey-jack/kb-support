@@ -477,16 +477,45 @@ function kbs_ticket_metabox_sections()  {
 
                     <div class="kbs-ticket-content-row-header">
                         <span class="kbs-ticket-content-row-title">
+							<?php
+							$dif_received  = absint( time() - strtotime( $kbs_ticket->date ) );
+							$diff_updates  = absint( time() - strtotime( $kbs_ticket->modified_date ) );
+							$time_received = 0;
+							$time_updated  = 0;
+
+							if ( ( $dif_received / ( 60 ) ) < 60 ) {
+								$time_received = absint( $dif_received / ( 60 ) ) . ( ( absint( $dif_received / ( 60 ) ) <= 1 ) ? esc_html__( ' minute', 'kb-support' ) : esc_html__( ' minutes ago', 'kb-support' ) );
+							} else if ( ( $dif_received / ( 60 * 60 ) ) <= 24 ) {
+								$time_received = absint( $dif_received / ( 60 * 60 ) ) . ( ( absint( $dif_received / ( 60 * 60 ) ) <= 1 ) ? esc_html__( ' hour', 'kb-support' ) : esc_html__( ' hours ago', 'kb-support' ) );
+							} else {
+								$time_received = absint( $dif_received / ( 60 * 60 * 24 ) ) . ( ( absint( $dif_received / ( 60 * 60 * 24 ) ) <= 1 ) ? esc_html__( ' day', 'kb-support' ) : esc_html__( ' days ago', 'kb-support' ) );
+							}
+
+							if ( ( $diff_updates / ( 60 ) ) < 60 ) {
+								$time_updated = absint( $diff_updates / ( 60 ) ) . ( ( absint( $diff_updates / ( 60 ) ) <= 1 ) ? esc_html__( ' minute', 'kb-support' ) : esc_html__( ' minutes ago', 'kb-support' ) );
+							} else if ( ( $diff_updates / ( 60 * 60 ) ) <= 24 ) {
+								$time_updated = absint( $diff_updates / ( 60 * 60 ) ) . ( ( absint( $diff_updates / ( 60 * 60 ) ) <= 1 ) ? esc_html__( ' hour', 'kb-support' ) : esc_html__( ' hours ago', 'kb-support' ) );
+							} else {
+								$time_updated = absint( $diff_updates / ( 60 * 60 * 24 ) ) . ( ( absint( $diff_updates / ( 60 * 60 * 24 ) ) <= 1 ) ? esc_html__( ' day', 'kb-support' ) : esc_html__( ' days ago', 'kb-support' ) );
+							}
+
+							$tooltip_received = '<div class="wpchill-tooltip wpchill-no-float"><span>[?]</span>' .
+												'<div class="wpchill-tooltip-content">' .
+												esc_html__( 'Receive date:  ', 'kb-support' ) .
+												date_i18n( $date_format, strtotime( $kbs_ticket->date ) ) .
+												'</div></div>';
+
+							?>
                             <?php printf(
                                 __( 'Received: %s', 'kb-support' ),
-                                date_i18n( $date_format, strtotime( $kbs_ticket->date ) )
+                                $time_received.$tooltip_received
                             ); ?>
 
                             <?php if ( $kbs_ticket->date != $kbs_ticket->modified_date ) : ?>
                                 <br>
                                 <?php printf(
                                     __( 'Updated: %s', 'kb-support' ),
-                                    date_i18n( $date_format, strtotime( $kbs_ticket->modified_date ) )
+                                   $time_updated
                                 ); ?>
                             <?php endif; ?>
                         </span>
@@ -495,8 +524,15 @@ function kbs_ticket_metabox_sections()  {
                         $actions = kbs_get_ticket_actions( $kbs_ticket, $kbs_ticket_update );
                         ?>
 
-                        <span class="kbs-ticket-content-row-actions">
-                            <?php echo implode( '&nbsp;&#124;&nbsp;', $actions ); ?>
+						<span class="kbs-ticket-content-row-actions">
+                           <a href="#" class="helptain-admin-row-actions-toggle dashicons dashicons-ellipsis"></a>
+							<ul class="helptain-admin-row-actions helptain-actions-sub-menu helptain-hide">
+								<?php
+								foreach ( $actions as $action ) {
+									echo '<li>' . $action . '</li>';
+								}
+								?>
+							</ul>
                         </span>
                     </div>
 

@@ -1597,7 +1597,19 @@ function kbs_get_note_html( $note, $ticket_id = 0 ) {
         </span>
 
         <span class="kbs-notes-row-actions">
-			<?php echo date_i18n( $date_format, strtotime( $note->comment_date ) ); ?>
+			<?php
+			$dif         = absint( time() - strtotime( $note->comment_date ) );
+			$time_passed = 0;
+
+			if ( ( $dif / ( 60 ) ) < 60 ) {
+				$time_passed = absint( $dif / ( 60 ) ) . ( ( absint( $dif / ( 60 ) ) <= 1 ) ? esc_html__( ' minute', 'kb-support' ) : esc_html__( ' minutes ago', 'kb-support' ) );
+			} else if ( ( $dif / ( 60 * 60 ) ) <= 24 ) {
+				$time_passed = absint( $dif / ( 60 * 60 ) ) . ( ( absint( $dif / ( 60 * 60 ) ) <= 1 ) ? esc_html__( ' hour', 'kb-support' ) : esc_html__( ' hours ago', 'kb-support' ) );
+			} else {
+				$time_passed = absint( $dif / ( 60 * 60 * 24 ) ) . ( ( absint( $dif / ( 60 * 60 * 24 ) ) <= 1 ) ? esc_html__( ' day', 'kb-support' ) : esc_html__( ' days ago', 'kb-support' ) );
+			}
+			echo $time_passed;
+			?>
 			<a href="#" class="helptain-admin-row-actions-toggle dashicons dashicons-ellipsis"></a>
 			<ul class="helptain-admin-row-actions helptain-actions-sub-menu helptain-hide">
 				<?php

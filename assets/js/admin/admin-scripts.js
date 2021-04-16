@@ -1371,7 +1371,7 @@ function kbs_load_ticket_replies( ticket_id, reply_id, page )	{
 			kbs_page: page
 		},
 		function(response)	{
-			jQuery( '.kbs-historic-reply-option-fields' ).prepend( response );
+			jQuery( '.kbs-historic-reply-option-fields' ).append( response );
 			jQuery('#kbs-replies-loader').html('');
 		}
 	);

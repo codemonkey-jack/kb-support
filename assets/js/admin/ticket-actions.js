@@ -136,7 +136,7 @@ jQuery( document ).ready( function ( $ ) {
 	/**
 	 * Toggle the reply/note row actions
 	 */
-	$( 'html body' ).on( 'click', '.kbs_historic_replies_wrapper a.helptain-admin-row-actions-toggle', function ( e ) {
+	$( 'html body' ).on( 'click', 'a.helptain-admin-row-actions-toggle', function ( e ) {
 		e.preventDefault();
 
 		var toggle          = $( this ),
