@@ -230,26 +230,24 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 
     }
 
-    if ( $file_count )  {
-        $icons['files'] = sprintf(
-            '<span class="dashicons dashicons-media-document" title="%s"></span>',
-            $file_count . ' ' . _n( 'attached file', 'attached files', $file_count, 'kb-support' )
-        );
-    }
 
-    //@todo: delete commented lines after testing with other extensions. icons no longer used
-	//$icons                 = apply_filters( 'kbs_ticket_replies_icons', $icons, $reply );
+	$icons = apply_filters( 'kbs_ticket_replies_icons', array(), $reply );
 
-
-    ob_start(); ?>
+	ob_start(); ?>
 
 	<div class="kbs-replies-row-header <?php echo esc_attr($_is_support); ?>">
-        <span class="kbs-replies-row-title">
-			<?php echo '<strong>' . esc_html( $author ) . '</strong> ' . esc_html__( 'replied', 'kb-support' ); ?>
-        </span>
-
 		<span class="kbs-replies-row-actions">
 			<?php
+
+			if ( ! empty( $icons ) ) {
+				foreach ( $icons as $icon ) {
+					echo '<div class="wpchill-tooltip wpchill-no-float"><span class="' . esc_attr( $icon['icon_class'] ) . '"></span>' .
+										 '<div class="wpchill-tooltip-content">' .
+										 esc_html( $icon['description'] ) .
+										 '</div></div>';
+				}
+			}
+
 			$dif         = absint( time() - strtotime( $reply->post_date ) );
 			$time_passed = 0;
 
@@ -271,6 +269,9 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 				}
 				?>
 			</ul>
+        </span>
+        <span class="kbs-replies-row-title">
+			<?php echo '<strong>' . esc_html( $author ) . '</strong> ' . esc_html__( 'replied', 'kb-support' ); ?>
         </span>
     </div>
 

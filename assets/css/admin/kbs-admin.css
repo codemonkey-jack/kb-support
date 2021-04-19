@@ -1911,3 +1911,12 @@ End Tooltips
 	text-transform : lowercase;
 	vertical-align : middle;
 }
+
+.kbs-replies-row-actions .wpchill-tooltip > span {
+	text-decoration : none;
+	color           : #a5b2bd;
+}
+
+.kbs-replies-row-actions .wpchill-tooltip .wpchill-tooltip-content {
+	text-align:left;
+}
