@@ -207,22 +207,10 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 
     $actions = apply_filters( 'kbs_ticket_replies_actions', $actions, $reply );
 
-    $icons   = array();
+	$is_read = false;
 
     if ( false === strpos( $author, __( 'Customer', 'kb-support' ) ) && false === strpos( $author, __( 'Participant', 'kb-support' ) ) )  {
         $is_read = kbs_reply_is_read( $reply->ID );
-        if ( $is_read )  {
-            $icons['is_read'] = sprintf(
-                '<span class="dashicons dashicons-visibility" title="%s %s"></span>',
-                __( 'Read by customer on', 'kb-support' ),
-                date_i18n( $date_format, strtotime( $is_read ) )
-            );
-        } else  {
-            $icons['not_read'] = sprintf(
-                '<span class="dashicons dashicons-hidden" title="%s"></span>',
-                __( 'Customer has not read', 'kb-support' )
-            );
-        }
 
         if ( 'closed' != get_post_status( $ticket_id ) && ( current_user_can( 'manage_ticket_settings' ) || get_current_user_id() == $reply->post_author ) ) {
 
@@ -298,20 +286,31 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
             <?php if ( $files ) : ?>
                 <div class="kbs-replies-files-section">
                 	<?php do_action( 'kbs_replies_before_files', $reply ); ?>
-                    <ol>
-                        <?php foreach( $files as $file ) : ?>
-                            <li>
-                            	<a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank">
-									<?php echo basename( get_attached_file( $file->ID ) ); ?>
-                                </a>
-                            </li>
-                        <?php endforeach; ?>
-                    </ol>
+
+					<ul class="helptain-reply-attachments">
+						<li class="icon"><span class="dashicons dashicons-paperclip"></span></li>
+						<?php foreach ( $files as $file ) :
+							$attached_file = get_attached_file( $file->ID );
+							?>
+							<li>
+								<a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank">
+									<i class="name"><?php echo esc_html( basename( $attached_file ) ); ?></i>
+									<span
+										class="size"><?php echo esc_html( size_format( filesize( $attached_file ) ) ); ?></span>
+								</a>
+							</li>
+						<?php endforeach; ?>
+					</ul>
                     <?php do_action( 'kbs_replies_after_files', $reply ); ?>
                 </div>
             <?php endif; ?>
             <?php do_action( 'kbs_after_reply_content_section', $reply ); ?>
         </div>
+		<?php
+		if ( $is_read ) {
+			echo '<p class="helptain-replies-viewed"><i class="dashicons dashicons-visibility"></i> ' . esc_html__( 'Customer viewed on','kb-support' ) . ' ' . esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $is_read ) ) ) . '</p>';
+		}
+		?>
     </div>
 
     <?php

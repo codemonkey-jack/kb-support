@@ -696,11 +696,12 @@ a.kbs_ticket_form_data	{
 .kbs-notes-content-section {
 	display: block;
 	padding: 10px 8px;
-	border-bottom: 1px solid rgba( 222, 222, 222, 0.3 );
 }
 
-.kbs-replies-files-section	{
-	background: #f9f9f9;
+.kbs-custom-ticket-section,
+.kbs-notes-content-section {
+	border-bottom : 1px solid rgba(222, 222, 222, 0.3);
+
 }
 
 .kbs-custom-ticket-section:last-child,
@@ -1859,4 +1860,54 @@ End Tooltips
 #kbs-ticket-metabox-ticket-details .kbs_ticket_content_wrapper .kbs-ticket-content-row-standard-fields {
 	border-left: 5px solid #93a1b0;
 	background:#fff;
+}
+
+.kbs_historic_replies_wrapper .kbs-replies-content-wrap .helptain-replies-viewed {
+	font-style : italic;
+	color      : #a5b2bd;
+}
+
+.kbs_historic_replies_wrapper .kbs-replies-content-sections .helptain-reply-attachments li {
+	background    : #fff;
+	border-radius : 12px;
+	border        : 1px solid #dadada;
+	display       : inline-block;
+	line-height   : 1;
+	margin        : 8px 4px 8px 0;
+	padding       : 4px 10px;
+	position      : relative;
+	color         : #a5b2bd;
+}
+
+.kbs_historic_replies_wrapper .kbs-replies-content-sections .helptain-reply-attachments li.icon {
+	border    : 0;
+	padding   : 0;
+}
+
+.kbs_historic_replies_wrapper .kbs-replies-content-sections .helptain-reply-attachments li.icon span {
+	font-size : 16px;
+}
+
+.kbs_historic_replies_wrapper .kbs-replies-content-sections .helptain-reply-attachments li a {
+	display : inline-block;
+	color   : #07c;
+}
+
+.kbs_historic_replies_wrapper .kbs-replies-content-sections .helptain-reply-attachments li a i.name {
+	overflow         : hidden;
+	-o-text-overflow : ellipsis;
+	text-overflow    : ellipsis;
+	white-space      : nowrap;
+	display          : inline-block;
+	font-style       : normal;
+	max-width        : 200px;
+	vertical-align   : middle;
+}
+
+.kbs_historic_replies_wrapper .kbs-replies-content-sections .helptain-reply-attachments li a span.size {
+	color          : #96989a;
+	display        : inline-block;
+	font-weight    : 400;
+	text-transform : lowercase;
+	vertical-align : middle;
 }
