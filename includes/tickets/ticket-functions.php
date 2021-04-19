@@ -1611,7 +1611,7 @@ function kbs_get_note_html( $note, $ticket_id = 0 ) {
 			echo $time_passed;
 			?>
 			<a href="#" class="helptain-admin-row-actions-toggle dashicons dashicons-ellipsis"></a>
-			<ul class="helptain-admin-row-actions helptain-actions-sub-menu helptain-hide">
+			<ul class="helptain-admin-row-actions helptain-actions-sub-menu kbs-hidden">
 				<?php
 				foreach($actions as $action){
 					echo '<li>'.$action.'</li>';

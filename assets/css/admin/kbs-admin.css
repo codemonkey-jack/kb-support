@@ -1707,10 +1707,6 @@ End Tooltips
 	z-index    : 9999;
 }
 
-.helptain-hide {
-	display : none;
-}
-
 #kbs_historic_reply_fields {
 	padding-top : 25px;
 }
@@ -1794,8 +1790,8 @@ End Tooltips
 	left       : auto;
 }
 
-.helptain-action-button ul.helptain-actionbar-sub-menu.helptain-hide,
-.helptain-actions-sub-menu.helptain-hide {
+.helptain-action-button ul.helptain-actionbar-sub-menu.kbs-hidden,
+.helptain-actions-sub-menu.kbs-hidden {
 	display : none;
 }
 
@@ -1810,6 +1806,11 @@ End Tooltips
 .helptain-actions-sub-menu li:hover {
 	background : #f1f3f5;
 	color      : #07c;
+}
+
+#helptain-action-bar .helptain-action-buttons .helptain-action-button ul.helptain-actionbar-sub-menu li a {
+	font-size       : 13px;
+	text-decoration : none;
 }
 
 .helptain-admin-row-actions-toggle {

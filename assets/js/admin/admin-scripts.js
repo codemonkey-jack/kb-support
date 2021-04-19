@@ -1393,7 +1393,7 @@ function kbs_load_ticket_reply( ticket_id, reply_id, page ) {
 			jQuery( '#kbs-replies-loader' ).html( '' );
 			jQuery( '#kbs-new-reply-loader' ).html( '' );
 			jQuery( 'iframe#kbs_ticket_reply_ifr' ).contents().find( 'body#tinymce' ).html( '' );
-			jQuery( '#kbs-ticket-reply-wrap' ).addClass( 'helptain-hide' );
+			jQuery( '#kbs-ticket-reply-wrap' ).addClass( 'kbs-hidden' );
 		}
 	);
 }
@@ -1410,7 +1410,7 @@ function kbs_load_ticket_note( ticket_id, note_id )	{
 		function ( response ) {
 			jQuery( '.kbs-historic-reply-option-fields' ).prepend( '<div class="kbs_historic_replies_wrapper " expanded="true">' + response + '</div>' );
 			jQuery( '#kbs-notes-loader' ).html( '' );
-			jQuery( '#kbs-ticket-add-note-container' ).addClass( 'helptain-hide' );
+			jQuery( '#kbs-ticket-add-note-container' ).addClass( 'kbs-hidden' );
 		}
 	);
 }

@@ -526,7 +526,7 @@ function kbs_ticket_metabox_sections()  {
 
 						<span class="kbs-ticket-content-row-actions">
                            <a href="#" class="helptain-admin-row-actions-toggle dashicons dashicons-ellipsis"></a>
-							<ul class="helptain-admin-row-actions helptain-actions-sub-menu helptain-hide">
+							<ul class="helptain-admin-row-actions helptain-actions-sub-menu kbs-hidden">
 								<?php
 								foreach ( $actions as $action ) {
 									echo '<li>' . $action . '</li>';
@@ -890,7 +890,7 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 			'teeny'         => true,
 			'dfw'           => false,
 			'tinymce'       => true,
-		) );
+		), $ticket_id );
 
 		$action_buttons = apply_filters( 'helptain_action_buttons', array(
 			'reply_button'          => array(
@@ -909,7 +909,7 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 			),
 			'status_button' => array(
 				'icon'        => 'dashicons-flag',
-				'description' => esc_html__( 'Canned Replies', 'kb-support' ),
+				'description' => esc_html__( 'Status', 'kb-support' ),
 				'link_content' => '',
 				'action' => 'set_status',
 				'priority'    => 30
@@ -921,7 +921,7 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 				'action' => 'assign_ticket',
 				'priority'    => 40
 			)
-		) );
+		), $ticket_id );
 
 		uasort( $action_buttons, 'helptain_sort_data_by_priority' );
 
@@ -942,10 +942,10 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 									<li class="helptain-action-button">
 										<a href="#<?php echo esc_attr( $key ); ?>"
 										   class="dashicons <?php echo esc_attr( $button['icon'] ); ?>"
-										   title="<?php echo esc_attr( $button['description'] ); ?>'"
+										   title="<?php echo esc_attr( $button['description'] ); ?>"
 										   data-action="<?php echo esc_attr( $button['action'] ); ?>"></a>
 										<ul id="helptain_status_select"
-											class="helptain-actionbar-sub-menu helptain-hide" name="ticket_status"
+											class="helptain-actionbar-sub-menu kbs-hidden" name="ticket_status"
 											nonce="<?php echo wp_create_nonce( 'set_status_nonce_' . $ticket_id ); ?>">
 											<?php foreach ( kbs_get_post_statuses( 'labels', true ) as $ticket_status ) : ?>
 												<li
@@ -962,7 +962,7 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 										   class="dashicons <?php echo esc_attr( $button['icon'] ); ?>"
 										   title="<?php echo esc_attr( $button['description'] ); ?>'"
 										   data-action="<?php echo esc_attr( $button['action'] ); ?>"></a>
-										<ul id="helptain_agent_select" class="helptain-actionbar-sub-menu helptain-hide"
+										<ul id="helptain_agent_select" class="helptain-actionbar-sub-menu kbs-hidden"
 											name="kbs_agent_id"
 											nonce="<?php echo wp_create_nonce( 'set_agent_nonce_' . $ticket_id ); ?>">
 											<?php foreach ( $kbs_agents as $kbs_agent ) {
@@ -975,9 +975,14 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 									</li>
 									<?php
 									break;
-								default:
+								case 'reply_button':
 									echo '<li class="helptain-action-button"><a href="#' . esc_attr( $key ) . '" class="dashicons ' . esc_attr( $button['icon'] ) . '" title="' . esc_attr( $button['description'] ) . '" data-action="' . esc_attr( $button['action'] ) . '">' . esc_html( $button['link_content'] ) . '</a></li>';
-									do_action( 'helptain_action_bar_button_' . $key, $button );
+									break;
+								case 'note_button':
+									echo '<li class="helptain-action-button"><a href="#' . esc_attr( $key ) . '" class="dashicons ' . esc_attr( $button['icon'] ) . '" title="' . esc_attr( $button['description'] ) . '" data-action="' . esc_attr( $button['action'] ) . '">' . esc_html( $button['link_content'] ) . '</a></li>';
+									break;
+								default:
+									do_action( 'helptain_action_bar_button_' . $key, $button, $ticket_id );
 									break;
 							}
 
@@ -993,7 +998,7 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 
 		</div>
 
-			<div id="kbs-ticket-reply-wrap" class="helptain-hide">
+			<div id="kbs-ticket-reply-wrap" class="kbs-hidden">
 				<p><label
 						for="kbs_ticket_reply"><strong><?php _e( 'Add a New Reply', 'kb-support' ); ?></strong></label><br/>
 					<?php do_action( 'kbs_ticket_metabox_before_reply_content', $ticket_id );
@@ -1035,7 +1040,7 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 				<div id="kbs-new-reply-loader"></div>
 			</div>
 
-			<div id="kbs-ticket-add-note-container" class="helptain-hide">
+			<div id="kbs-ticket-add-note-container" class="kbs-hidden">
 				<p><label
 						for="kbs_new_note"><strong><?php _e( 'Add a New Note', 'kb-support' ); ?></strong></label><br/>
 					<?php echo KBS()->html->textarea( array(

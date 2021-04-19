@@ -21,10 +21,10 @@ jQuery( document ).ready( function ( $ ) {
 
 		switch ( action ) {
 			case 'show_reply_editor':
-				reply_wrapper.toggleClass( 'helptain-hide' );
-				note_wrapper.addClass( 'helptain-hide' );
-				status_select.addClass( 'helptain-hide' );
-				agent_select.addClass( 'helptain-hide' );
+				reply_wrapper.toggleClass( 'kbs-hidden' );
+				note_wrapper.addClass( 'kbs-hidden' );
+				status_select.addClass( 'kbs-hidden' );
+				agent_select.addClass( 'kbs-hidden' );
 
 				$( 'html,body' ).animate( {
 					scrollTop: (reply_wrapper.offset().top - 80)
@@ -32,10 +32,10 @@ jQuery( document ).ready( function ( $ ) {
 
 				break;
 			case 'show_note_editor':
-				note_wrapper.toggleClass( 'helptain-hide' );
-				reply_wrapper.addClass( 'helptain-hide' );
-				status_select.addClass( 'helptain-hide' );
-				agent_select.addClass( 'helptain-hide' );
+				note_wrapper.toggleClass( 'kbs-hidden' );
+				reply_wrapper.addClass( 'kbs-hidden' );
+				status_select.addClass( 'kbs-hidden' );
+				agent_select.addClass( 'kbs-hidden' );
 
 				$( 'html,body' ).animate( {
 					scrollTop: (note_wrapper.offset().top - 80)
@@ -43,12 +43,12 @@ jQuery( document ).ready( function ( $ ) {
 
 				break;
 			case 'set_status':
-				status_select.toggleClass( 'helptain-hide' );
-				agent_select.addClass( 'helptain-hide' );
+				status_select.toggleClass( 'kbs-hidden' );
+				agent_select.addClass( 'kbs-hidden' );
 				break;
 			case 'assign_ticket':
-				agent_select.toggleClass( 'helptain-hide' );
-				status_select.addClass( 'helptain-hide' );
+				agent_select.toggleClass( 'kbs-hidden' );
+				status_select.addClass( 'kbs-hidden' );
 				break;
 			default:
 				jQuery( document ).trigger( 'helptain_action_bar_action_' + action, $( this ) );
@@ -142,6 +142,6 @@ jQuery( document ).ready( function ( $ ) {
 		var toggle          = $( this ),
 		    actions_wrapper = toggle.parent().find( '.helptain-admin-row-actions' );
 
-		actions_wrapper.toggleClass( 'helptain-hide' );
+		actions_wrapper.toggleClass( 'kbs-hidden' );
 	} );
 } );
