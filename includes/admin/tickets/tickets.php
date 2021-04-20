@@ -424,9 +424,18 @@ function kbs_order_admin_tickets( $query )	{
 			$query->set( 'order',  $order );
 			break;
 		case 'date':
-			//@todo: Need to find a way to sort old tickets also. Currently, with this setup, old tickets are missing from table
 			$query->set( 'orderby', 'meta_value' );
-			$query->set( 'meta_key', '_kbs_ticket_last_reply_date' );
+			$query->set( 'meta_query', array(
+				'relation' => 'OR',
+				array(
+					'key'     => '_kbs_ticket_last_reply_date',
+					'compare' => 'EXISTS'
+				),
+				array(
+					'key'     => '_kbs_ticket_last_reply_date',
+					'compare' => 'NOT EXISTS'
+				),
+			) );
 			$query->set( 'order', $order );
 			break;
 		case 'title':
