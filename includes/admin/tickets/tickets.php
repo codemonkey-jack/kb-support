@@ -424,18 +424,19 @@ function kbs_order_admin_tickets( $query )	{
 			$query->set( 'order',  $order );
 			break;
 		case 'date':
-			$query->set( 'orderby', 'meta_value' );
+			$query->set( 'orderby', 'meta_value modified' );
 			$query->set( 'meta_query', array(
-				'relation' => 'OR',
-				array(
-					'key'     => '_kbs_ticket_last_reply_date',
-					'compare' => 'EXISTS'
-				),
-				array(
-					'key'     => '_kbs_ticket_last_reply_date',
-					'compare' => 'NOT EXISTS'
-				),
-			) );
+					'relation' => 'OR',
+					array(
+						'key'     => '_kbs_ticket_last_reply_date',
+						'compare' => 'EXISTS'
+					),
+					array(
+						'key'     => '_kbs_ticket_last_reply_date',
+						'compare' => 'NOT EXISTS'
+					),
+				)
+			);
 			$query->set( 'order', $order );
 			break;
 		case 'title':
