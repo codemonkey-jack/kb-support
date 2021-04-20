@@ -248,11 +248,32 @@ function kbs_ajax_insert_ticket_reply()	{
 		'author'      => get_current_user_id()
 	);
 
-	$reply_id = $ticket->add_reply( $reply_data );
+	$reply_id      = $ticket->add_reply( $reply_data );
+	$status_option = kbs_agent_get_default_reply_status();
+
+	if ( '0' != $status_option ) {
+		$update_fields = array(
+			'ID'          => absint( $reply_data['ticket_id'] ),
+			'post_status' => sanitize_text_field( $status_option ),
+			'edit_date'   => current_time( 'mysql' )
+		);
+
+		$updated = wp_update_post( $update_fields );
+
+	}
 
 	do_action( 'kbs_ticket_admin_reply', $ticket->ID, $reply_id );
 
-	wp_send_json( array( 'reply_id' => $reply_id ) );
+	wp_send_json(
+		apply_filters(
+			'helptain_ticket_reply_json_response',
+			array(
+				'reply_id'      => $reply_id,
+				'status_option' => kbs_get_post_status_label( $status_option ),
+				'status_color'  => kbs_get_ticket_status_colour( $status_option, true ),
+			)
+		)
+	);
 
 } // kbs_ajax_reply_to_ticket
 add_action( 'wp_ajax_kbs_insert_ticket_reply', 'kbs_ajax_insert_ticket_reply' );

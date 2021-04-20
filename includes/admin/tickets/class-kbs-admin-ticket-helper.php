@@ -81,7 +81,7 @@ class KBS_Admin_Ticket_Helper {
 
 		$response = array(
 			'status_color' => kbs_get_ticket_status_colour( $data['status'], true ),
-			'status'       => $data['status']
+			'status'       => kbs_get_post_status_label($data['status'])
 		);
 
 		echo json_encode( $response );

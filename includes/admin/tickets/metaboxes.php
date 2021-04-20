@@ -112,19 +112,15 @@ function kbs_ticket_add_meta_boxes( $post )	{
 
 	if ( $kbs_ticket_update )	{
 
-		if ( 'new' != $kbs_ticket->status )	{
-
-			add_meta_box(
-				'kbs-ticket-metabox-ticket-reply',
-				sprintf( __( 'Reply to %1$s', 'kb-support' ), $single_label ),
-				'kbs_ticket_metabox_reply_callback',
-				'kbs_ticket',
-				'normal',
-				'high',
-				array()
-			);
-
-		}
+		add_meta_box(
+			'kbs-ticket-metabox-ticket-reply',
+			sprintf( __( 'Reply to %1$s', 'kb-support' ), $single_label ),
+			'kbs_ticket_metabox_reply_callback',
+			'kbs_ticket',
+			'normal',
+			'high',
+			array()
+		);
 
 		add_meta_box(
 			'kbs-ticket-metabox-ticket-details',
@@ -549,7 +545,7 @@ function kbs_ticket_metabox_sections()  {
     </div>
     <?php
 } // kbs_ticket_metabox_sections
-add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_sections', 10 );
+add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_sections', 30 );
 
 /**
  * Display a notice if this ticket has been flagged.
@@ -861,7 +857,7 @@ function kbs_ticket_metabox_existing_replies_row( $ticket_id ) {
 	</div>
 	<?php
 } // kbs_ticket_metabox_replies_row
-add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_existing_replies_row', 25 );
+add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_existing_replies_row', 15);
 
 /**
  * Display the ticket reply row.
@@ -874,198 +870,179 @@ add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_existing_replies_row'
 function kbs_ticket_metabox_reply_row( $ticket_id )	{
 	global $kbs_ticket, $kbs_ticket_update;
 
-	if ( 'closed' == $kbs_ticket->post_status ) : ?>
-		<p>
-			<?php printf( __( 'This %1$s is currently closed. <a href="%2$s">Re-open %3$s.</a>', 'kb-support' ),
-				kbs_get_ticket_label_singular( true ),
-				wp_nonce_url( add_query_arg( 'kbs-action', 're-open-ticket', get_edit_post_link( $ticket_id ) ), 'kbs-reopen-ticket', 'kbs-ticket-nonce' ),
-				kbs_get_ticket_label_singular()
-			); ?>
-		</p>
-	<?php else :
+	$settings = apply_filters( 'kbs_ticket_reply_mce_settings', array(
+		'textarea_rows' => 10,
+		'quicktags'     => false,
+		'teeny'         => true,
+		'dfw'           => false,
+		'tinymce'       => true,
+	), $ticket_id );
 
-		$settings = apply_filters( 'kbs_ticket_reply_mce_settings', array(
-			'textarea_rows' => 10,
-			'quicktags'     => false,
-			'teeny'         => true,
-			'dfw'           => false,
-			'tinymce'       => true,
-		), $ticket_id );
+	$action_buttons = array(
+		'reply_button'  => array(
+			'icon'         => 'dashicons-undo',
+			'description'  => esc_html__( 'Reply', 'kb-support' ),
+			'link_content' => '',
+			'action'       => 'show_reply_editor',
+			'priority'     => 10
+		),
+		'note_button'   => array(
+			'icon'         => 'dashicons-edit',
+			'description'  => esc_html__( 'Note', 'kb-support' ),
+			'link_content' => '',
+			'action'       => 'show_note_editor',
+			'priority'     => 20
+		),
+		'assign_button' => array(
+			'icon'         => 'dashicons-admin-users',
+			'description'  => esc_html__( 'Assign', 'kb-support' ),
+			'link_content' => '',
+			'action'       => 'assign_ticket',
+			'priority'     => 40
+		)
+	);
 
-		$action_buttons = apply_filters( 'helptain_action_buttons', array(
-			'reply_button'          => array(
-				'icon'        => 'dashicons-undo',
-				'description' => esc_html__( 'Reply', 'kb-support' ),
-				'link_content' => '',
-				'action' => 'show_reply_editor',
-				'priority'    => 10
-			),
-			'note_button'           => array(
-				'icon'        => 'dashicons-edit',
-				'description' => esc_html__( 'Note', 'kb-support' ),
-				'link_content' => '',
-				'action' => 'show_note_editor',
-				'priority'    => 20
-			),
-			'status_button' => array(
-				'icon'        => 'dashicons-flag',
-				'description' => esc_html__( 'Status', 'kb-support' ),
-				'link_content' => '',
-				'action' => 'set_status',
-				'priority'    => 30
-			),
-			'assign_button' => array(
-				'icon' => 'dashicons-admin-users',
-				'description' => esc_html__('Assign','kb-support'),
-				'link_content' => '',
-				'action' => 'assign_ticket',
-				'priority'    => 40
-			)
-		), $ticket_id );
+	if ( kbs_agent_can_set_status_on_reply() ) {
 
-		uasort( $action_buttons, 'helptain_sort_data_by_priority' );
+		$action_buttons['status_button'] = array(
+			'icon'         => 'dashicons-flag',
+			'description'  => esc_html__( 'Status', 'kb-support' ),
+			'link_content' => '',
+			'action'       => 'set_status',
+			'priority'     => 30
+		);
+	}
 
-		$kbs_ticket_status = kbs_get_ticket_status( $kbs_ticket, true );
-		$kbs_agents        = kbs_get_agents();
-		$ticket_agent_id   = get_post_meta( $ticket_id, '_kbs_ticket_agent_id', true );
-		?>
+	$action_buttons = apply_filters( 'helptain_action_buttons', $action_buttons, $ticket_id );
 
-		<div class="helptain-action-wrapper">
-			<div id="helptain-action-bar">
-				<ul class="helptain-action-buttons">
-					<?php
-					if ( ! empty( $action_buttons ) ) {
-						foreach ( $action_buttons as $key => $button ) {
-							switch ( $key ) {
-								case 'status_button':
-									?>
-									<li class="helptain-action-button">
-										<a href="#<?php echo esc_attr( $key ); ?>"
-										   class="dashicons <?php echo esc_attr( $button['icon'] ); ?>"
-										   title="<?php echo esc_attr( $button['description'] ); ?>"
-										   data-action="<?php echo esc_attr( $button['action'] ); ?>"></a>
-										<ul id="helptain_status_select"
-											class="helptain-actionbar-sub-menu kbs-hidden" name="ticket_status"
-											nonce="<?php echo wp_create_nonce( 'set_status_nonce_' . $ticket_id ); ?>">
-											<?php foreach ( kbs_get_post_statuses( 'labels', true ) as $ticket_status ) : ?>
-												<li
-													status="<?php echo esc_attr( $ticket_status->name ); ?>"><?php echo esc_html( $ticket_status->label ); ?></li>
-											<?php endforeach; ?>
-										</ul>
-									</li>
-									<?php
-									break;
-								case 'assign_button':
-									?>
-									<li class="helptain-action-button">
-										<a href="#<?php echo esc_attr( $key ); ?>"
-										   class="dashicons <?php echo esc_attr( $button['icon'] ); ?>"
-										   title="<?php echo esc_attr( $button['description'] ); ?>'"
-										   data-action="<?php echo esc_attr( $button['action'] ); ?>"></a>
-										<ul id="helptain_agent_select" class="helptain-actionbar-sub-menu kbs-hidden"
-											name="kbs_agent_id"
-											nonce="<?php echo wp_create_nonce( 'set_agent_nonce_' . $ticket_id ); ?>">
-											<?php foreach ( $kbs_agents as $kbs_agent ) {
-												?>
-												<li
-													agent_id="<?php echo esc_attr( $kbs_agent->data->ID ); ?>"
-													class="<?php echo ( $ticket_agent_id == $kbs_agent->data->ID ) ? 'active' : ''; ?>"><?php echo esc_html( $kbs_agent->display_name ); ?></li>
-											<?php } ?>
-										</ul>
-									</li>
-									<?php
-									break;
-								case 'reply_button':
-									echo '<li class="helptain-action-button"><a href="#' . esc_attr( $key ) . '" class="dashicons ' . esc_attr( $button['icon'] ) . '" title="' . esc_attr( $button['description'] ) . '" data-action="' . esc_attr( $button['action'] ) . '">' . esc_html( $button['link_content'] ) . '</a></li>';
-									break;
-								case 'note_button':
-									echo '<li class="helptain-action-button"><a href="#' . esc_attr( $key ) . '" class="dashicons ' . esc_attr( $button['icon'] ) . '" title="' . esc_attr( $button['description'] ) . '" data-action="' . esc_attr( $button['action'] ) . '">' . esc_html( $button['link_content'] ) . '</a></li>';
-									break;
-								default:
-									do_action( 'helptain_action_bar_button_' . $key, $button, $ticket_id );
-									break;
-							}
+	uasort( $action_buttons, 'helptain_sort_data_by_priority' );
 
+	$kbs_ticket_status = kbs_get_ticket_status( $kbs_ticket, true );
+	$kbs_ticket_color = kbs_get_ticket_status_colour( $kbs_ticket->post_status,true );
+	$kbs_agents        = kbs_get_agents();
+	$ticket_agent_id   = get_post_meta( $ticket_id, '_kbs_ticket_agent_id', true );
+	?>
+
+	<div class="helptain-action-wrapper">
+		<div id="helptain-action-bar">
+			<ul class="helptain-action-buttons">
+				<?php
+				if ( ! empty( $action_buttons ) ) {
+					foreach ( $action_buttons as $key => $button ) {
+						switch ( $key ) {
+							case 'status_button':
+								?>
+								<li class="helptain-action-button">
+									<a href="#<?php echo esc_attr( $key ); ?>"
+									   class="dashicons <?php echo esc_attr( $button['icon'] ); ?>"
+									   title="<?php echo esc_attr( $button['description'] ); ?>"
+									   data-action="<?php echo esc_attr( $button['action'] ); ?>"></a>
+									<ul id="helptain_status_select"
+										class="helptain-actionbar-sub-menu kbs-hidden" name="ticket_status"
+										nonce="<?php echo wp_create_nonce( 'set_status_nonce_' . $ticket_id ); ?>">
+										<?php foreach ( kbs_get_post_statuses( 'labels', true ) as $ticket_status ) : ?>
+											<li
+												status="<?php echo esc_attr( $ticket_status->name ); ?>"><?php echo esc_html( $ticket_status->label ); ?></li>
+										<?php endforeach; ?>
+									</ul>
+								</li>
+								<?php
+								break;
+							case 'assign_button':
+								?>
+								<li class="helptain-action-button">
+									<a href="#<?php echo esc_attr( $key ); ?>"
+									   class="dashicons <?php echo esc_attr( $button['icon'] ); ?>"
+									   title="<?php echo esc_attr( $button['description'] ); ?>"
+									   data-action="<?php echo esc_attr( $button['action'] ); ?>"></a>
+									<ul id="helptain_agent_select" class="helptain-actionbar-sub-menu kbs-hidden"
+										name="kbs_agent_id"
+										nonce="<?php echo wp_create_nonce( 'set_agent_nonce_' . $ticket_id ); ?>">
+										<?php foreach ( $kbs_agents as $kbs_agent ) {
+											?>
+											<li
+												agent_id="<?php echo esc_attr( $kbs_agent->data->ID ); ?>"
+												class="<?php echo ( $ticket_agent_id == $kbs_agent->data->ID ) ? 'active' : ''; ?>"><?php echo esc_html( $kbs_agent->display_name ); ?></li>
+										<?php } ?>
+									</ul>
+								</li>
+								<?php
+								break;
+							case 'reply_button':
+								echo '<li class="helptain-action-button"><a href="#' . esc_attr( $key ) . '" class="dashicons ' . esc_attr( $button['icon'] ) . '" title="' . esc_attr( $button['description'] ) . '" data-action="' . esc_attr( $button['action'] ) . '">' . esc_html( $button['link_content'] ) . '</a></li>';
+								break;
+							case 'note_button':
+								echo '<li class="helptain-action-button"><a href="#' . esc_attr( $key ) . '" class="dashicons ' . esc_attr( $button['icon'] ) . '" title="' . esc_attr( $button['description'] ) . '" data-action="' . esc_attr( $button['action'] ) . '">' . esc_html( $button['link_content'] ) . '</a></li>';
+								break;
+							default:
+								do_action( 'helptain_action_bar_button_' . $key, $button, $ticket_id );
+								break;
 						}
+
 					}
-					?>
-					<li class="helptain-action-button ticket-status "
-						style="background-color:<?php echo esc_attr( kbs_get_ticket_status_colour( $kbs_ticket_status, true ) ); ?>"><?php echo esc_html__( 'Status: ', 'kb-support' ) . esc_html( $kbs_ticket_status ); ?></li>
-				</ul>
-			</div>
-
-			<?php do_action( 'helptain_action_bar_content' ); ?>
-
+				}
+				?>
+				<li class="helptain-action-button ticket-status "
+					style="background-color:<?php echo esc_attr( $kbs_ticket_color ); ?>"><?php echo esc_html__( 'Status: ', 'kb-support' ) . esc_html( $kbs_ticket_status ); ?></li>
+			</ul>
 		</div>
 
-			<div id="kbs-ticket-reply-wrap" class="kbs-hidden">
-				<p><label
-						for="kbs_ticket_reply"><strong><?php _e( 'Add a New Reply', 'kb-support' ); ?></strong></label><br/>
-					<?php do_action( 'kbs_ticket_metabox_before_reply_content', $ticket_id );
-					wp_editor( '', 'kbs_ticket_reply', $settings ); ?>
-				</p>
+		<?php do_action( 'helptain_action_bar_content' ); ?>
 
-				<?php
-				/*
-				 * Fires immediately before the reply buttons are output
-				 * @since	1.0
-				 * @param	int	$post_id	The Ticket post ID
-				 */
-				do_action( 'kbs_ticket_before_reply_buttons', $ticket_id );
+	</div>
 
-				if ( kbs_agent_can_set_status_on_reply() ) : ?>
-					<p><label>
-							<?php printf(
-								__( '<strong>Set status to</strong> %s <strong>and</strong>&nbsp;', 'kb-support' ),
-								KBS()->html->ticket_status_dropdown( array(
-									'name'     => 'ticket_reply_status',
-									'selected' => kbs_agent_get_default_reply_status( $kbs_ticket->ID ),
-									'chosen'   => true
-								) )
-							); ?> <a id="kbs-reply-update"
-									 class="button button-primary"><?php _e( 'Reply', 'kb-support' ); ?></a></label>
-					</p>
-					<p><a id="kbs-reply-close"
-						  class="button button-secondary"><?php _e( 'Reply and Close', 'kb-support' ); ?></a></p>
-				<?php else : ?>
-					<div id="kbs-ticket-reply-container">
-						<div class="kbs-reply"><a id="kbs-reply-update"
-												  class="button button-primary"><?php _e( 'Reply', 'kb-support' ); ?></a>
-						</div>
-						<div class="kbs-reply"><a id="kbs-reply-close"
-												  class="button button-secondary"><?php _e( 'Reply and Close', 'kb-support' ); ?></a>
-						</div>
-					</div>
-				<?php endif; ?>
-				<div id="kbs-new-reply-loader"></div>
+	<div id="kbs-ticket-reply-wrap" class="kbs-hidden">
+		<p><label
+				for="kbs_ticket_reply"><strong><?php _e( 'Add a New Reply', 'kb-support' ); ?></strong></label><br/>
+			<?php do_action( 'kbs_ticket_metabox_before_reply_content', $ticket_id );
+			wp_editor( '', 'kbs_ticket_reply', $settings ); ?>
+		</p>
+
+		<?php
+		/*
+		 * Fires immediately before the reply buttons are output
+		 * @since	1.0
+		 * @param	int	$post_id	The Ticket post ID
+		 */
+		do_action( 'kbs_ticket_before_reply_buttons', $ticket_id );
+		?>
+
+		<div id="kbs-ticket-reply-container">
+			<div class="kbs-reply"><a id="kbs-reply-update"
+									  class="button button-primary"><?php _e( 'Reply', 'kb-support' ); ?></a>
 			</div>
-
-			<div id="kbs-ticket-add-note-container" class="kbs-hidden">
-				<p><label
-						for="kbs_new_note"><strong><?php _e( 'Add a New Note', 'kb-support' ); ?></strong></label><br/>
-					<?php echo KBS()->html->textarea( array(
-						'name'  => 'kbs_new_note',
-						'id'    => 'kbs_new_note',
-						'desc'  => __( 'Notes are only visible to support workers', 'kb-support' ),
-						'class' => 'large-text',
-						'rows'  => 5
-					) ); ?>
-				</p>
-
-				<?php
-				/*
-				 * Fires immediately before the add note button is output.
-				 * @since	1.0
-				 * @param	int	$post_id	The Ticket post ID
-				 */
-				do_action( 'kbs_ticket_before_add_note_button', $ticket_id ); ?>
-
-				<div class="kbs-add-note"><a id="kbs-add-note"
-											 class="button button-secondary"><?php _e( 'Add Note', 'kb-support' ); ?></a>
-				</div>
-				<div id="kbs-new-note-loader"></div>
+			<div class="kbs-reply"><a id="kbs-reply-close"
+									  class="button button-secondary"><?php _e( 'Reply and Close', 'kb-support' ); ?></a>
 			</div>
+		</div>
+		<div id="kbs-new-reply-loader"></div>
+	</div>
 
-	<?php endif;
-} // kbs_ticket_metabox_details_row
-add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_reply_row', 20 );
+	<div id="kbs-ticket-add-note-container" class="kbs-hidden">
+		<p><label
+				for="kbs_new_note"><strong><?php _e( 'Add a New Note', 'kb-support' ); ?></strong></label><br/>
+			<?php echo KBS()->html->textarea( array(
+				'name'  => 'kbs_new_note',
+				'id'    => 'kbs_new_note',
+				'desc'  => __( 'Notes are only visible to support workers', 'kb-support' ),
+				'class' => 'large-text',
+				'rows'  => 5
+			) ); ?>
+		</p>
+
+		<?php
+		/*
+		 * Fires immediately before the add note button is output.
+		 * @since	1.0
+		 * @param	int	$post_id	The Ticket post ID
+		 */
+		do_action( 'kbs_ticket_before_add_note_button', $ticket_id ); ?>
+
+		<div class="kbs-add-note"><a id="kbs-add-note"
+									 class="button button-secondary"><?php _e( 'Add Note', 'kb-support' ); ?></a>
+		</div>
+		<div id="kbs-new-note-loader"></div>
+	</div>
+
+<?php } // kbs_ticket_metabox_details_row
+add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_reply_row', 10 );

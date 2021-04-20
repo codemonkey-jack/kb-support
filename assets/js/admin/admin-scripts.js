@@ -500,18 +500,19 @@ jQuery(document).ready(function ($) {
 					data: postData,
 					url: ajaxurl,
 					beforeSend: function()	{
-						$('.kbs-reply').hide();
 						$('#kbs-new-reply-loader').html('<img src="' + kbs_vars.ajax_loader + '" />');
 					},
-					success: function (response) {
-						if (response.reply_id)	{
+					success: function ( response ) {
+						if ( response.reply_id ) {
 							kbs_load_ticket_reply( ticket_id, response.reply_id, 1 );
+							if ( '' !== response.status_option ) {
+								jQuery( '#helptain-action-bar li.ticket-status' ).html( 'Status: ' + response.status_option ).css( 'background-color', response.status_color );
+							}
 							return true;
-						} else	{
-							window.alert(kbs_vars.reply_not_added);
+						} else {
+							window.alert( kbs_vars.reply_not_added );
 						}
-						$('#kbs-new-reply-loader').html('');
-						$('.kbs-reply').show();
+						$( '#kbs-new-reply-loader' ).html( '' );
 					}
 				}).fail(function (data) {
 					if ( window.console && window.console.log ) {
