@@ -12,6 +12,28 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Reset the metaboxes in case user has moved them, so that the reply will stick on top and ticket details on bottom
+ *
+ * @since 1.6.0
+ */
+function helptain_admin_metaboxes() {
+
+	if ( 'kbs_ticket' != get_current_screen()->post_type ) {
+		return;
+	}
+
+	$user   = get_current_user_id();
+	$u_data = get_user_meta( $user, 'meta-box-order_kbs_ticket', true );
+
+	if ( isset( $u_data['normal'] ) ) {
+		unset( $u_data['normal'] );
+		update_user_meta( $user, 'meta-box-order_kbs_ticket', $u_data );
+	}
+
+}
+
+add_action( 'load-post.php', 'helptain_admin_metaboxes' );
+/**
  * Returns default KBS Ticket meta fields.
  *
  * @since	1.0
@@ -61,7 +83,7 @@ add_action( 'admin_head', 'kbs_ticket_remove_meta_boxes' );
  */
 function kbs_ticket_add_meta_boxes( $post )	{
 
-	if ( ! kbs_agent_can_access_ticket( $post->ID ) )	{
+	if ( ! kbs_agent_can_access_ticket( $post->ID ) ) {
 		wp_die(
 			sprintf(
 				__( 'You do not have access to this %s. <a href="%s">Go Back</a>', 'kb-support' ),
@@ -75,16 +97,14 @@ function kbs_ticket_add_meta_boxes( $post )	{
 
 	global $kbs_ticket, $kbs_ticket_update;
 
-	$save              = __( 'Create', 'kb-support' );
-	$kbs_ticket_update = false;
-	$kbs_ticket        = new KBS_Ticket( $post->ID );
-	$single_label      = kbs_get_ticket_label_singular();
-    $ticket_number     = '';
+	$save          = __( 'Create', 'kb-support' );
+	$kbs_ticket    = new KBS_Ticket( $post->ID );
+	$single_label  = kbs_get_ticket_label_singular();
+	$ticket_number = '';
 
-	if ( 'draft' != $post->post_status && 'auto-draft' != $post->post_status )	{
-		$save              = __( 'Update', 'kb-support' );
-		$kbs_ticket_update = true;
-        $ticket_number     = '# ' . kbs_format_ticket_number( $kbs_ticket->number );
+	if ( 'draft' != $post->post_status && 'auto-draft' != $post->post_status ) {
+		$save          = __( 'Update', 'kb-support' );
+		$ticket_number = '# ' . kbs_format_ticket_number( $kbs_ticket->number );
 		remove_post_type_support( $post->post_type, 'editor' );
 	}
 
@@ -98,7 +118,7 @@ function kbs_ticket_add_meta_boxes( $post )	{
 		array()
 	);
 
-	if ( kbs_multiple_agents() )  {
+	if ( kbs_multiple_agents() ) {
 		add_meta_box(
 			'kbs-ticket-metabox-agents',
 			__( 'Assisting agents', 'kb-support' ),
@@ -110,29 +130,25 @@ function kbs_ticket_add_meta_boxes( $post )	{
 		);
 	}
 
-	if ( $kbs_ticket_update )	{
+	add_meta_box(
+		'kbs-ticket-metabox-ticket-reply',
+		sprintf( __( 'Reply to %1$s', 'kb-support' ), $single_label ),
+		'kbs_ticket_metabox_reply_callback',
+		'kbs_ticket',
+		'normal',
+		'high',
+		array()
+	);
 
-		add_meta_box(
-			'kbs-ticket-metabox-ticket-reply',
-			sprintf( __( 'Reply to %1$s', 'kb-support' ), $single_label ),
-			'kbs_ticket_metabox_reply_callback',
-			'kbs_ticket',
-			'normal',
-			'high',
-			array()
-		);
-
-		add_meta_box(
-			'kbs-ticket-metabox-ticket-details',
-			sprintf( __( 'Submitted %1$s', 'kb-support' ), $single_label ),
-			'kbs_ticket_metabox_data_callback',
-			'kbs_ticket',
-			'normal',
-			'high',
-			array()
-		);
-
-	}
+	add_meta_box(
+		'kbs-ticket-metabox-ticket-details',
+		sprintf( __( 'Submitted %1$s', 'kb-support' ), $single_label ),
+		'kbs_ticket_metabox_data_callback',
+		'kbs_ticket',
+		'normal',
+		'low',
+		array()
+	);
 
 } // kbs_ticket_add_meta_boxes
 add_action( 'add_meta_boxes_kbs_ticket', 'kbs_ticket_add_meta_boxes' );
