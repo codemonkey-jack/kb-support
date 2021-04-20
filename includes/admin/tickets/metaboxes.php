@@ -103,8 +103,9 @@ function kbs_ticket_add_meta_boxes( $post )	{
 	$ticket_number = '';
 
 	if ( 'draft' != $post->post_status && 'auto-draft' != $post->post_status ) {
-		$save          = __( 'Update', 'kb-support' );
-		$ticket_number = '# ' . kbs_format_ticket_number( $kbs_ticket->number );
+		$save              = __( 'Update', 'kb-support' );
+		$kbs_ticket_update = true;
+		$ticket_number     = '# ' . kbs_format_ticket_number( $kbs_ticket->number );
 		remove_post_type_support( $post->post_type, 'editor' );
 	}
 
@@ -537,16 +538,20 @@ function kbs_ticket_metabox_sections()  {
                         ?>
 
 						<span class="kbs-ticket-content-row-actions">
-                           <a href="#" class="helptain-admin-row-actions-toggle dashicons dashicons-ellipsis"></a>
-							<ul class="helptain-admin-row-actions helptain-actions-sub-menu kbs-hidden">
-								<?php
-								foreach ( $actions as $action ) {
-									echo '<li>' . $action . '</li>';
-								}
+							<?php if ( $actions && ! empty( $actions ) ) {
 								?>
-							</ul>
+								<a href="#" class="helptain-admin-row-actions-toggle dashicons dashicons-ellipsis"></a>
+								<ul class="helptain-admin-row-actions helptain-actions-sub-menu kbs-hidden">
+									<?php
+									foreach ( $actions as $action ) {
+										echo '<li>' . $action . '</li>';
+									}
+									?>
+								</ul>
+							<?php } ?>
+
                         </span>
-                    </div>
+					</div>
 
                     <div class="kbs-ticket-content-row-standard-fields">
                         <?php do_action( 'kbs_ticket_metabox_standard_fields', $kbs_ticket, $kbs_ticket_update ); ?>

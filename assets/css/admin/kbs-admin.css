@@ -1832,6 +1832,7 @@ End Tooltips
 #kbs-ticket-metabox-ticket-details {
 	background : transparent;
 	border     : 0;
+	box-shadow : none;
 }
 
 #kbs-ticket-reply-wrap,

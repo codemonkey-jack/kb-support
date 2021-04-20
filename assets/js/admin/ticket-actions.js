@@ -57,6 +57,21 @@ jQuery( document ).ready( function ( $ ) {
 	} );
 
 	/**
+	 * Stop propagation so we close on html,body click
+	 */
+	action_bar.on( 'click', 'li.helptain-action-button a, li.helptain-action-button li, .helptain-actions-sub-menu li, .helptain-actions-sub-menu a', function ( event ) {
+		event.stopPropagation();
+	} );
+
+
+	/**
+	 * Hide the actionbar submenus
+	 */
+	$( 'html,body' ).on( 'click', function () {
+		$( '.helptain-actionbar-sub-menu, .helptain-actions-sub-menu' ).addClass( 'kbs-hidden' );
+	} );
+
+	/**
 	 * Set ticket status
 	 */
 	action_bar.on( 'click', 'ul#helptain_status_select li', function ( e ) {
@@ -138,6 +153,7 @@ jQuery( document ).ready( function ( $ ) {
 	 */
 	$( 'html body' ).on( 'click', 'a.helptain-admin-row-actions-toggle', function ( e ) {
 		e.preventDefault();
+		e.stopPropagation();
 
 		var toggle          = $( this ),
 		    actions_wrapper = toggle.parent().find( '.helptain-admin-row-actions' );
