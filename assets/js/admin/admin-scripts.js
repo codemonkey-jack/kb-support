@@ -506,7 +506,7 @@ jQuery(document).ready(function ($) {
 						if ( response.reply_id ) {
 							kbs_load_ticket_reply( ticket_id, response.reply_id, 1 );
 							if ( '' !== response.status_option ) {
-								jQuery( '#helptain-action-bar li.ticket-status' ).html( 'Status: ' + response.status_option ).css( 'background-color', response.status_color );
+								jQuery( '.ticket-status' ).html( 'Status: ' + response.status_option ).css( 'background-color', response.status_color );
 							}
 							return true;
 						} else {

@@ -335,10 +335,10 @@ function kbs_ajax_display_ticket_replies()	{
 
 			if ( isset( $args['page'] ) && $args['page'] < $replies_query->pages )	{
 				$output .= sprintf(
-					'<p class="kbs-replies-load-more"><a class="button button-secondary button-small" id="kbs-replies-next-page" data-ticket-id="%d" data-load-page="%d">%s</a></p>',
+					'<p class="kbs-replies-load-more"><a class="button button-secondary" id="kbs-replies-next-page" data-ticket-id="%d" data-load-page="%d">%s</a></p>',
 					(int)$_POST['kbs_ticket_id'],
 					( $args['page'] + 1 ),
-					__( 'Load More', 'kb-support' )
+					__( 'Load Previous Tickets', 'kb-support' )
 				);
 			}
 

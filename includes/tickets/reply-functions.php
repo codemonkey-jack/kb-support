@@ -271,7 +271,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 			</ul>
         </span>
         <span class="kbs-replies-row-title">
-			<?php echo '<strong>' . esc_html( $author ) . '</strong> ' . esc_html__( 'replied', 'kb-support' ); ?>
+			<?php echo '<h4><b>' . esc_html( $author ) . '</b> ' . esc_html__( 'replied', 'kb-support' ) . '</h4>'; ?>
         </span>
     </div>
 
@@ -280,7 +280,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
         	<?php do_action( 'kbs_before_reply_content_section', $reply ); ?>
             <div id="kbs-reply-option-section-<?php echo $reply->ID; ?>" class="kbs-replies-content-section">
                 <?php do_action( 'kbs_replies_before_content', $reply ); ?>
-                <?php echo wpautop( $reply->post_content ); ?>
+                <?php echo str_replace("<p>&nbsp;</p>", "", wpautop( $reply->post_content ) ); ?>
                 <?php do_action( 'kbs_replies_content', $reply ); ?>
             </div>
             <?php do_action( 'kbs_after_reply_content_section', $reply ); ?>

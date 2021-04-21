@@ -98,7 +98,7 @@ jQuery( document ).ready( function ( $ ) {
 				if ( 'undefined' == typeof response || !response || response.error ) {
 					console.log( 'php function returned false' );
 				} else {
-					$list.parents( 'ul.helptain-action-buttons' ).find( 'li.ticket-status' ).html( 'Status: ' + response.status ).css( 'background-color', response.status_color );
+					$list.parents( '.helptain-action-buttons' ).find( '.ticket-status' ).html( 'Status: ' + response.status ).css( 'background-color', response.status_color );
 				}
 			}
 		} ).fail( function ( data ) {
