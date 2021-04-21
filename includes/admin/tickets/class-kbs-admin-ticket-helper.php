@@ -80,7 +80,7 @@ class KBS_Admin_Ticket_Helper {
 		update_post_meta( $data['ticket_id'], '_kbs_ticket_last_status_change', current_time( 'timestamp' ) );
 
 		$response = array(
-			'status_color' => kbs_get_ticket_status_colour( $data['status'], true ),
+			'status_color' => kbs_get_ticket_status_colour( $data['status'] ),
 			'status'       => kbs_get_post_status_label($data['status'])
 		);
 

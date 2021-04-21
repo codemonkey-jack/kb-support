@@ -270,7 +270,7 @@ function kbs_ajax_insert_ticket_reply()	{
 			array(
 				'reply_id'      => $reply_id,
 				'status_option' => kbs_get_post_status_label( $status_option ),
-				'status_color'  => kbs_get_ticket_status_colour( $status_option, true ),
+				'status_color'  => kbs_get_ticket_status_colour( $status_option ),
 			)
 		)
 	);
