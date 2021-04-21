@@ -91,10 +91,9 @@ function kbs_register_user_profile_fields( $user )	{
 		$fields = array(
             0 => 'replies_location',
 			1 => 'replies_to_load',
-			2 => 'replies_to_expand',
-			3 => 'redirect_reply',
-			4 => 'redirect_closed',
-            5 => 'reply_alerts'
+			2 => 'redirect_reply',
+			3 => 'redirect_closed',
+            4 => 'reply_alerts'
 		);
 
 		if ( kbs_departments_enabled() )    {
@@ -104,8 +103,7 @@ function kbs_register_user_profile_fields( $user )	{
 		$type   = 'customer';
 		$fields = array(
 			0 => 'replies_to_load',
-			1 => 'replies_to_expand',
-            2 => 'closed_tickets'
+            1 => 'closed_tickets'
 		);
 	}
 
@@ -315,88 +313,6 @@ add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_user_profile_re
 add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile_replies_to_load_field', 5 );
 
 /**
- * Adds the Redirect After Reply option field to the user profile for agents.
- *
- * @since	1.2
- * @param   object	$user	The WP_User object
- */
-function kbs_render_agent_user_profile_redirect_reply_field( $user )  {
-    if ( ! kbs_is_agent( $user->ID ) || ( get_current_user_id() != $user->ID && ! current_user_can( 'manage_ticket_settings' ) ) )  {
-        return;
-    }
-
-	$redirect = get_user_meta( $user->ID, '_kbs_redirect_reply', true );
-	$redirect = ! empty( $redirect ) ? esc_attr( $redirect ) : 'stay';
-
-	ob_start(); ?>
-
-    <tr>
-        <th scope="row">
-            <label for="kbs-agent-redirect-reply"><?php _e( 'Redirect After Reply', 'kb-support' ); ?></label>
-        </th>
-        <td>
-        	<?php echo KBS()->html->select( array(
-				'name'             => 'kbs_agent_redirect_reply',
-				'id'               => 'kbs-agent-redirect-reply',
-				'selected'         => $redirect,
-				'show_option_all'  => false,
-				'show_option_none' => false,
-				'options'          => apply_filters( 'kbs_agent_reply_redirect_options', array(
-					'stay' => sprintf( __( 'Current %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
-					'list' => sprintf( __( '%s List', 'kb-support' ), kbs_get_ticket_label_plural() )
-				) )
-			) ); ?>
-            <p class="description"><?php printf( __( 'Choose where to be redirected after submitting a reply to a %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></p>
-        </td>
-    </tr>
-
-	<?php echo ob_get_clean();
-
-} // kbs_render_agent_user_profile_redirect_reply_field
-add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_agent_user_profile_redirect_reply_field', 5 );
-
-/**
- * Adds the Redirect on Close option field to the user profile for agents.
- *
- * @since	1.2
- * @param   object	$user	The WP_User object
- */
-function kbs_render_agent_user_profile_redirect_close_field( $user )  {
-    if ( ! kbs_is_agent( $user->ID ) || ( get_current_user_id() != $user->ID && ! current_user_can( 'manage_ticket_settings' ) ) )  {
-        return;
-    }
-
-	$redirect = get_user_meta( $user->ID, '_kbs_redirect_close', true );
-	$redirect = ! empty( $redirect ) ? esc_attr( $redirect ) : 'stay';
-
-	ob_start(); ?>
-
-    <tr>
-        <th scope="row">
-            <label for="kbs-agent-redirect-close"><?php _e( 'Redirect After Close', 'kb-support' ); ?></label>
-        </th>
-        <td>
-        	<?php echo KBS()->html->select( array(
-				'name'             => 'kbs_agent_redirect_close',
-				'id'               => 'kbs-agent-redirect-close',
-				'selected'         => $redirect,
-				'show_option_all'  => false,
-				'show_option_none' => false,
-				'options'          => apply_filters( 'kbs_agent_close_redirect_options', array(
-					'stay' => sprintf( __( 'Current %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
-					'list' => sprintf( __( '%s List', 'kb-support' ), kbs_get_ticket_label_plural() )
-				) )
-			) ); ?>
-            <p class="description"><?php printf( __( 'Choose where to be redirected after submitting a reply to close a %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></p>
-        </td>
-    </tr>
-
-	<?php echo ob_get_clean();
-
-} // kbs_render_agent_user_profile_redirect_close_field
-add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_agent_user_profile_redirect_close_field', 5 );
-
-/**
  * Adds the department options field to the user profile for agents.
  *
  * @since	1.3.4
@@ -573,42 +489,6 @@ function kbs_save_user_load_replies( $user_id ) {
 } // kbs_save_user_load_replies
 add_action( 'personal_options_update', 'kbs_save_user_load_replies' );
 add_action( 'edit_user_profile_update', 'kbs_save_user_load_replies' );
-
-/**
- * Saves the redirect option when replying to a ticket.
- *
- * @since	1.2
- * @param	int		$user_id	WP User ID
- */
-function kbs_save_user_redirect_reply( $user_id ) {
-	if ( ! kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
-		return;
-	}
-
-	$number = ! empty( $_POST['kbs_agent_redirect_reply'] ) ? sanitize_text_field( $_POST['kbs_agent_redirect_reply'] ) : 'stay';
-
-	update_user_meta( $user_id, '_kbs_redirect_reply', $number );
-} // kbs_save_user_redirect_reply
-add_action( 'personal_options_update', 'kbs_save_user_redirect_reply' );
-add_action( 'edit_user_profile_update', 'kbs_save_user_redirect_reply' );
-
-/**
- * Saves the redirect option when closing a ticket.
- *
- * @since	1.2
- * @param	int		$user_id	WP User ID
- */
-function kbs_save_user_redirect_close( $user_id ) {
-	if ( ! kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
-		return;
-	}
-
-	$number = ! empty( $_POST['kbs_agent_redirect_close'] ) ? sanitize_text_field( $_POST['kbs_agent_redirect_close'] ) : 'stay';
-
-	update_user_meta( $user_id, '_kbs_redirect_close', $number );
-} // kbs_save_user_redirect_close
-add_action( 'personal_options_update', 'kbs_save_user_redirect_close' );
-add_action( 'edit_user_profile_update', 'kbs_save_user_redirect_close' );
 
 /**
  * Saves the ticket reply alerts option.
@@ -877,7 +757,7 @@ add_action( 'init', 'kbs_process_profile_editor_updates' );
  * @return  string	Post field to order by
  */
 function kbs_get_user_tickets_orderby_setting( $user_id = 0 )   {
-    $default = 'dates';
+    $default = 'date';
 
     if ( empty( $user_id ) )    {
         $user_id = get_current_user_id();

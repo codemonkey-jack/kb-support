@@ -419,7 +419,7 @@ function kbs_order_admin_tickets( $query )	{
 	$order   = '' != $query->get( 'order' )   ? $query->get( 'order' )   : $order_setting;
 
 	switch( $orderby )	{
-        case 'id':
+        case 'ID':
 			$query->set( 'orderby',  'ID' );
 			$query->set( 'order',  $order );
 			break;

@@ -553,8 +553,12 @@ a.kbs_ticket_form_data	{
 .kbs-notes-row-actions a {
 	text-decoration: none;
 	width: auto;
-	cursor: pointer;
 	vertical-align: middle;
+}
+
+.kbs-replies-row-actions a,
+.kbs-notes-row-actions a {
+	cursor : pointer;
 }
 
 .kbs-ticket-content-row-actions .toggle-add-reply-option-section,

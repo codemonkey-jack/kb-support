@@ -295,10 +295,9 @@ function kbs_load_admin_scripts( $hook ) {
 	}
 
 	wp_register_script( 'kbs-admin-scripts', $js_dir . 'admin/admin-scripts' . $suffix . '.js', $admin_deps, KBS_VERSION, false );
-	// @todo: reput the minified file after development
 	$admin_deps[] = 'kbs-admin-scripts';
-	//wp_register_script( 'kbs-admin-ticket', $js_dir . '/admin/ticket-actions' . $suffix . '.js', $admin_deps, KBS_VERSION, true );
-	wp_register_script( 'kbs-admin-ticket', $js_dir . 'admin/ticket-actions.js', $admin_deps, KBS_VERSION, true );
+	wp_register_script( 'kbs-admin-ticket', $js_dir . '/admin/ticket-actions' . $suffix . '.js', $admin_deps, KBS_VERSION, true );
+	//wp_register_script( 'kbs-admin-ticket', $js_dir . 'admin/ticket-actions.js', $admin_deps, KBS_VERSION, true );
 	wp_enqueue_script( 'kbs-admin-scripts' );
 	wp_enqueue_script( 'kbs-admin-ticket' );
 

@@ -234,8 +234,6 @@ if ( ! is_user_logged_in() ) : ?>
                         </div>
 
                         <?php do_action( 'kbs_profile_editor_after_replies_to_load' ); ?>
-						<!-- @todo: Delete  action "kbs_profile_editor_after_replies_to_expand" ; For now we will keep it-->
-                        <?php do_action( 'kbs_profile_editor_after_replies_to_expand' ); ?>
 
                         <p class="kbs_form_section_heading"><?php _e( 'Change Password', 'kb-support' ); ?></p>
 						<div class="kbs_profile_editor_password">

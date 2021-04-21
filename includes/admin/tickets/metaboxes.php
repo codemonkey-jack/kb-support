@@ -167,9 +167,6 @@ function kbs_get_ticket_actions( $kbs_ticket, $updating = true )   {
     $actions = array();
 
     if ( $updating )   {
-        if ( 'new' != $kbs_ticket->status && 'closed' != $kbs_ticket->status )  {
-            $actions['add_reply'] = '<a href="#" class="toggle-add-reply-option-section">' . __( 'Add reply', 'kb-support' ) . '</a>';
-        }
 
 		if ( kbs_participants_enabled() )	{
 			$participant_count  = kbs_get_ticket_participant_count( $kbs_ticket );
@@ -771,7 +768,7 @@ function kbs_ticket_metabox_participants_row( $ticket_id )	{
 
     <?php if ( ! kbs_participants_enabled() ) return; ?>
 
-    <div id="kbs-ticket-participants-fields" class="kbs-custom-ticket-sections-wrap">
+    <div id="kbs-ticket-participants-fields" class="kbs-custom-ticket-sections-wrap" style="display:none;">
         <div class="kbs-custom-ticket-sections">
             <div class="kbs-custom-ticket-section">
                 <span class="kbs-custom-ticket-section-title">
@@ -840,7 +837,7 @@ function kbs_ticket_metabox_form_data_row( $ticket_id )	{
 
     <?php if ( empty( $kbs_ticket->form_data ) ) return; ?>
 
-    <div id="kbs-ticket-formdata-fields" class="kbs-custom-ticket-sections-wrap">
+    <div id="kbs-ticket-formdata-fields" class="kbs-custom-ticket-sections-wrap" style="display:none;">
         <div class="kbs-custom-ticket-sections">
             <div class="kbs-custom-ticket-section">
                 <span class="kbs-custom-ticket-section-title"><?php echo $kbs_ticket->get_form_name(); ?></span>

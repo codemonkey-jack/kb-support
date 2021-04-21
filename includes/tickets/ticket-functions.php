@@ -204,8 +204,7 @@ function kbs_get_ticket_orderby_options()	{
 	$options = array(
 		'ID'       => __( 'ID', 'kb-support' ),
 		'title'    => __( 'Subject', 'kb-support' ),
-		'date'     => __( 'Date Created', 'kb-support' ),
-		'modified' => __( 'Date Modified', 'kb-support' )
+		'date'     => __( 'Date Modified', 'kb-support' ),
 	);
 
 	$options = apply_filters( 'kbs_ticket_orderby_options', $options );
@@ -218,9 +217,11 @@ function kbs_get_ticket_orderby_options()	{
  *
  * Returns the total number of tickets.
  *
- * @since	1.0
- * @param	arr	$args	List of arguments to base the ticket count on
- * @return	arr	$count	Number of tickets sorted by ticket date
+ * @param arr $args List of arguments to base the ticket count on
+ *
+ * @return    arr    $count    Number of tickets sorted by ticket date
+ * @throws Exception
+ * @since    1.0
  */
 function kbs_count_tickets( $args = array() ) {
 

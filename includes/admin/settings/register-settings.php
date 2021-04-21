@@ -321,16 +321,6 @@ function kbs_get_registered_settings() {
 						'max'     => '50',
 						'std'     => '5'
 					),
-					'replies_to_expand' => array(
-						'id'      => 'replies_to_expand',
-						'name'    => __( 'Default Replies to Expand', 'kb-support' ),
-						'desc'    => sprintf( __( 'Enter the number of replies that should auto expand for a customer on the %s Manager screen. Enter <code>0</code> to expand none. Registered customers can change this setting on their profile page.', 'kb-support' ), strtolower( $single ) ),
-						'type'    => 'number',
-						'size'    => 'small',
-                        'min'     => '0',
-						'max'     => '50',
-						'std'     => 0
-					),
                     'hide_closed_front' => array(
 						'id'      => 'hide_closed_front',
 						'name'    => sprintf( __( 'Hide Closed %s?', 'kb-support' ), $plural ),

@@ -21,7 +21,9 @@ class KBS_Backwards_Compatibility {
 	 *
 	 * @since 1.6.0
 	 */
-	public function __construct(){
+	public function __construct() {
+
+		add_filter( 'kbs_user_tickets_orderby', array( $this, 'orderby_compatiblity' ), 30, 2 );
 
 	}
 
@@ -32,13 +34,33 @@ class KBS_Backwards_Compatibility {
 	 * @since 1.6.0
 	 *
 	 */
-	public static function get_instance(){
+	public static function get_instance() {
 
-		if ( !isset( self::$instance ) && !( self::$instance instanceof KBS_Backwards_Compatibility ) ){
+		if ( ! isset( self::$instance ) && ! ( self::$instance instanceof KBS_Backwards_Compatibility ) ) {
 			self::$instance = new KBS_Backwards_Compatibility();
 		}
 
 		return self::$instance;
+
+	}
+
+	/**
+	 * Orderby tickets compatibility
+	 *
+	 * @param $orderby
+	 * @param $user_id
+	 *
+	 * @return mixed|string
+	 *
+	 * @since 1.6.0
+	 */
+	public function orderby_compatiblity( $orderby, $user_id ) {
+
+		if ( 'modified' == $orderby ) {
+			return 'date';
+		}
+
+		return $orderby;
 
 	}
 
