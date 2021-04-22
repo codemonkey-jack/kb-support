@@ -249,7 +249,8 @@ function kbs_ajax_insert_ticket_reply()	{
 	);
 
 	$reply_id      = $ticket->add_reply( $reply_data );
-	$status_option = kbs_agent_get_default_reply_status();
+
+	$status_option = ( isset( $reply_data['close'] ) && '1' == $reply_data['close'] ) ? 'closed' : kbs_agent_get_default_reply_status();
 
 	if ( '0' != $status_option ) {
 		$update_fields = array(
