@@ -252,9 +252,10 @@ function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
 } // kb_tickets_post_column_id
 
 function kb_tickets_post_column_status($ticket_id,$kbs_ticket){
+
 	$output = sprintf( '<span class="kbs-status" style="background-color: %s;">%s</span>',
-		kbs_get_ticket_status_colour( get_post_status_object( $kbs_ticket->post_status )->name ),
-		kbs_get_post_status_label( $kbs_ticket->post_status ),
+		kbs_get_ticket_status_colour( $kbs_ticket->post_status  ),
+		kbs_get_post_status_label( $kbs_ticket->post_status )
 	);
 
 	do_action( 'kbs_tickets_post_column_status', $kbs_ticket );

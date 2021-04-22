@@ -936,7 +936,7 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 	uasort( $action_buttons, 'helptain_sort_data_by_priority' );
 
 	$kbs_ticket_status = kbs_get_ticket_status( $kbs_ticket, true );
-	$kbs_ticket_color = kbs_get_ticket_status_colour( $kbs_ticket->post_status );
+	$kbs_ticket_color  = kbs_get_ticket_status_colour( $kbs_ticket->post_status );
 	$kbs_agents        = kbs_get_agents();
 	$ticket_agent_id   = get_post_meta( $ticket_id, '_kbs_ticket_agent_id', true );
 	?>
