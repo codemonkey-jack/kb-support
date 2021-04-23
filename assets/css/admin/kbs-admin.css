@@ -1980,6 +1980,10 @@ End Tooltips
 	box-shadow: none;
 }
 
+#kbs-ticket-metabox-ticket-details .kbs_ticket_content_wrapper {
+	padding : 25px;
+}
+
 #kbs-ticket-reply-wrap,
 #kbs-ticket-add-note-container {
 	background: #fff;
