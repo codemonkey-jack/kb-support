@@ -383,15 +383,19 @@ function kbs_ajax_load_front_end_replies()	{
 
     if ( ! empty( $replies ) ) :
         foreach( $replies as $reply ) :
-            $reply_content = apply_filters( 'the_content', $reply->post_content );
-            $reply_content = str_replace( ']]>', ']]&gt;', $reply_content );
-            $files         = kbs_ticket_has_files( $reply->ID );
-            $file_count    = ( $files ? count( $files ) : false );
-            $heading       = apply_filters( 'kbs_front_replies_title', sprintf(
-                '%s by %s',
-                date_i18n( $time_format . ' \o\n ' . $date_format, strtotime(  $reply->post_date ) ),
-                kbs_get_reply_author_name( $reply->ID, true )
-            ) );
+
+			$current_user_reply = absint( $reply->post_author ) == get_current_user_id();
+			$read_reply    = get_post_meta( $reply->ID, '_kbs_reply_customer_read', true );
+			$reply_content = apply_filters( 'the_content', $reply->post_content );
+			$reply_content = str_replace( ']]>', ']]&gt;', $reply_content );
+			$files         = kbs_ticket_has_files( $reply->ID );
+			$file_count    = ( $files ? count( $files ) : false );
+
+			$heading       = apply_filters( 'kbs_front_replies_title', sprintf(
+				'%s by %s',
+				date_i18n( $time_format . ' \o\n ' . $date_format, strtotime( $reply->post_date ) ),
+				kbs_get_reply_author_name( $reply->ID, true )
+			) );
             ?>
             <div id="kbs-reply-card" class="card kbs_replies_wrapper">
                 <div class="card-header kbs-replies-row-header">
@@ -404,6 +408,7 @@ function kbs_ajax_load_front_end_replies()	{
                             <?php _e( 'View Reply', 'kb-support' ); ?>
                         </a>
                     </span>
+					<?php echo (!$current_user_reply && '' == $read_reply ) ? '<span class="new-reply"><sup>( ! )</sup></span>' : ''; ?>
                 </div>
 
                 <div id="kbs_ticket_reply-<?php echo $reply->ID; ?>" class="collapse" aria-labelledby="kbs_ticket_reply-<?php echo $reply->ID; ?>-heading" data-parent="#kbs-ticket-replies">
@@ -429,7 +434,6 @@ function kbs_ajax_load_front_end_replies()	{
                     </div>
                 </div>
             </div>
-            <div id="kbs-loading-replies"></div>
 
         <?php endforeach; ?>
 
@@ -441,11 +445,12 @@ function kbs_ajax_load_front_end_replies()	{
 
     <?php endif;
 
-	$output = ob_get_clean();
-    $response = array(
-        'replies'   => $output,
-        'next_page' => $next_page
-    );
+	$output   = ob_get_clean();
+	$output   .= ' <div id="kbs-loading-replies"></div>';
+	$response = array(
+		'replies'   => $output,
+		'next_page' => $next_page
+	);
 	wp_send_json_success( $response );
 } // kbs_ajax_load_front_end_replies
 add_action( 'wp_ajax_kbs_load_front_end_replies', 'kbs_ajax_load_front_end_replies' );

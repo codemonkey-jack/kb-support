@@ -179,7 +179,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                     <?php foreach( $replies as $reply ) : ?>
 
                                         <?php
-										$current_user_replay = absint( $reply->post_author ) == get_current_user_id();
+										$current_user_reply = absint( $reply->post_author ) == get_current_user_id();
 										$read_reply          = get_post_meta( $reply->ID, '_kbs_reply_customer_read', true );
 										$reply_content       = apply_filters( 'the_content', $reply->post_content );
 										$reply_content       = str_replace( ']]>', ']]&gt;', $reply_content );
@@ -203,7 +203,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                                         <?php _e( 'View Reply', 'kb-support' ); ?>
                                                     </a>
                                                 </span>
-												<?php echo (!$current_user_replay && '' == $read_reply ) ? '<span class="new-reply"><sup>( ! )</sup></span>' : ''; ?>
+												<?php echo (!$current_user_reply && '' == $read_reply ) ? '<span class="new-reply"><sup>( ! )</sup></span>' : ''; ?>
                                             </div>
 
                                             <div id="kbs_ticket_reply-<?php echo esc_attr($reply->ID); ?>" class="collapse" aria-labelledby="kbs_ticket_reply-<?php echo $reply->ID; ?>-heading" data-parent="#kbs-ticket-replies">
