@@ -411,7 +411,7 @@ function kbs_admin_email_reply_notice( $reply_id = 0, $data = array() ) {
 	$from_email  = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
 	$from_email  = apply_filters( 'kbs_notification_reply_from_address', $from_email, $ticket_id, $data, $reply_id );
 
-	$subject     = kbs_get_option( 'reply_notification_subject', sprintf( __( 'New %1Ss Reply Received - %1$s #%1$s', 'kb-support' ), $single, $ticket_id ) );
+	$subject     = kbs_get_option( 'reply_notification_subject', sprintf( __( 'New %1$s Reply Received - %1$s #%1$s', 'kb-support' ), $single, $ticket_id ) );
 	$subject     = apply_filters( 'kbs_admin_reply_notification_subject', wp_strip_all_tags( $subject ), $ticket_id, $reply_id );
 	$subject     = kbs_do_email_tags( $subject, $ticket_id );
 
