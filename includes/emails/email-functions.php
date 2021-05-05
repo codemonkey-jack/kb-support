@@ -47,7 +47,7 @@ function kbs_get_ticket_received_no_notification_emails()	{
  * Determines if an email should be removed from the notification list.
  *
  * @since	1.2.7
- * @param	string	$email	Email address to check	
+ * @param	string	$email	Email address to check
  * @return	bool	true if the email address should be removed
  */
 function kbs_maybe_remove_email_from_notification( $email = '' ) {
@@ -166,7 +166,7 @@ function kbs_email_ticket_reply( $ticket_id, $reply_id ) {
 
 	$disable = kbs_get_option( 'ticket_reply_disable_email', false );
 	$disable = apply_filters( 'kbs_ticket_reply_disable_email', $disable, $ticket_id );
-	
+
 	if ( ! empty( $disable ) )	{
 		return;
 	}
@@ -228,7 +228,7 @@ function kbs_email_ticket_closed( $ticket_id ) {
 
 	$disable = kbs_get_option( 'ticket_closed_disable_email', false );
 	$disable = apply_filters( 'kbs_ticket_close_disable_email', $disable, $ticket_id );
-	
+
 	if ( ! empty( $disable ) )	{
 		return;
 	}
@@ -350,7 +350,7 @@ function kbs_admin_email_ticket_notice( $ticket_id = 0, $ticket_data = array() )
 	$from_email  = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
 	$from_email  = apply_filters( 'kbs_notification_ticket_from_address', $from_email, $ticket_id, $ticket_data );
 
-	$subject     = kbs_get_option( 'ticket_notification_subject', sprintf( __( 'New %1Ss logged - Case #%1$s', 'kb-support' ), $single, $ticket_id ) );
+	$subject     = kbs_get_option( 'ticket_notification_subject', sprintf( __( 'New %1$s logged - Case #%1$s', 'kb-support' ), $single, $ticket_id ) );
 	$subject     = apply_filters( 'kbs_admin_ticket_notification_subject', wp_strip_all_tags( $subject ), $ticket_id );
 	$subject     = kbs_do_email_tags( $subject, $ticket_id );
 
