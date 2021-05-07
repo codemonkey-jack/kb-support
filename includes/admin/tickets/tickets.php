@@ -802,7 +802,7 @@ add_action( 'pre_get_posts', 'kbs_filter_company_tickets' );
  * @return	void
  */
 function kbs_filter_agent_tickets( $query )	{
-	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) || ! isset( $_GET['agent'] ) )	{
+	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) || ! isset( $_GET['agent'] ) || '0' == $_GET['agent'] )	{
 		return;
 	}
 
