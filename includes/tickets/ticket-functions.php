@@ -1599,7 +1599,7 @@ function kbs_get_note_html( $note, $ticket_id = 0 ) {
 
     <div class="kbs-notes-row-header">
         <span class="kbs-notes-row-title">
-			<?php echo '<strong>' . esc_html( $user ) . '</strong>' . esc_html__( ' created a note' ); ?>
+			<?php echo '<strong>' . esc_html( $user ) . '</strong>' . esc_html__( ' created a note','kb-support' ); ?>
         </span>
 
         <span class="kbs-notes-row-actions">

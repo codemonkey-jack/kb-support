@@ -54,7 +54,7 @@ if ( is_user_logged_in() )	: ?>
 						$replies = false;
 
 						if ( isset( $new_replies[ 'ticket-' . $ticket->ID ] ) && !empty( $new_replies[ 'ticket-' . $ticket->ID ] ) ){
-							$replies = ' <sup class="ticket-history-attention ticket-history-new-replies">' . count( $new_replies[ 'ticket-' . $ticket->ID ] ) . ' ' . esc_html__('New ','kn-support') . ( count( $new_replies[ 'ticket-' . $ticket->ID ] ) > 1 ? esc_html__( 'Replies', 'kb-support' ) : esc_html__( 'Reply', 'kb-support' ) ) . '</sup>';
+							$replies = ' <sup class="ticket-history-attention ticket-history-new-replies">' . count( $new_replies[ 'ticket-' . $ticket->ID ] ) . ' ' . esc_html__('New ','kb-support') . ( count( $new_replies[ 'ticket-' . $ticket->ID ] ) > 1 ? esc_html__( 'Replies', 'kb-support' ) : esc_html__( 'Reply', 'kb-support' ) ) . '</sup>';
 						}
 						?>
                         <tr id="ticket_data_<?php echo $ticket->ID; ?>" class="ticket_data_row">
