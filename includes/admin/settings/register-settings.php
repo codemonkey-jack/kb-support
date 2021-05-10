@@ -251,6 +251,14 @@ function kbs_get_registered_settings() {
 						'chosen'  => true,
 						'options' => kbs_get_pages(),
 					),
+					'login_page'   => array(
+						'id'      => 'login_page',
+						'name'    => __( 'Login Page', 'kb-support' ),
+						'desc'    => __( 'This is the page where customers can login / register.', 'kb-support' ),
+						'type'    => 'select',
+						'chosen'  => true,
+						'options' => helptain_get_login_pages(),
+					),
 				),
                 'customers' => array(
                     'customer_registration_settings_header' => array(
@@ -2287,6 +2295,38 @@ function kbs_get_pages( $force = false ) {
 	return $pages_options;
 
 } // kbs_get_pages
+
+/**
+ * Retrieve a list of all published pages.
+ *
+ * On large sites this can be expensive, so only load if on the settings page or $force is set to true
+ *
+ * @since	1.0
+ * @param	bool	$force			Force the pages to be loaded even if not on settings
+ * @return	arr		$pages_options	An array of the pages
+ */
+function helptain_get_login_pages( $force = false ) {
+
+	$pages_options = array(
+		'0'        => __( 'Choose a login page', 'kb-support' ),
+		'wp_login' => __( 'WP default login page', 'kb-support' )
+	); // Default
+
+	if( ( ! isset( $_GET['page'] ) || 'kbs-settings' != $_GET['page'] ) && ! $force ) {
+		return $pages_options;
+	}
+
+	$pages = get_pages();
+	if ( $pages ) {
+		foreach ( $pages as $page ) {
+			$pages_options[ $page->ID ] = $page->post_title;
+		}
+	}
+
+	return $pages_options;
+
+} // kbs_get_pages
+
 
 /**
  * Returns a select list for user role options.

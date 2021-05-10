@@ -348,6 +348,9 @@ function kbs_display_notice( $m )	{
  * @return	arr|str	Notice.
  */
 function kbs_get_notices( $notice = '', $notice_only = false )	{
+
+	$login_page = ( 'wp_login' != kbs_get_option( 'login_page' ) ) ? get_permalink( kbs_get_option( 'login_page' ) ) :  get_home_url() . '/wp-login.php';
+
 	$notices = array(
 		'agents_cannot_submit' => array(
 			'class'  => 'info',
@@ -360,7 +363,7 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		),
 		'need_login' => array(
 			'class'  => 'info',
-			'notice' => sprintf( __( 'You must be logged in to create a support %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
+			'notice' => sprintf( __( 'You must be %2$s to create a support %1$s.', 'kb-support' ), kbs_get_ticket_label_singular( true ), helptain_get_login_page())
 		),
 		'profile_login' => array(
 			'class'  => 'info',
@@ -1189,4 +1192,27 @@ function helptain_sort_data_by_date( $a, $b ) {
 	}
 
 	return $a_time > $b_time ? - 1 : 1;
+}
+
+/**
+ * Return the login link
+ *
+ * @return string
+ * @since 1.5.5
+ */
+function helptain_get_login_page() {
+
+	$login_page = kbs_get_option( 'login_page' );
+
+	if ( '0' == $login_page ) {
+		return __( 'logged in', 'kb-support' );
+	}
+
+	if ( 'wp_login' == $login_page ) {
+
+		return '<a href="' . esc_url( get_home_url() . '/wp-login.php' ) . '">' . __( 'logged in', 'kb-support' ) . '</a>';
+	}
+
+	return '<a href="' . esc_url( get_permalink( $login_page ) ) . '">' . __( 'logged in', 'kb-support' ) . '</a>';
+
 }
