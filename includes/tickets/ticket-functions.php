@@ -944,7 +944,12 @@ function kbs_set_ticket_status( $ticket_id, $status = 'open' )	{
  * @param	str|null	$initiated_by	The email address of the user changing status
  * @return	void
 */
-function kbs_record_status_change_in_log( $ticket_id = 0, $new_status, $old_status = 'new', $initiated_by = null ) {
+function kbs_record_status_change_in_log( $ticket_id, $new_status, $old_status = 'new', $initiated_by = null ) {
+
+	if ( empty( $ticket_id ) ) {
+		return false;
+	}
+
 	global $kbs_logs;
 
 	$log_data = array(

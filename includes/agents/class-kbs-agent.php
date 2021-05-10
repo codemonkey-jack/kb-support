@@ -354,7 +354,11 @@ class KBS_Agent {
 	 * @access	public
 	 * @since       1.2.5
 	 */
-	public function add_meta( $meta_key = '', $meta_value, $unique = false ) {
+	public function add_meta( $meta_key, $meta_value, $unique = false ) {
+
+		if ( empty( $meta_key ) || empty( $meta_value ) ) {
+			return false;
+		}
 		return add_user_meta( $this->id, $meta_key, $meta_value, $unique );
 	} // add_meta
 
@@ -369,7 +373,12 @@ class KBS_Agent {
 	 * @access	public
 	 * @since       1.2.5
 	 */
-	public function update_meta( $meta_key = '', $meta_value, $prev_value = '' ) {
+	public function update_meta( $meta_key, $meta_value, $prev_value = '' ) {
+
+		if ( empty( $meta_key ) || empty( $meta_value ) ) {
+			return false;
+		}
+
 		return update_user_meta( $this->id, $meta_key, $meta_value, $prev_value );
 	} // update_meta
 
