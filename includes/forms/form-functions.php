@@ -1355,6 +1355,7 @@ add_action( 'kbs_form_display_recaptcha_field', 'kbs_display_form_recaptcha_fiel
 function kbs_display_form_file_upload_field( $field, $settings )	{
 
 	if ( ! kbs_file_uploads_are_enabled() )	{
+		echo esc_html__('File uploads are not enabled.','kb-support');
 		return;
 	}
 
