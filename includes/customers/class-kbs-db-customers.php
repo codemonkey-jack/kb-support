@@ -306,7 +306,7 @@ class KBS_DB_Customers extends KBS_DB  {
          * @since   1.5.3
          */
 
-		if(emtpy($user_id)){
+		if(empty($user_id)){
 			return false;
 		}
 

@@ -325,6 +325,9 @@ class KBS_Register_Meta {
                             'hide_label' => array(
                                 'type' => 'boolean'
                             ),
+                            'front_hidden' => array(
+		                        'type' => 'boolean'
+	                        ),
                             'input_class' => array(
                                 'type' => 'string'
                             ),

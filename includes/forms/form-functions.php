@@ -348,6 +348,7 @@ function kbs_add_default_fields_to_form( $form_id )	{
 				'placeholder'     => '',
 				'description'     => '',
 				'hide_label'      => false,
+				'front_hidden'    => false,
 				'kb_search'       => $field_data['kb_search'],
 				'show_logged_in'  => $field_data['show_logged_in'],
 				'menu_order'      => $field_data['menu_order']
@@ -687,6 +688,12 @@ function kbs_display_field_setting_icons( $field_id )	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 
+		if ( ! empty( $settings['front_hidden'] ) )	{
+			$output[] = '<i title="' . __( 'Hide on front', 'kb-support' ) . '" class="fas fa-tag" aria-hidden="true"></i>';
+		} else	{
+			$output[] = '&nbsp;&nbsp;&nbsp;';
+		}
+
 		if ( ! empty( $settings['required'] ) )	{
 			$output[] = '<i title="' . __( 'Required Field', 'kb-support' ) . '" class="fas fa-asterisk" aria-hidden="true"></i>';
 		} else	{
@@ -838,6 +845,7 @@ function kbs_display_form_text_field( $field, $settings )	{
 	$placeholder = ! empty( $settings['placeholder'] ) ? ' placeholder="' . esc_attr( $settings['placeholder'] ) . '"' : '';
 	$class       = ! empty( $settings['input_class'] ) ? esc_attr( $settings['input_class'] ) : '';
 	$value       = '';
+	$style       = '';
 
 	if ( $type == 'date_field' )	{
 		if( empty( $class ) ) {
@@ -888,12 +896,17 @@ function kbs_display_form_text_field( $field, $settings )	{
 		$value = ' value="' . esc_attr( $settings['value'] ) . '"';
 	}
 
-	$output = sprintf( '<input type="%1$s" name="%2$s" id="%2$s" class="kbs-input %3$s"%4$s%5$s />',
-		esc_attr( $type ),
-		esc_attr( $field->post_name ),
-		! empty( $class ) ? $class : '',
-		$value,
-		$placeholder
+	if ( is_user_logged_in() && ! empty( $settings['front_hidden'] ) ) {
+		$style = 'style="display:none;"';
+	}
+
+	$output = sprintf( '<input type="%1$s" name="%2$s" id="%2$s" class="kbs-input %3$s"%4$s%5$s%6$s />',
+			esc_attr( $type ),
+			esc_attr( $field->post_name ),
+			! empty( $class ) ? $class : '',
+			$value,
+			$placeholder,
+			$style
 	);
 
 	$output = apply_filters( 'kbs_display_form_' . $settings['type'] . '_field', $output, $field, $settings );

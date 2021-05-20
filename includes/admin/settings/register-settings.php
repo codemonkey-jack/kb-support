@@ -516,7 +516,7 @@ function kbs_get_registered_settings() {
 					'admin_agents' => array(
 						'id'      => 'admin_agents',
 						'name'    => __( 'Administrators are Agents?', 'kb-support' ),
-						'desc'    => __( 'If enabled, users with the <code>Administrator</code> role will also be Support Agents.', 'kb-support' ),
+						'desc'    => __( 'If enabled, users with the <code>Administrator</code> role will also be Support Agents. Else, Administrators won\'t be able to see the tickets/respond to them.', 'kb-support' ),
 						'type'    => 'checkbox',
 						'std'     => '1'
 					),

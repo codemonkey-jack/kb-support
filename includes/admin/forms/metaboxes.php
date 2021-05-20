@@ -726,6 +726,16 @@ function kbs_render_field_options_rows( $post_id )	{
 			<strong><?php _e( 'Hide Label?', 'kb-support' ); ?></strong></label>
         </p>
 	</div>
+
+	<div id="kbs_meta_field_front_hidden_wrap">
+		<p><label for="kbs_field_front_hidden">
+				<?php echo KBS()->html->checkbox( array(
+						'name' => 'kbs_field_front_hidden',
+						'current' => ! empty( $kbs_edit_field->settings['front_hidden'] ) ? $kbs_edit_field->settings['front_hidden'] : null
+				) ); ?>
+				<strong><?php _e( 'Hide on front? (experimental)', 'kb-support' ); ?></strong></label>
+		</p>
+	</div>
     <?php
 } // kbs_render_field_options_rows
 add_action( 'kbs_form_mb_field_options', 'kbs_render_field_options_rows', 10, 1 );
