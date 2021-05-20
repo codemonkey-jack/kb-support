@@ -296,7 +296,7 @@ class KBS_DB_Customers extends KBS_DB  {
 	 * @access	public
 	 * @since	1.0
 	*/
-	public function update_customer_email_on_user_update( $user_id = 0, $old_user_data ) {
+	public function update_customer_email_on_user_update( $user_id, $old_user_data ) {
         /**
          * Fixes a bug whereby when get_password_reset_key() is called
          * it results in the `profile_updated` hook being used.
@@ -305,6 +305,11 @@ class KBS_DB_Customers extends KBS_DB  {
          *
          * @since   1.5.3
          */
+
+		if(emtpy($user_id)){
+			return false;
+		}
+
         if ( did_action( 'retrieve_password' ) )    {
             return;
         }

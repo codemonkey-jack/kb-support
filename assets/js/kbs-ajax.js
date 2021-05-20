@@ -62,10 +62,28 @@ jQuery(document).ready(function ($) {
         kbs_recaptcha_V3();
     }
 
+	/* = Floating widget wrapper toggle
+	 ====================================================================================== */
+	$( document.body ).on( 'click', '.kbs-beacon-header-navigation span', function () {
+		var btn    = $( this ),
+		    id     = btn.attr( 'id' ),
+		    target = $( 'div[data-toggle="' + id + '"]' );
+
+		$( '.kbs-beacon-header-navigation span' ).toggleClass( 'active' );
+		$( 'div[data-toggle]' ).not( target ).addClass( 'hide' );
+		target.removeClass( 'hide' );
+
+		if ( 'kbs-beacon-ask' === id ) {
+			$( '#kbs-beacon .kbs-beacon-search-wrapper' ).addClass( 'hide' );
+		} else {
+			$( '#kbs-beacon .kbs-beacon-search-wrapper' ).removeClass( 'hide' );
+		}
+	} );
+
     /* = Ticket submission form validation and submission
 	====================================================================================== */
 	$(document).on('click', '#kbs_ticket_form #kbs_ticket_submit', function(e) {
-		var kbsTicketForm = document.getElementById('kbs_ticket_form');
+		var kbsTicketForm = $(this).parents('#kbs_ticket_form');
 
 		if( typeof kbsTicketForm.checkValidity === 'function' && false === kbsTicketForm.checkValidity() ) {
 			return;
@@ -75,7 +93,7 @@ jQuery(document).ready(function ($) {
 		$(this).val(kbs_scripts.submit_ticket_loading);
 		$(this).prop('disabled', true);
 		$(this).after(' <span id="kbs-loading" class="kbs-loader"><img src="' + kbs_scripts.ajax_loader + '" /></span>');
-		$('input').removeClass('error');
+		kbsTicketForm.find('input').removeClass('error');
 
 		var tinymceActive = (typeof tinyMCE !== 'undefined') && tinyMCE.activeEditor && ! tinyMCE.activeEditor.isHidden();
 
@@ -83,8 +101,7 @@ jQuery(document).ready(function ($) {
 			tinyMCE.triggerSave();
 		}
 
-        var $form      = $('#kbs_ticket_form'),
-            ticketData = $('#kbs_ticket_form').serialize();
+        var ticketData = kbsTicketForm.serialize();
 
 		$.ajax({
 			type       : 'POST',
@@ -93,15 +110,41 @@ jQuery(document).ready(function ($) {
 			url        : kbs_scripts.ajaxurl,
 			success    : function (response) {
 				if ( response.error )	{
-					$form.find('.kbs_alert_error').show('fast');
-					$form.find('.kbs_alert_error').html(response.error);
+					kbsTicketForm.find('.kbs_alert_error').show('fast');
+					kbsTicketForm.find('.kbs_alert_error').html(response.error);
 
-					$('#kbs_ticket_submit').prop('disabled', false);
-					$('#kbs_ticket_form_submit').find('#kbs-loading').remove();
-					$('#kbs_ticket_submit').val(kbs_scripts.submit_ticket);
+					kbsTicketForm.find('#kbs_ticket_submit').prop('disabled', false);
+					kbsTicketForm.find('#kbs_ticket_form_submit').find('#kbs-loading').remove();
+					kbsTicketForm.find('#kbs_ticket_submit').val(kbs_scripts.submit_ticket);
 				} else	{
-					$form.append( '<input type="hidden" name="kbs_action" value="submit_ticket" />' );
-					$form.get(0).submit();
+					kbsTicketForm.append( '<input type="hidden" name="kbs__form_action" value="submit_ticket" />' );
+					kbsTicketForm.append( '<input type="hidden" name="action" value="kbs__form_action" />' );
+					var ticketDataa = kbsTicketForm.serialize();
+
+					$.ajax({
+						type       : 'POST',
+						dataType   : 'json',
+						data       : ticketDataa,
+						url        : kbs_scripts.ajaxurl,
+						success    : function (myResponse) {
+
+							if ( myResponse.error ) {
+
+							} else {
+								if ( 'undefined' != typeof myResponse.kbs_submission_text ) {
+									kbsTicketForm.parents( '#kbs_ticket_wrap' ).addClass( 'form-submitted' );
+									kbsTicketForm.parents( '#kbs_ticket_form_wrap' ).html( '<p>' + myResponse.kbs_submission_text + '</p>' );
+								} else if ( 'undefined' != typeof myResponse.kbs_submission_redirect ) {
+									window.location.href = myResponse.kbs_submission_redirect
+								}
+							}
+						}
+					}).fail(function (data) {
+						if ( window.console && window.console.log ) {
+							console.log(data);
+						}
+					});
+
 				}
 			}
 		}).fail(function (data) {
@@ -115,10 +158,10 @@ jQuery(document).ready(function ($) {
 	/* = Ticket reply form validation and submission
 	====================================================================================== */
     // Mark reply as read
-	$(document).on('click', '.ticket_reply_content', function()	{
-		var reply_id = $(this).data('key');
-        kbs_cust_read_reply(reply_id);
-	});
+	$( document ).on( 'click', '.ticket_reply_content, .toggle-view-reply-option-section[aria-expanded="false"]', function () {
+		var reply_id = $( this ).data( 'key' );
+		kbs_cust_read_reply( reply_id );
+	} );
 
     // Load more replies
     $( document.body ).on( 'click', '#kbs-replies-next-page', function(e) {

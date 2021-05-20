@@ -1,9 +1,9 @@
 <?php
 	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
-	
+
 /**
  * Manage kbs-form posts.
- * 
+ *
  * @since		1.0
  * @package		KBS
  * @subpackage	Forms
@@ -17,7 +17,7 @@
  * @return	arr		$columns	Filtered array of column name => label to be shown as the column header.
  */
 function kbs_set_kbs_form_post_columns( $columns ) {
-    
+
 	$columns = array(
         'cb'          => '<input type="checkbox" />',
 		'title'       => __( 'Name', 'kb-support' ),
@@ -26,9 +26,9 @@ function kbs_set_kbs_form_post_columns( $columns ) {
 		'fields'      => __( 'Field Count', 'kb-support' ),
 		'submissions' => __( 'Submissions', 'kb-support' ),
     );
-	
+
 	return apply_filters( 'kbs_form_post_columns', $columns );
-	
+
 } // kbs_set_kbs_form_post_columns
 add_filter( 'manage_kbs_form_posts_columns' , 'kbs_set_kbs_form_post_columns' );
 
@@ -70,7 +70,7 @@ add_action( 'manage_kbs_form_posts_custom_column' , 'kbs_set_kbs_form_column_dat
  * @param	bool	$update			Whether an existing post if being updated or not.
  * @return	void
  */
-function kbs_form_post_save( $post_id, $post, $update )	{	
+function kbs_form_post_save( $post_id, $post, $update )	{
 
 	// Remove the save post action to avoid loops
 	remove_action( 'save_post_kbs_form', 'kbs_form_post_save', 10, 3 );
@@ -80,9 +80,13 @@ function kbs_form_post_save( $post_id, $post, $update )	{
 		do_action( 'kbs_form_before_save', $post_id, $post, $update );
 	}
 
-    $redirect = isset( $_POST['kbs_form_redirect'] ) ? $_POST['kbs_form_redirect'] : kbs_get_option( 'tickets_page' );
+	$redirect        = isset( $_POST['kbs_form_redirect'] ) ? $_POST['kbs_form_redirect'] : kbs_get_option( 'tickets_page' );
+	$submission      = isset( $_POST['kbs_form_submission'] ) ? $_POST['kbs_form_submission'] : 'redirect';
+	$submission_text = isset( $_POST['kbs_form_submission_text'] ) ? $_POST['kbs_form_submission_text'] : esc_html__( 'Ticket has been created. You can check your tickets [link] here [/link]', 'kb-support' );
 
-    update_post_meta( $post_id, '_redirect_page', $redirect );
+	update_post_meta( $post_id, '_redirect_page', $redirect );
+	update_post_meta( $post_id, '_submission_action', $submission );
+	update_post_meta( $post_id, '_submission_text', $submission_text );
 
 	// Fire the after save action
 	do_action( 'kbs_form_after_save', $post_id, $post, $update );

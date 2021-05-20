@@ -3,7 +3,7 @@
  * Plugin Name: KB Support
  * Plugin URI: https://kb-support.com/
  * Description: The best help desk tool for WordPress. Simple yet effective. Feature rich.
- * Version: 1.5.4
+ * Version: 1.5.5
  * Date: 2 February 2021
  * Author: WPChill
  * Author URI: https://wpchill.com
@@ -229,7 +229,13 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . 'includes/deprecated-functions.php';
 		}
 
+		// Only include this one if floating widget is active. No need to trigger functions if not
+		if ( isset( $kbs_options['floating_widget'] ) && '1' == $kbs_options['floating_widget'] ){
+			require_once KBS_PLUGIN_DIR . 'includes/widgets/class-kbs-floating-widget.php';
+		}
+
 		require_once KBS_PLUGIN_DIR . 'includes/ajax-functions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-wpchill-review.php';
 		require_once KBS_PLUGIN_DIR . 'includes/template-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-cache-helper.php';
 		require_once KBS_PLUGIN_DIR . 'includes/post-types.php';
@@ -239,7 +245,6 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-roles.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-cron.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-logging.php';
-		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-license-handler.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-knowledgebase.php';
         require_once KBS_PLUGIN_DIR . 'includes/class-kbs-register-meta.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-actions.php';

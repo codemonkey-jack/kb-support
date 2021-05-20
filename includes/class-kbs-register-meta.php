@@ -216,6 +216,7 @@ class KBS_Register_Meta {
         $object = get_post_type_object( 'kbs_form' );
 
         $meta_fields = array(
+
             '_redirect_page' => array(
                 'type'         => 'integer',
                 'description'  => __( 'Redirect page ID.', 'kb-support' ),
@@ -227,6 +228,30 @@ class KBS_Register_Meta {
                         'default' => 0
                     )
                 )
+            ),
+            '_submission_action' => array(
+	            'type'         => 'string',
+	            'description'  => __( 'After submission action', 'kb-support' ),
+	            'single'       => true,
+	            'default'      => 'redirect',
+	            'show_in_rest' => array(
+		            'schema' => array(
+			            'type'    => 'string',
+			            'default' => 'redirect'
+		            )
+	            )
+            ),
+            '_submission_text' => array(
+	            'type'         => 'string',
+	            'description'  => __( 'After submission text', 'kb-support' ),
+	            'single'       => true,
+	            'default'      => esc_html__( 'Ticket has been created. You can check your tickets [link] here [/link]', 'kb-support' ),
+	            'show_in_rest' => array(
+		            'schema' => array(
+			            'type'    => 'string',
+			            'default' => esc_html__( 'Ticket has been created. You can check your tickets [link] here [/link]', 'kb-support' ),
+		            )
+	            )
             ),
             '_submission_count' => array(
                 'type'         => 'integer',
@@ -355,7 +380,7 @@ class KBS_Register_Meta {
      */
     public function get_kbs_company_meta_fields()   {
         $object = get_post_type_object( 'kbs_company' );
-		
+
 		$meta_fields = array(
 			'_kbs_company_customer' => array(
 				'type'              => 'integer',

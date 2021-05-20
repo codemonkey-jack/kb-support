@@ -201,7 +201,12 @@ class KBS_Company {
 	 * @access	public
 	 * @since	1.0
 	 */
-	public function add_meta( $meta_key = '', $meta_value, $unique = false ) {
+	public function add_meta( $meta_key, $meta_value, $unique = false ) {
+
+		if ( empty( $meta_key ) || empty( $meta_value ) ) {
+			return false;
+		}
+
 		return add_post_meta( $this->ID, $meta_key, $meta_value, $unique );
 	} // add_meta
 
@@ -216,7 +221,12 @@ class KBS_Company {
 	 * @access	public
 	 * @since	1.0
 	 */
-	public function update_meta( $meta_key = '', $meta_value, $prev_value = '' ) {
+	public function update_meta( $meta_key, $meta_value, $prev_value = '' ) {
+
+		if ( empty( $meta_key ) || empty( $meta_value ) ) {
+			return false;
+		}
+
 		return update_post_meta( $this->ID, $meta_key, $meta_value, $prev_value );
 	} // update_meta
 

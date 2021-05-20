@@ -71,7 +71,7 @@ function kbs_add_licensing_menu_link()  {
     global $submenu;
 
     $submenu['edit.php?post_type=kbs_ticket'][900] = array(
-        __( 'Manage Licenses', 'kb-support' ),
+        __( 'Manage Extensions', 'kb-support' ),
         'manage_ticket_settings',
         add_query_arg( array(
             'post_type' => 'kbs_ticket',

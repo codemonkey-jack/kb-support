@@ -532,7 +532,7 @@ function kbs_render_agent_user_profile_department_field( $user )  {
         </tr>
 
         <?php echo ob_get_clean();
-        
+
     }
 } // kbs_render_agent_user_profile_department_field
 add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_agent_user_profile_department_field', 10 );
@@ -776,9 +776,9 @@ function kbs_get_users_by_role( $role = array( 'support_agent', 'support_manager
 	$args = apply_filters( 'kbs_users_by_role', $args );
 
 	$user_query = new WP_User_Query( $args );
-	
+
 	$users = $user_query->get_results();
-	
+
 	return $users;
 } // kbs_get_users_by_role
 
@@ -1116,7 +1116,7 @@ function kbs_create_user_name( $user_data ) {
 /**
  * Check to see if a username is a duplicate.
  * If it is, append a postfix and return it.
- * 
+ *
  * @since 1.2.6
  *
  * @param   string  $user_name  Username to check

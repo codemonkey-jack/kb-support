@@ -121,13 +121,13 @@ function kbs_delete_option( $key = '' ) {
  */
 function kbs_get_settings() {
 	$settings = get_option( 'kbs_settings' );
-	
+
 	if( empty( $settings ) ) {
 
 		$settings = array();
 
 		update_option( 'kbs_settings', $settings );
-		
+
 	}
 
 	return apply_filters( 'kbs_get_settings', $settings );
@@ -250,7 +250,15 @@ function kbs_get_registered_settings() {
 						'type'    => 'select',
 						'chosen'  => true,
 						'options' => kbs_get_pages(),
-					)
+					),
+					'login_page'   => array(
+						'id'      => 'login_page',
+						'name'    => __( 'Login Page', 'kb-support' ),
+						'desc'    => __( 'This is the page where customers can login / register.', 'kb-support' ),
+						'type'    => 'select',
+						'chosen'  => true,
+						'options' => helptain_get_login_pages(),
+					),
 				),
                 'customers' => array(
                     'customer_registration_settings_header' => array(
@@ -858,7 +866,7 @@ function kbs_get_registered_settings() {
 						'name' => __( 'Content', 'kb-support' ),
 						'desc' => sprintf( __( 'Enter the content that is sent to customers when their %1$s receives a reply. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br/>' . kbs_get_emails_tags_list(),
 						'type' => 'rich_editor',
-						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" . 
+						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" .
 								  sprintf( __( 'Your support %1$s # {ticket_id} has received a reply. Click the link below to access your %1$s and review the details.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
 								  '<a href="{ticket_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .
@@ -896,7 +904,7 @@ function kbs_get_registered_settings() {
 						'name' => __( 'Content', 'kb-support' ),
 						'desc' => sprintf( __( 'Enter the content that is sent to customers when their %1$s is closed. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br/>' . kbs_get_emails_tags_list(),
 						'type' => 'rich_editor',
-						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" . 
+						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" .
 								  sprintf( __( 'Your support %1$s # {ticket_id} is now closed. You can review the details of your %1$s by clicking the URL below.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
 								  '<a href="{ticket_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .
@@ -1214,10 +1222,89 @@ function kbs_get_registered_settings() {
 						'desc'    => __( 'Choose whether to show a reCAPTCHA on the <code>[kbs_register]</code> form.', 'kb-support' ),
 						'type'    => 'checkbox'
 					)
-					
+
 				)
 			)
-		)
+		),
+		/** Widgets Settings */
+		'widgets' => apply_filters( 'kbs_settings_widgets',
+			array(
+				'main' => array(
+					'floating_widget_settings' => array(
+						'id'   => 'floating_widget_settings',
+						'name' => '<h3>' . __( 'Floating Widget', 'kb-support' ) . '</h3>',
+						'desc' => '',
+						'type' => 'header'
+					),
+					'floating_widget' => array(
+						'id'      => 'floating_widget',
+						'name'    => __( 'Enable floating widget', 'kb-support' ),
+						'desc'    => sprintf( __( 'Toggle ON if you want to display a floating widget with your submitting form.', 'kb-support' ), strtolower( $plural ) ),
+						'type'    => 'checkbox',
+					),
+					'floating_widget_logo' => array(
+						'id'      => 'floating_widget_logo',
+						'name'    => __( 'Floating widget Icon', 'kb-support' ),
+						'desc'    => __( 'Choose the floating widget logo', 'kb-support' ),
+						'type' => 'upload'
+					),
+					'floating_widget_form' => array(
+						'id'      => 'floating_widget_form',
+						'name'    => __( 'Floating widget Form', 'kb-support' ),
+						'desc'    => __( 'Choose what form should be displayed in the floating widget', 'kb-support' ),
+						'type'    => 'select',
+						'chosen'  => true,
+						'options' => kbs_get_array_forms(),
+						'std'     => 'none'
+					),
+					'floating_widget_icon' => array(
+						'id'      => 'floating_widget_icon',
+						'name'    => __( 'Floating widget Icon', 'kb-support' ),
+						'desc'    => __( 'Choose the floating widget icon', 'kb-support' ),
+						'type'    => 'select',
+						'chosen'  => true,
+						'options' => array(
+							'comments-regular' => esc_html__( 'Empty comment icon', 'kb-support' ),
+							'comments-solid'   => esc_html__( 'Full comment icon', 'kb-support' ),
+							'bars-solid'       => esc_html__( 'Bars', 'kb-support' ),
+							'ticket-alt-solid' => esc_html__( 'Ticket', 'kb-support' ),
+							'envelope-regular' => esc_html__( 'Envelope', 'kb-support' ),
+							'user-edit-solid'  => esc_html__( 'User pencil', 'kb-support' )
+						),
+						'std'     => 'comments-regular'
+					),
+					'floating_widget_position' => array(
+						'id'      => 'floating_widget_position',
+						'name'    => __( 'Floating widget Position', 'kb-support' ),
+						'desc'    => __( 'Choose the floating widget position', 'kb-support' ),
+						'type'    => 'select',
+						'chosen'  => true,
+						'options' => array(
+							'left'   => esc_html__( 'Left', 'kb-support' ),
+							'right'  => esc_html__( 'Right', 'kb-support' ),
+						),
+						'std'     => 'left'
+					),
+					'floating_widget_color' => array(
+						'id'      => 'floating_widget_color',
+						'name'    => __( 'Floating widget Color', 'kb-support' ),
+						'desc'    => __( 'Choose the floating widget color', 'kb-support' ),
+						'type'    => 'color',
+						'options' => array(
+							'left'   => esc_html__( 'Left', 'kb-support' ),
+							'right'  => esc_html__( 'Right', 'kb-support' ),
+							'center' => esc_html__( 'Center', 'kb-support' ),
+						),
+					),
+					'floating_widget_label' => array(
+						'id'   => 'floating_widget_label',
+						'name' => __( 'Hide floating widget Label', 'kb-support' ),
+						'desc' => __( 'Choose whether to hide or display the input label', 'kb-support' ),
+						'type' => 'checkbox',
+					),
+				),
+			)
+		),
 	);
 
     if ( ! kbs_participants_enabled() ) {
@@ -1425,8 +1512,10 @@ function kbs_get_settings_tabs() {
 	if ( ! empty( $settings['licenses'] ) ) {
 		$tabs['licenses'] = __( 'Licenses', 'kb-support' );
 	}
-	
+
 	$tabs['misc']   = __( 'Misc', 'kb-support' );
+
+	$tabs['widgets']   = __( 'Widgets', 'kb-support' );
 
 	return apply_filters( 'kbs_settings_tabs', $tabs );
 } // kbs_get_settings_tabs
@@ -1506,7 +1595,10 @@ function kbs_get_registered_settings_sections() {
 		'misc'       => apply_filters( 'kbs_settings_sections_misc', array(
 			'main'                 => __( 'Misc Settings', 'kb-support' ),
 			'recaptcha'            => __( 'Google reCAPTCHA', 'kb-support' )
-		) )
+		) ),
+		'widgets' => apply_filters( 'kbs_settings_sections_widgets', array(
+			'main' => __( 'Floating widget', 'kb-support' ),
+		) ),
 	);
 
 	$sections = apply_filters( 'kbs_settings_sections', $sections );
@@ -1549,7 +1641,16 @@ function kbs_checkbox_callback( $args ) {
 	$class = kbs_sanitize_html_class( $args['field_class'] );
 
 	$checked = ! empty( $kbs_option ) ? checked( 1, $kbs_option, false ) : '';
-	$html = '<input type="checkbox" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"' . $name . ' value="1" ' . $checked . ' class="' . $class . '"/>';
+
+	$html = '<div class="wpchill-toggle">';
+	$html .= '<input class="wpchill-toggle__input" type="checkbox" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" '.$name.' value="1" ' . $checked . '>';
+	$html .= '<div class="wpchill-toggle__items">';
+	$html .= '<span class="wpchill-toggle__track"></span>';
+	$html .= '<span class="wpchill-toggle__thumb"></span>';
+	$html .= '<svg class="wpchill-toggle__off" width="6" height="6" aria-hidden="true" role="img" focusable="false" viewBox="0 0 6 6"><path d="M3 1.5c.8 0 1.5.7 1.5 1.5S3.8 4.5 3 4.5 1.5 3.8 1.5 3 2.2 1.5 3 1.5M3 0C1.3 0 0 1.3 0 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z"></path></svg>';
+	$html .= '<svg class="wpchill-toggle__on" width="2" height="6" aria-hidden="true" role="img" focusable="false" viewBox="0 0 2 6"><path d="M0 0h2v6H0z"></path></svg>';
+	$html .= '</div>';
+	$html .= '</div>';
 	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
 
 	echo apply_filters( 'kbs_after_setting_output', $html, $args );
@@ -2082,207 +2183,6 @@ function kbs_descriptive_text_callback( $args ) {
 } // kbs_descriptive_text_callback
 
 /**
- * Registers the license field callback for Software Licensing
- *
- * @since	1.0
- * @param	arr		$args	Arguments passed by the setting
- * @global	$kbs_options	Array of all the KBS options
- * @return void
- */
-if ( ! function_exists( 'kbs_license_key_callback' ) ) {
-	function kbs_license_key_callback( $args )	{
-
-		$kbs_option = kbs_get_option( $args['id'] );
-
-		$messages = array();
-		$license  = get_option( $args['options']['is_valid_license_option'] );
-
-		if ( $kbs_option )	{
-			$value = $kbs_option;
-		} else	{
-			$value = isset( $args['std'] ) ? $args['std'] : '';
-		}
-
-		if ( ! empty( $license ) && is_object( $license ) )	{
-
-			// activate_license 'invalid' on anything other than valid, so if there was an error capture it
-			if ( false === $license->success ) {
-
-				switch( $license->error ) {
-
-					case 'expired' :
-
-						$class = 'expired';
-						$messages[] = sprintf(
-							__( 'Your license key expired on %s. Please <a href="%s" target="_blank" title="Renew your license key">renew your license key</a>.', 'kb-support' ),
-							date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) ),
-							'http://kb-support.com/checkout/?edd_license_key=' . $value
-						);
-
-						$license_status = 'license-' . $class . '-notice';
-
-						break;
-
-					case 'revoked' :
-
-						$class = 'error';
-						$messages[] = sprintf(
-							__( 'Your license key has been disabled. Please <a href="%s" target="_blank">contact support</a> for more information.', 'kb-support' ),
-							'https://kb-support.com/support'
-						);
-
-						$license_status = 'license-' . $class . '-notice';
-
-						break;
-
-					case 'missing' :
-
-						$class = 'missing';
-						$messages[] = sprintf(
-							__( 'Invalid license. Please <a href="%s" target="_blank" title="Visit account page">visit your account page</a> and verify it.', 'kb-support' ),
-							'http://kb-support.com/your-account'
-						);
-
-						$license_status = 'license-' . $class . '-notice';
-
-						break;
-
-					case 'invalid' :
-					case 'site_inactive' :
-
-						$class = 'error';
-						$messages[] = sprintf(
-							__( 'Your %s is not active for this URL. Please <a href="%s" target="_blank" title="Visit account page">visit your account page</a> to manage your license key URLs.', 'kb-support' ),
-							$args['name'],
-							'http://kb-support.com/your-account'
-						);
-
-						$license_status = 'license-' . $class . '-notice';
-
-						break;
-
-					case 'item_name_mismatch' :
-
-						$class = 'error';
-						$messages[] = sprintf( __( 'This appears to be an invalid license key for %s.', 'kb-support' ), $args['name'] );
-
-						$license_status = 'license-' . $class . '-notice';
-
-						break;
-
-					case 'no_activations_left':
-
-						$class = 'error';
-						$messages[] = sprintf( __( 'Your license key has reached its activation limit. <a href="%s">View possible upgrades</a> now.', 'kb-support' ), 'http://kb-support.com/your-account/' );
-
-						$license_status = 'license-' . $class . '-notice';
-
-						break;
-
-					case 'license_not_activable':
-
-						$class = 'error';
-						$messages[] = __( 'The key you entered belongs to a bundle, please use the product specific license key.', 'kb-support' );
-
-						$license_status = 'license-' . $class . '-notice';
-						break;
-
-					default :
-
-						$class = 'error';
-						$error = ! empty(  $license->error ) ?  $license->error : __( 'unknown_error', 'kb-support' );
-						$messages[] = sprintf( __( 'There was an error with this license key: %s. Please <a href="%s">contact our support team</a>.', 'kb-support' ), $error, 'https://kb-support.com/support' );
-
-						$license_status = 'license-' . $class . '-notice';
-						break;
-
-				}
-
-			} else {
-
-				switch( $license->license ) {
-
-					case 'valid' :
-					default:
-						$class      = 'valid';
-						$now        = current_time( 'timestamp' );
-						$expiration = strtotime( $license->expires, current_time( 'timestamp' ) );
-
-						if ( 'lifetime' === $license->expires ) {
-
-							$messages[] = __( 'Your lifetime license key is valid.', 'kb-support' );
-
-							$license_status = 'license-lifetime-notice';
-
-						} elseif( $expiration > $now && $expiration - $now < ( DAY_IN_SECONDS * 30 ) ) {
-
-							$messages[] = sprintf(
-								__( 'Your license key expires on %s. <a href="%s" target="_blank" title="Renew license">Renew your license key</a> to continue receiving updates and support.', 'kb-support' ),
-								date_i18n(
-									get_option( 'date_format' ),
-									strtotime( $license->expires, current_time( 'timestamp' ) )
-								),
-								'http://kb-support.com/checkout/?edd_license_key=' . $value
-							);
-
-							$license_status = 'license-expires-soon-notice';
-
-						} else {
-							$messages[] = sprintf(
-								__( 'Your license key expires on %s.', 'kb-support' ),
-								date_i18n(
-									get_option( 'date_format' ),
-									strtotime( $license->expires, current_time( 'timestamp' ) )
-								)
-							);
-
-							$license_status = 'license-expiration-date-notice';
-						}
-
-						break;
-				}
-			}
-		} else	{
-			$class = 'missing';
-
-			$messages[] = sprintf(
-				__( 'Enter a valid <a href="%s" target="_blank">license key</a> to receive updates for %s.', 'kb-support' ),
-                'https://kb-support.com/your-account/',
-				$args['name']
-			);
-
-			$license_status = null;
-		}
-
-		$class .= ' ' . kbs_sanitize_html_class( $args['field_class'] );
-
-		$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-		$html = '<input type="text" class="' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" value="' . esc_attr( $value ) . '"/>';
-
-		if ( ( is_object( $license ) && 'valid' == $license->license ) || 'valid' == $license ) {
-			$html .= '<input type="submit" class="button-secondary" name="' . $args['id'] . '_deactivate" value="' . __( 'Deactivate License',  'kb-support' ) . '"/>';
-		}
-
-		$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
-
-		if ( ! empty( $messages ) ) {
-			foreach( $messages as $message ) {
-
-				$html .= '<div class="kbs-license-data kbs-license-' . $class . ' ' . $license_status . '">';
-					$html .= '<p>' . $message . '</p>';
-				$html .= '</div>';
-
-			}
-		}
-
-		wp_nonce_field( kbs_sanitize_key( $args['id'] ) . '-nonce', kbs_sanitize_key( $args['id'] ) . '-nonce' );
-
-		echo $html;
-	}
-
-} // kbs_license_key_callback
-
-/**
  * Registers the premium extension field callback.
  *
  * @since	1.4.6
@@ -2294,12 +2194,7 @@ if ( ! function_exists( 'kbs_premium_extension_callback' ) ) {
 	function kbs_premium_extension_callback( $args )	{
         $data = $args['data'];
         $demo = false;
-
-        $html = sprintf(
-            '<input type="text" class="regular-text" id="kbs_settings[%1$s]" name="kbs_settings[%1$s]" value="" placeholder="%2$s" disabled="disabled" />',
-            kbs_sanitize_key( $args['name'] ),
-            __( 'Enter your license key', 'kb-support' )
-        );
+        $html = '';
 
 		if ( isset( $data['demo_url'] ) ) {
             $demo = true;
@@ -2412,6 +2307,38 @@ function kbs_get_pages( $force = false ) {
 } // kbs_get_pages
 
 /**
+ * Retrieve a list of all published pages.
+ *
+ * On large sites this can be expensive, so only load if on the settings page or $force is set to true
+ *
+ * @since	1.0
+ * @param	bool	$force			Force the pages to be loaded even if not on settings
+ * @return	array		$pages_options	An array of the pages
+ */
+function helptain_get_login_pages( $force = false ) {
+
+	$pages_options = array(
+		'0'        => __( 'Choose a login page', 'kb-support' ),
+		'wp_login' => __( 'WP default login page', 'kb-support' )
+	); // Default
+
+	if( ( ! isset( $_GET['page'] ) || 'kbs-settings' != $_GET['page'] ) && ! $force ) {
+		return $pages_options;
+	}
+
+	$pages = get_pages();
+	if ( $pages ) {
+		foreach ( $pages as $page ) {
+			$pages_options[ $page->ID ] = $page->post_title;
+		}
+	}
+
+	return $pages_options;
+
+} // kbs_get_pages
+
+
+/**
  * Returns a select list for user role options.
  *
  * @since	1.2.6
@@ -2426,7 +2353,7 @@ function kbs_get_user_role_options()	{
 
         $roles[ $role ] = $name;
     }
-	
+
 	return apply_filters( 'kbs_user_role_options', $roles );
 } // kbs_get_user_role_options
 
@@ -2493,7 +2420,7 @@ function kbs_get_resolve_time_options()	{
 		3 * WEEK_IN_SECONDS  => __( '3 Weeks', 'kb-support' ),
 		4 * WEEK_IN_SECONDS  => __( '4 Weeks', 'kb-support' )
 	);
-	
+
 	return apply_filters( 'kbs_target_resolve_time_options', $resolve_times );
 } // kbs_get_resolve_time_options
 
