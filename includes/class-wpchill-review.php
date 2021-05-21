@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * Main Class for review
@@ -15,11 +15,11 @@ class Wpchill_Review {
 
     /**
      * Main construct function for our class
-     * 
+     *
      * @param array $args
-     * 
+     *
      * @return void
-     * 
+     *
      */
     function __construct( $args ) {
 		if( !isset( $args['slug'] ) && !isset( $args['plugin_name'] ) ) {
@@ -40,10 +40,10 @@ class Wpchill_Review {
 		}
 
 		$this->messages = array(
-			'notice'  => esc_html__( "Hi there! Stoked to see you're using {$this->plugin_name} for a few days now - hope you like it! And if you do, please consider rating it. It would mean the world to us.  Keep on rocking!", $this->textdomain ),
-			'rate'    => esc_html__( 'Rate the plugin', $this->textdomain ),
-			'rated'   => esc_html__( 'Remind me later', $this->textdomain ),
-			'no_rate' => esc_html__( 'Don\'t show again', $this->textdomain ),
+			'notice'  => esc_html__( "Hi there! Stoked to see you're using {$this->plugin_name} for a few days now - hope you like it! And if you do, please consider rating it. It would mean the world to us.  Keep on rocking!", 'kb-support' ),
+			'rate'    => esc_html__( 'Rate the plugin', 'kb-support' ),
+			'rated'   => esc_html__( 'Remind me later', 'kb-support' ),
+			'no_rate' => esc_html__( 'Don\'t show again', 'kb-support' ),
 		);
 
 		if ( isset( $args['messages'] ) ) {
@@ -55,7 +55,7 @@ class Wpchill_Review {
 	}
 
     public function init() {
-        
+
         if( ! is_admin() ) {
             return;
         }
@@ -85,7 +85,7 @@ class Wpchill_Review {
 	}
 
     /**
-     * Create value entry in db 
+     * Create value entry in db
      */
     private function value() {
 
@@ -94,13 +94,13 @@ class Wpchill_Review {
 		} else {
 			$value = get_option( "{$this->slug}-rate-time" );
 		}
-        
+
         if( $value ) {
             return $value;
         }
 
 		$value = time() + DAY_IN_SECONDS;
-		
+
 		if( isset( $this->option_name ) ) {
 			update_option( $this->option_name, $value, false);
 		}else {
@@ -133,7 +133,7 @@ class Wpchill_Review {
      * Ajax action for review
      */
     public function ajax() {
-        
+
         check_ajax_referer( "epsilon-{$this->slug}-review", 'security');
 
         if( ! isset( $_POST['check'] ) ) {
@@ -153,7 +153,7 @@ class Wpchill_Review {
 		}elseif ( 'epsilon-no-rate' == $_POST['check'] ) {
 			$time = time() + YEAR_IN_SECONDS * 5;
         }
-        
+
 		if( isset( $this->option_name ) ) {
 			update_option( $this->option_name, $time, false);
 		}else {
@@ -209,11 +209,11 @@ class Wpchill_Review {
 }
 
 /**
- * @param array 
- * 
+ * @param array
+ *
  * Must contain slug && plugin_name (is required to create the proper defaults)
  * Optional components ( if no plugin name is passed we will take the name from the slug)
  * option_name
- * messages - if no messages passed, we have defaults 
+ * messages - if no messages passed, we have defaults
  */
 new Wpchill_Review( array( 'slug' => 'kb-support', 'plugin_name' => 'KB Support'));
