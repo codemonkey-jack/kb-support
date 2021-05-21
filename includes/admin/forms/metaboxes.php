@@ -735,6 +735,7 @@ function kbs_render_field_options_rows( $post_id )	{
 				) ); ?>
 				<strong><?php _e( 'Hide on front? (experimental)', 'kb-support' ); ?></strong></label>
 		</p>
+		<p class="description"><?php echo esc_html__('Hides the field on front. Fields need not to be required.','kb-support'); ?></p>
 	</div>
     <?php
 } // kbs_render_field_options_rows

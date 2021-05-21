@@ -896,7 +896,7 @@ function kbs_display_form_text_field( $field, $settings )	{
 		$value = ' value="' . esc_attr( $settings['value'] ) . '"';
 	}
 
-	if ( is_user_logged_in() && ! empty( $settings['front_hidden'] ) ) {
+	if ( is_user_logged_in() && ! empty( $settings['front_hidden'] ) && empty($settings['required']) ) {
 		$style = 'style="display:none;"';
 	}
 
