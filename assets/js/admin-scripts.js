@@ -1355,17 +1355,17 @@ jQuery(document).ready(function ($) {
 	 * Floating widget settings conditions
 	 */
 	if ( $( 'input[name="kbs_settings[floating_widget]"]' ).is( ':checked' ) ) {
-		$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label' ).show();
+		$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label,tr.kbs_option_floating_widget_logo' ).show();
 	} else {
-		$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label' ).hide();
+		$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label,tr.kbs_option_floating_widget_logo' ).hide();
 	}
 
 	$( 'input[name="kbs_settings[floating_widget]"]' ).on( 'change', function () {
 
 		if ( $( this ).is( ':checked' ) ) {
-			$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label' ).show();
+			$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label,tr.kbs_option_floating_widget_logo' ).show();
 		} else {
-			$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label' ).hide();
+			$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label,tr.kbs_option_floating_widget_logo' ).hide();
 		}
 	} );
 

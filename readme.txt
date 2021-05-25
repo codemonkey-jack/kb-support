@@ -2,9 +2,9 @@
 Contributors: wpchill, silkalns
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 5.6
+Tested up to: 5.7
 Requires PHP: 5.4
-Stable tag: 1.5.4
+Stable tag: 1.5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -133,8 +133,17 @@ This plugin uses the following svg icon files from https://fontawesome.com/ lice
 
 == Changelog ==
 
-= 1.5.5 - - =
-Added: Review Class
+= 1.5.6 - 25.05.2021 =
+Added: Front hidden option for form fields
+Added: Floating widget
+Added: Login page option
+Changed: Some texts have been modified to better inform the users about their functionality
+Changed: Checkbox is now transformed to toggle
+Fixed: Deprecated function where required parameter is after optional one
+Fixed: Change reply status to viewed when the client views it
+
+= 1.5.5 - 18.03.2021 =
+Changed: Remove license functionality
 
 = 1.5.4 - 01.03.2021 =
 Fixed: FontAwesome style and scripts
