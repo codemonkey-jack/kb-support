@@ -253,8 +253,8 @@ function kbs_get_registered_settings() {
 					),
 					'login_page'   => array(
 						'id'      => 'login_page',
-						'name'    => __( 'Login Page', 'kb-support' ),
-						'desc'    => __( 'This is the page where customers can login / edit profile. Should contain the <code>[kbs_login]</code> shortcode or alternative login form.', 'kb-support' ),
+						'name'    => __( 'Login/Register Page', 'kb-support' ),
+						'desc'    => __( 'This is the page where customers can register / login / edit profile if not using our dedicated forms found in Settings->Tickets->Submission Settings.', 'kb-support' ),
 						'type'    => 'select',
 						'chosen'  => true,
 						'options' => helptain_get_login_pages(),
