@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.class{
+	font-size: 200px;
+}
+
+.kbs-chat-message:hover .kbs-chat-toolbar {
+	display: inline-block;
+}
+
+.text-editor .ql-container {
+	padding: 5px;
+	min-height: 10rem;
+}
+
+.text-editor .ql-editor {
+	min-height: 10rem;
+}
+
+.text-editor .ql-toolbar {
+	background: rgb(243, 244, 246)
+}
+
+.kbs-chat-message .message-content {
+	max-width:50%;
+	width:48%;
+}
+
+.kbs-chat-message .message-content p {
+	min-width:200px;
+	max-width:96%;
+}
+
+.kbs-chat-message .message-content .kbs-chat-toolbar {
+	max-width:4%;
+}
+
+ol, ul {
+	list-style: auto;
+}

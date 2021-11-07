@@ -76,13 +76,20 @@ class KBS_Replies_API extends KBS_API {
 					'args'                => $this->get_collection_params(),
 				),
                 array(
+					'methods'             => WP_REST_Server::DELETABLE,
+					'callback'            => array( $this, 'delete_item' ),
+					'permission_callback' => array( $this, 'create_item_permissions_check' ),
+					'args'                => $this->get_collection_params(),
+				),
+				array(
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => array( $this, 'create_item' ),
 					'permission_callback' => array( $this, 'create_item_permissions_check' ),
 					'args'                => $this->get_collection_params(),
-				)
-			)
+				),
+			),
 		);
+
 
 		register_rest_route(
 			$this->namespace . $this->version,
@@ -98,9 +105,58 @@ class KBS_Replies_API extends KBS_API {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_item' ),
 					'permission_callback' => array( $this, 'get_item_permissions_check' )
-				)
-			)
+				),
+				array(
+					'methods'             => WP_REST_Server::DELETABLE,
+					'callback'            => array( $this, 'delete_item' ),
+					'permission_callback' => array( $this, 'create_item_permissions_check' ),
+					'args'                => $this->get_collection_params(),
+				),
+
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'create_item' ),
+					'permission_callback' => array( $this, 'create_item_permissions_check' ),
+					'args'                => $this->get_collection_params(),
+				),
+			),
 		);
+
+		// Register routes for the notes.
+		register_rest_route(
+			$this->namespace . $this->version,
+			'/' . $this->rest_base . '/ticket/notes' . '/(?P<id>\d+)',
+			array(
+                'args'   => array(
+					'id' => array(
+						'type'        => 'integer',
+						'description' => sprintf(
+                            __( 'Unique identifier for the %s.', 'kb-support' ),
+                            kbs_get_ticket_label_singular( true )
+                        )
+					)
+				),
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_notes' ),
+					'permission_callback' => array( $this, 'get_items_permissions_check' ),
+					'args'                => $this->get_collection_params(),
+				),
+                array(
+					'methods'             => WP_REST_Server::DELETABLE,
+					'callback'            => array( $this, 'delete_note' ),
+					'permission_callback' => array( $this, 'create_item_permissions_check' ),
+					'args'                => $this->get_collection_params(),
+				),
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'create_note' ),
+					'permission_callback' => array( $this, 'create_item_permissions_check' ),
+					'args'                => $this->get_collection_params(),
+				),
+			),
+		);
+
     } // register_routes
 
 	/**
@@ -145,35 +201,6 @@ class KBS_Replies_API extends KBS_API {
 	 * @return	bool|WP_Error	True if the request has read access for the item, WP_Error object otherwise.
      */
     public function get_items_permissions_check( $request ) {
-        if ( ! $this->is_authenticated() )	{
-			return new WP_Error(
-				'rest_forbidden_context',
-				$this->errors( 'no_auth' ),
-				array( 'status' => rest_authorization_required_code() )
-			);
-		}
-
-        $error = new WP_Error(
-			'rest_post_invalid_id',
-			__( 'Invalid post ID.', 'kb-support' ),
-			array( 'status' => 404 )
-		);
-
-        $ticket_id = isset( $request['id'] ) ? $request['id'] : false;
-        $post      = get_post( $ticket_id );
-
-        if ( empty( $post ) || empty( $post->ID ) || 'kbs_ticket' !== $post->post_type ) {
-			return $error;
-		}
-
-		if ( 'edit' === $request['context'] || ! $this->check_read_permission( $post ) ) {
-			return new WP_Error(
-				'rest_forbidden_context',
-				__( 'Sorry, you are not allowed to view this object.', 'kb-support' ),
-				array( 'status' => rest_authorization_required_code() )
-			);
-		}
-
 		return true;
     } // get_items_permissions_check
 
@@ -188,8 +215,7 @@ class KBS_Replies_API extends KBS_API {
 	public function create_item_permissions_check( $request ) {
 		$create = $this->is_authenticated() && kbs_is_agent( $this->user_id );
         $create = apply_filters( "kbs_rest_{$this->post_type}_create", $create, $request, $this );
-
-		if ( ! $create )	{
+		if ( ! $create ) {
 			return new WP_Error(
 				'rest_forbidden_context',
 				$this->errors( 'no_auth' ),
@@ -228,7 +254,7 @@ class KBS_Replies_API extends KBS_API {
 	 * @param	WP_REST_Request		$request	Full details about the request
 	 * @return	WP_REST_Response|WP_Error		Response object on success, or WP_Error object on failure
 	 */
-	function get_items( $request )	{
+	function get_items( $request ) {
         // Ensure a search string is set in case the orderby is set to 'relevance'.
 		if ( ! empty( $request['orderby'] ) && 'relevance' === $request['orderby'] && empty( $request['search'] ) ) {
 			return new WP_Error(
@@ -347,8 +373,10 @@ class KBS_Replies_API extends KBS_API {
 			if ( ! $this->check_read_permission( $post ) ) {
 				continue;
 			}
-
 			$data    = $this->prepare_item_for_response( $post, $request );
+			$data->data['author'] = get_the_author_meta( 'user_nicename', $post->post_author );
+			$data->data['isAgent'] = kbs_is_agent( $post->post_author);
+			$data->data['type'] = 'kbs_ticket_reply';
 			$posts[] = $this->prepare_response_for_collection( $data );
 		}
 
@@ -373,7 +401,6 @@ class KBS_Replies_API extends KBS_API {
 				array( 'status' => 400 )
 			);
 		}
-
 		$response = rest_ensure_response( $posts );
 
 		$response->header( 'X-WP-Total', (int) $total_posts );
@@ -401,6 +428,35 @@ class KBS_Replies_API extends KBS_API {
 
 		return $response;
 	} // get_items
+
+	public function get_notes( $request ) {
+		$notes = kbs_get_notes( $request['id'] );
+		$formatted_noted = [];
+
+		foreach ( $notes as $key => $note ) {
+			$formatted_noted[$key]['id'] = $note->comment_ID;
+			$formatted_noted[$key]['date'] = $note->comment_date;
+			$formatted_noted[$key]['postID'] = $note->comment_post_ID;
+			$formatted_noted[$key]['type'] = $note->comment_type;
+			$formatted_noted[$key]['author'] = get_the_author_meta( 'user_nicename', $note->user_id );
+			$formatted_noted[$key]['content'] = $note->comment_content;
+
+		}
+		return rest_ensure_response( $formatted_noted );
+
+	}
+
+	public function create_note( $request ) {
+		if ( ! isset( $request['id'] ) ) {
+			return new WP_Error( 'rest_post_invalid_id', __( 'Invalid post ID.', 'kb-support' ), array( 'status' => 404 ) );
+		}
+		$id = $request['id'];
+		$note = $request['note'];
+
+		$note_id = kbs_insert_note( $id, $note );
+
+		return rest_ensure_response( $note_id );
+	}
 
     /**
 	 * Creates a ticket reply.
@@ -484,6 +540,26 @@ class KBS_Replies_API extends KBS_API {
 
 		return rest_ensure_response( $response );
 	} // create_item
+
+	public function delete_item( $request ) {
+
+		if( ! isset($request['id']) )  {
+			return new WP_Error(
+				'required_fields',
+				$this->errors( 'required_fields' ),
+				array( 'status' => 400 )
+			);
+		}
+
+		$post = get_post( $request['id']);
+
+		wp_delete_post( $request['id'] );
+
+		$response = $this->prepare_item_for_response( $post, $request );
+
+		return rest_ensure_response( $response );
+
+	}
 
     /**
 	 * Prepares a single reply output for response.

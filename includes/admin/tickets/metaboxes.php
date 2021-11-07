@@ -1,7 +1,7 @@
-<?php	
+<?php
 /**
  * Manage kbs_ticket post metaboxes.
- * 
+ *
  * @since		0.1
  * @package		KBS
  * @subpackage	Functions/Metaboxes
@@ -134,7 +134,7 @@ function kbs_ticket_add_meta_boxes( $post )	{
 		}
 
 		add_meta_box(
-			'kbs-ticket-metabox-ticket-private',
+			'kbs-ticket-metabox-ticket-chat',
 			__( 'Private Notes', 'kb-support' ),
 			'kbs_ticket_metabox_notes_callback',
 			'kbs_ticket',
@@ -143,7 +143,7 @@ function kbs_ticket_add_meta_boxes( $post )	{
 			array()
 		);
 	}
-	
+
 } // kbs_ticket_add_meta_boxes
 add_action( 'add_meta_boxes_kbs_ticket', 'kbs_ticket_add_meta_boxes' );
 
@@ -385,7 +385,7 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
 
                 <p><a href="<?php echo admin_url( 'edit.php?post_type=kbs_ticket' ); ?>"><?php printf( __( 'Back to %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></a>
 
-					<?php submit_button( 
+					<?php submit_button(
                         sprintf( '%s %s',
                             empty( $kbs_ticket_update ) ? __( 'Add', 'kb-support' ) : __( 'Update', 'kb-support' ),
                             kbs_get_ticket_label_singular()
@@ -416,18 +416,18 @@ add_action( 'kbs_ticket_status_fields', 'kbs_ticket_metabox_save_row', 10 );
  * @param	int		$ticket_id			The ticket post ID.
  */
 function kbs_ticket_metabox_sla_row( $ticket_id )	{
-	
+
 	global $kbs_ticket, $kbs_ticket_update;
-	
+
 	if ( ! kbs_track_sla() || ! $kbs_ticket_update )	{
 		return;
 	}
-	
+
 	$sla_respond_class  = '';
 	$sla_resolve_class  = '';
 	$sla_respond_remain = '';
 	$sla_resolve_remain = '';
-	
+
 	if ( $kbs_ticket_update )	{
 		$respond            = $kbs_ticket->sla_respond;
 		$resolve            = $kbs_ticket->sla_resolve;
@@ -443,9 +443,9 @@ function kbs_ticket_metabox_sla_row( $ticket_id )	{
 	if ( ! empty( $ticket->sla_respond ) || ! empty( $kbs_ticket->sla_resolve ) ) : ?>
         <p><strong><?php _e( 'SLA Status', 'kb-support' ); ?></strong></p>
         <p><?php echo kbs_display_sla_response_status_icon( $kbs_ticket ); ?></p>
-            
+
         <p><?php echo kbs_display_sla_resolve_status_icon( $kbs_ticket ); ?></p>
-    
+
     <?php endif;
 
 } // kbs_ticket_metabox_sla_row
@@ -568,7 +568,7 @@ function kbs_ticket_metabox_sections()  {
             </div>
 
         </div>
-    
+
     </div>
     <?php
 } // kbs_ticket_metabox_sections
@@ -590,7 +590,7 @@ function kbs_ticket_metabox_flagged_notice_section( $ticket_id )    {
 
     ob_start(); ?>
 	<div id="kbs-ticket-flag-notice" class="notice-wrap<?php echo $class; ?>">
-		<div class="notice notice-warning notice-alt inline">
+		<div class="inline notice notice-warning notice-alt">
 			<p><span class="dashicons dashicons-flag kbs-notice-alert"></span> <?php printf(
 				__( 'This %s has been flagged.', 'kb-support' ),
 				kbs_get_ticket_label_singular( true )
@@ -661,7 +661,7 @@ function kbs_ticket_metabox_customer_section( $ticket_id )	{
 				<span class="kbs-customer-ticket-attr customer-company">
 					<?php echo kbs_get_company_name( $kbs_ticket->company_id ); ?>
 				</span>
-				
+
 				<?php do_action( 'kbs_ticket_metabox_after_company_name', $customer_id ); ?>
 
 			<?php endif; ?>
@@ -676,7 +676,7 @@ function kbs_ticket_metabox_customer_section( $ticket_id )	{
 				<span class="kbs-customer-ticket-attr customer-website">
 					<?php printf( '<a href="%1$s" target="_blank">%1$s</a>', esc_url( $user_info['website'] ) ); ?>
 				</span>
-				
+
 				<?php do_action( 'kbs_ticket_metabox_after_customer_website', $customer_id ); ?>
 
 			<?php endif; ?>
@@ -694,7 +694,7 @@ function kbs_ticket_metabox_customer_section( $ticket_id )	{
 	</div>
 	<hr>
     <?php
-		
+
 } // kbs_ticket_metabox_customer_section
 add_action( 'kbs_ticket_metabox_standard_fields', 'kbs_ticket_metabox_customer_section', 10 );
 
@@ -719,7 +719,7 @@ function kbs_ticket_metabox_content_section( $ticket_id )	{
         <?php echo $kbs_ticket->get_content(); ?>
     </div>
     <?php
-		
+
 } // kbs_ticket_metabox_content_section
 add_action( 'kbs_ticket_metabox_standard_fields', 'kbs_ticket_metabox_content_section', 20 );
 
@@ -759,7 +759,7 @@ function kbs_ticket_metabox_attachments_row( $ticket_id )	{
         <?php echo implode( '&nbsp;&nbsp;&#124;&nbsp;&nbsp;', $files ); ?>
 
     </div>
-    <?php		
+    <?php
 } // kbs_ticket_metabox_attachments_row
 add_action( 'kbs_ticket_metabox_standard_fields', 'kbs_ticket_metabox_attachments_row', 25 );
 
@@ -828,7 +828,7 @@ function kbs_ticket_metabox_participants_row( $ticket_id )	{
         </div>
     </div>
     <?php
-		
+
 } // kbs_ticket_metabox_participants_row
 add_action( 'kbs_ticket_metabox_custom_sections', 'kbs_ticket_metabox_participants_row', 10 );
 
@@ -858,7 +858,7 @@ function kbs_ticket_metabox_form_data_row( $ticket_id )	{
         </div>
     </div>
     <?php
-		
+
 } // kbs_ticket_metabox_form_data_row
 add_action( 'kbs_ticket_metabox_custom_sections', 'kbs_ticket_metabox_form_data_row', 20 );
 
@@ -866,7 +866,7 @@ add_action( 'kbs_ticket_metabox_custom_sections', 'kbs_ticket_metabox_form_data_
  * Determines where to display the existing replies row.
  *
  * @since   1.5.3
- * @param   
+ * @param
  * @global	object	$kbs_ticket			KBS_Ticket class object
  * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
  * @param	int		$ticket_id			The ticket post ID.

@@ -142,15 +142,15 @@ final class KB_Support {
 			add_action( 'plugins_loaded', array( self::$instance, 'load_textdomain' ) );
 
 			self::$instance->includes();
-			self::$instance->roles         = new KBS_Roles();
-            self::$instance->api           = new KBS_API();
-			self::$instance->emails        = new KBS_Emails();
-			self::$instance->email_tags    = new KBS_Email_Template_Tags();
-			self::$instance->html          = new KBS_HTML_Elements();
-			self::$instance->customers     = new KBS_DB_Customers();
-			self::$instance->customer_meta = new KBS_DB_Customer_Meta();
-			self::$instance->KB            = new KBS_Knowledgebase();
-
+			self::$instance->roles          = new KBS_Roles();
+            self::$instance->api            = new KBS_API();
+			self::$instance->emails         = new KBS_Emails();
+			self::$instance->email_tags     = new KBS_Email_Template_Tags();
+			self::$instance->html           = new KBS_HTML_Elements();
+			self::$instance->customers      = new KBS_DB_Customers();
+			self::$instance->customer_meta  = new KBS_DB_Customer_Meta();
+			self::$instance->KB             = new KBS_Knowledgebase();
+			self::$instance->KB_Ticket_Chat = new KBS_Ticket_Chat();
 			do_action( 'kbsupport_init' );
 		}
 
@@ -237,6 +237,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-stats.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-roles.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-ticket-chat.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-cron.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-logging.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-license-handler.php';
@@ -383,3 +384,11 @@ function KBS()	{
 
 // Get KBS Running
 KBS();
+
+
+// add_action('init', 'kbs_init');
+
+function kbs_init() {
+	var_dump( kbs_get_ticket( 876646826));
+
+}
