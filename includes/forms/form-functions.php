@@ -146,7 +146,7 @@ function kbs_get_array_forms( $args = array() ) {
 	$defaults = array(
 		'post_type'      => 'kbs_form',
 		'post_status'    => 'any',
-		'posts_per_page' => -1
+		'posts_per_page' => - 1
 	);
 
 	$args  = wp_parse_args( $args, $defaults );
@@ -156,7 +156,7 @@ function kbs_get_array_forms( $args = array() ) {
 		'none' => esc_html__( 'Select form', 'kb-support' )
 	);
 
-	foreach ( $forms as $form ){
+	foreach ( $forms as $form ) {
 		$return[ $form->ID ] = $form->post_title;
 	}
 
@@ -208,11 +208,11 @@ function kbs_get_form_redirect_target( $form_id ) {
  * @return    string        The after form submission action
  * @since    1.6.0
  */
-function kbs_get_form_submission_options( $form_id ){
+function kbs_get_form_submission_options( $form_id ) {
 
 	$submission = get_post_meta( $form_id, '_submission_action', true );
 
-	if ( !$submission ){
+	if ( ! $submission ) {
 		$submission = 'redirect';
 	}
 
@@ -709,25 +709,19 @@ function kbs_display_field_setting_icons( $field_id ) {
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 
-		if ( ! empty( $settings['front_hidden'] ) )	{
-			$output[] = '<i title="' . __( 'Hide on front', 'kb-support' ) . '" class="fas fa-tag" aria-hidden="true"></i>';
-		} else	{
-			$output[] = '&nbsp;&nbsp;&nbsp;';
-		}
-
-		if ( ! empty( $settings['required'] ) )	{
+		if ( ! empty( $settings['required'] ) ) {
 			$output[] = '<i title="' . __( 'Required Field', 'kb-support' ) . '" class="fas fa-asterisk" aria-hidden="true"></i>';
 		} else {
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 
-		if ( ! empty( $settings['placeholder'] ) )	{
+		if ( ! empty( $settings['placeholder'] ) ) {
 			$output[] = '<i title="' . sprintf( __( 'Placeholder: %s', 'kb-support' ), stripslashes( $settings['placeholder'] ) ) . '" class="fas fa-info-circle" aria-hidden="true"></i>';
 		} else {
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 
-		if ( ! empty( $settings['mapping'] ) && 'post_category' != $settings['mapping'] )	{
+		if ( ! empty( $settings['mapping'] ) && 'post_category' != $settings['mapping'] ) {
 			$output[] = '<i title="' . sprintf( __( 'Maps to %s', 'kb-support' ), stripslashes( $mappings[ $settings['mapping'] ] ) ) . '" class="fas fa-map-marker-alt" aria-hidden="true"></i>';
 		} else {
 			$output[] = '&nbsp;&nbsp;&nbsp;';
@@ -833,8 +827,8 @@ function kbs_check_email_from_submission( $email ) {
 	$is_banned = false;
 	$banned    = kbs_get_banned_emails();
 
-	if ( ! empty( $banned ) )	{
-		if ( is_user_logged_in() )	{
+	if ( ! empty( $banned ) ) {
+		if ( is_user_logged_in() ) {
 
 			// The user is logged in, check that their account email is not banned
 			$user_data = get_userdata( get_current_user_id() );
@@ -1397,8 +1391,7 @@ add_action( 'kbs_form_display_recaptcha_field', 'kbs_display_form_recaptcha_fiel
  */
 function kbs_display_form_file_upload_field( $field, $settings ) {
 
-	if ( ! kbs_file_uploads_are_enabled() )	{
-		echo esc_html__('File uploads are not enabled.','kb-support');
+	if ( ! kbs_file_uploads_are_enabled() ) {
 		return;
 	}
 
@@ -1494,9 +1487,10 @@ function kbs_get_banned_emails() {
 /**
  * Determines if an email is banned
  *
- * @since	1.0
- * @param	str		$email	Email address to check
- * @return	bool	true if the email address is banned, or false
+ * @param str $email Email address to check
+ *
+ * @return    bool    true if the email address is banned, or false
+ * @since    1.0
  */
 function kbs_is_email_banned( $email = '' ) {
 
