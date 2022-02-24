@@ -41,7 +41,7 @@ class Wpchill_Review {
 
 		$this->messages = array(
 			'notice'  => esc_html__( "Hi there! Stoked to see you're using {$this->plugin_name} for a few days now - hope you like it! And if you do, please consider rating it. It would mean the world to us.  Keep on rocking!", 'kb-support' ),
-			'rate'    => esc_html__( 'Rate the plugin','kb-support' ),
+			'rate'    => esc_html__( 'Rate the plugin', 'kb-support' ),
 			'rated'   => esc_html__( 'Remind me later', 'kb-support' ),
 			'no_rate' => esc_html__( 'Don\'t show again', 'kb-support' ),
 		);

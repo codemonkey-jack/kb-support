@@ -20,15 +20,22 @@ global $kbs_form;
 
 					<?php $label_class = ''; ?>
                     <?php $settings    = $kbs_form->get_field_settings( $field->ID ); ?>
+					<?php $settings['show_logged_in'] = false; ?>
 
                     <?php if ( 'hidden' != $settings['type'] ) : ?>
                         <p class="<?php echo $field->post_name; ?>">
                     <?php endif; ?>
-                            <?php if ( empty( $settings['hide_label'] ) && 'recaptcha' != $settings['type'] ) : ?>
+					<?php
+					$d = true;
+
+					if ( ! empty( $settings['front_hidden'] ) && empty( $settings['required'] ) ) {
+						$d = false;
+					}
+					?>
+					<?php if ( empty( $settings['hide_label'] ) && 'recaptcha' != $settings['type'] && $d ) : ?>
                                 <?php if ( ! empty( $settings['label_class'] ) ) : ?>
                                     <?php $label_class = ' class="' . sanitize_html_class( $settings['label_class'] ) . '"'; ?>
                                 <?php endif; ?>
-
                                 <label for="<?php echo $field->post_name; ?>"<?php echo $label_class; ?>>
 
                                     <?php echo esc_attr( get_the_title( $field->ID ) ); ?>

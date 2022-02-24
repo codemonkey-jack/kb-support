@@ -89,6 +89,7 @@ class KBS_Floating_Widget {
 				opacity    : 0;
 				position   : absolute;
 				z-index    : 9;
+				cursor     : pointer;
 			}
 
 			#kbs-beacon .kbs-beacon-close {

@@ -248,6 +248,37 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		compress: {
+			main: {
+				options: {
+					archive: 'kb-support.zip',
+					mode: 'zip'
+				},
+				files: [{
+					src: [
+						'*',
+						'**',
+						'!_notes/**',
+						'!node_modules/**',
+						'!.git/**',
+						'!.editorconfig',
+						'!.jshintrc',
+						'!.gitignore',
+						'!.gitattributes',
+						'!composer.json',
+						'!composer.lock',
+						'!README.md',
+						'!CONTRIBUTING.md',
+						'!Gruntfile.js',
+						'!package.json',
+						'!package-lock.json',
+						'!phpunit.xml',
+						'!kb-support.zip'
+					]
+				}]
+			}
+		},
+
 		// shell command to commit the new version of the plugin
 		shell: {
 			// Remove delete files.
@@ -302,6 +333,10 @@ module.exports = function( grunt ) {
 		'makepot'
 		//'potomo',
 		//'glotpress_download'
+	] );
+
+	grunt.registerTask( 'release', [
+		'compress'
 	] );
 
 	// deploy task

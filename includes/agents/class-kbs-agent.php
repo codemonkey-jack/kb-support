@@ -378,7 +378,6 @@ class KBS_Agent {
 		if ( empty( $meta_key ) || empty( $meta_value ) ) {
 			return false;
 		}
-
 		return update_user_meta( $this->id, $meta_key, $meta_value, $prev_value );
 	} // update_meta
 

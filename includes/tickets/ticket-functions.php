@@ -853,7 +853,13 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
  * @param	str|null	$submit_date	The date of the submission
  * @return	void
 */
-function kbs_record_submission_in_log( $ticket_id = 0, $form_id = 0, $submit_date = null ) {
+function kbs_record_submission_in_log( $ticket_id, $form_id = 0, $submit_date = null ) {
+
+	if ( empty( $ticket_id ) ) {
+		return false;
+	}
+
+
 	global $kbs_logs;
 
 	$log_data = array(

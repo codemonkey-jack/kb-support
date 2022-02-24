@@ -790,6 +790,7 @@ jQuery(document).ready(function ($) {
 					form_data        : $('#post').serialize(),
 					form_id          : kbs_vars.post_id,
 					hide_label       : ( $('#kbs_field_hide_label').is(':checked') )      ? $('#kbs_field_hide_label').val()      : 0,
+					front_hidden     : ( $('#kbs_field_front_hidden').is(':checked') )    ? $('#kbs_field_front_hidden').val()      : 0,
 					input_class      : $('#kbs_field_input_class').val(),
 					kb_search        : ( $('#kbs_field_kb_search').is(':checked') ) ? $('#kbs_field_kb_search').val() : 0,
 					label            : $('#kbs_field_label').val(),
@@ -1322,17 +1323,17 @@ jQuery(document).ready(function ($) {
 	 * Floating widget settings conditions
 	 */
 	if ( $( 'input[name="kbs_settings[floating_widget]"]' ).is( ':checked' ) ) {
-		$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label' ).show();
+		$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label,tr.kbs_option_floating_widget_logo' ).show();
 	} else {
-		$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label' ).hide();
+		$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label,tr.kbs_option_floating_widget_logo' ).hide();
 	}
 
 	$( 'input[name="kbs_settings[floating_widget]"]' ).on( 'change', function () {
 
 		if ( $( this ).is( ':checked' ) ) {
-			$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label' ).show();
+			$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label,tr.kbs_option_floating_widget_logo' ).show();
 		} else {
-			$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label' ).hide();
+			$( 'tr.kbs_option_floating_widget_form, tr.kbs_option_floating_widget_icon, tr.kbs_option_floating_widget_position, tr.kbs_option_floating_widget_color, tr.kbs_option_floating_widget_label,tr.kbs_option_floating_widget_logo' ).hide();
 		}
 	} );
 

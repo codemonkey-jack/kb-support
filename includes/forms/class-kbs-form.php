@@ -94,7 +94,7 @@ class KBS_Form {
 		return true;
 
 	} // setup_form
-	
+
 	/**
 	 * Magic __get function to dispatch a call to retrieve a private property
 	 *
@@ -118,7 +118,7 @@ class KBS_Form {
 	public function get_ID() {
 		return $this->ID;
 	} // get_ID
-	
+
 	/**
 	 * Retrieve the form shortcode.
 	 *
@@ -163,6 +163,7 @@ class KBS_Form {
 			'description'     => ! empty( $data['description'] )     ? sanitize_text_field( $data['description'] )   : '',
 			'description_pos' => ! empty( $data['description_pos'] ) ? $data['description_pos']                      : 'label',
 			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                          : false,
+            'front_hidden'    => ! empty( $data['front_hidden'] )    ? true                                          : false,
 			'input_class'     => ! empty( $data['input_class'] )     ? sanitize_text_field( $data['input_class'] )   : '',
 			'label_class'     => ! empty( $data['label_class'] )     ? sanitize_text_field( $data['label_class'] )   : '',
 			'mapping'         => ! empty( $data['mapping'] )         ? $data['mapping']                              : '',
@@ -251,6 +252,7 @@ class KBS_Form {
 			'description'     => ! empty( $data['description'] )     ? sanitize_text_field( $data['description'] )   : '',
 			'description_pos' => ! empty( $data['description_pos'] ) ? $data['description_pos']                      : 'label',
 			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                          : false,
+            'front_hidden'    => ! empty( $data['front_hidden'] )    ? true                                          : false,
 			'input_class'     => ! empty( $data['input_class'] )     ? sanitize_text_field( $data['input_class'] )   : '',
 			'label_class'     => ! empty( $data['label_class'] )     ? sanitize_text_field( $data['label_class'] )   : '',
 			'mapping'         => ! empty( $data['mapping'] )         ? $data['mapping']                              : '',
@@ -308,7 +310,7 @@ class KBS_Form {
 	public function has_mapping( $mapping )	{
 		foreach( $this->fields as $field )	{
 			$settings = $this->get_field_settings( $field->ID );
-			
+
 			if ( ! empty( $settings ) && ! empty( $settings['mapping'] ) && $settings['mapping'] == $mapping )	{
 				return true;
 			}
