@@ -2306,3 +2306,37 @@ End Tooltips
     top: -2px;
     padding-right: 10px;
 }
+
+#adminmenu ul>li:not(:last-child) a[href^="post-new.php?post_type=kbs_ticket"]:after,
+#adminmenu ul>li:not(:last-child) a[href^="edit.php?post_type=kbs_form"]:after,
+#adminmenu ul>li:not(:last-child) a[href^="edit.php?post_type=kbs_ticket&page=kbs-customers"]:after {
+    border-bottom: 1px solid hsla(0,0%,100%,.2);
+    display: block;
+    float: left;
+    margin: 13px -15px 8px;
+    content: "";
+    width: calc(100% + 30px);
+}
+
+#adminmenu ul>li:not(:last-child) a[href^="edit.php?post_type=kbs_ticket&page=kbs-customers"]::before {
+    font-family: dashicons;
+    display: inline-block;
+    line-height: 1;
+    font-weight: 400;
+    font-style: normal;
+    speak: never;
+    text-decoration: inherit;
+    text-transform: none;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    width: 18px;
+    height: 18px;
+    font-size: 15px;
+    vertical-align: top;
+    text-align: center;
+    transition: color .1s ease-in;
+    content: '\f474';
+    transform: rotate(2deg);
+    transform: scaleX(-1);
+}
