@@ -496,6 +496,28 @@ function kbs_ticket_metabox_sections() {
 				<div class="kbs_ticket_content_wrapper">
 
 					<div class="kbs-ticket-content-row-header">
+
+					<?php do_action( 'kbs_ticket_metabox_header_fields', $kbs_ticket, $kbs_ticket_update ); ?>
+
+					<?php
+						$actions = kbs_get_ticket_actions( $kbs_ticket, $kbs_ticket_update );
+						?>
+
+						<span class="kbs-ticket-content-row-actions">
+							<?php if ( $actions && ! empty( $actions ) ) {
+								?>
+								<a href="#" class="helptain-admin-row-actions-toggle dashicons dashicons-ellipsis"></a>
+								<ul class="helptain-admin-row-actions helptain-actions-sub-menu kbs-hidden">
+									<?php
+									foreach ( $actions as $action ) {
+										echo '<li>' . $action . '</li>';
+									}
+									?>
+								</ul>
+							<?php } ?>
+
+                        </span>
+						
                         <span class="kbs-ticket-content-row-title">
 							<?php
 							$dif_received  = absint( time() - strtotime( $kbs_ticket->date ) );
@@ -532,34 +554,14 @@ function kbs_ticket_metabox_sections() {
 							); ?>
 
 							<?php if ( $kbs_ticket->date != $kbs_ticket->modified_date ) : ?>
-								<br>
 								<?php printf(
 									__( 'Updated: %s', 'kb-support' ),
 									$time_updated
 								); ?>
 							<?php endif; ?>
                         </span>
-
-						<?php
-						$actions = kbs_get_ticket_actions( $kbs_ticket, $kbs_ticket_update );
-						?>
-
-						<span class="kbs-ticket-content-row-actions">
-							<?php if ( $actions && ! empty( $actions ) ) {
-								?>
-								<a href="#" class="helptain-admin-row-actions-toggle dashicons dashicons-ellipsis"></a>
-								<ul class="helptain-admin-row-actions helptain-actions-sub-menu kbs-hidden">
-									<?php
-									foreach ( $actions as $action ) {
-										echo '<li>' . $action . '</li>';
-									}
-									?>
-								</ul>
-							<?php } ?>
-
-                        </span>
 					</div>
-
+					<hr>
 					<div class="kbs-ticket-content-row-standard-fields">
 						<?php do_action( 'kbs_ticket_metabox_standard_fields', $kbs_ticket, $kbs_ticket_update ); ?>
 					</div>
@@ -649,9 +651,9 @@ function kbs_ticket_metabox_customer_section( $ticket_id ) {
 	}
 
 	?>
-	<div class="kbs-customer-ticket-overview">
+	<div class="kbs-customer-ticket-overview"> 
 		<span class="kbs-ticket-avatar">
-			<?php echo get_avatar( $kbs_ticket->email, '', kbs_get_company_logo( $kbs_ticket->company_id ) ); ?>
+			<?php echo get_avatar( $kbs_ticket->email, 60, kbs_get_company_logo( $kbs_ticket->company_id ) ); ?>
 		</span>
 		<span class="kbs-customer-ticket-contact">
 			<span class="kbs-customer-ticket-attr customer-name">
@@ -695,11 +697,11 @@ function kbs_ticket_metabox_customer_section( $ticket_id ) {
 
 		</span>
 	</div>
-	<hr>
+	
 	<?php
 
 } // kbs_ticket_metabox_customer_section
-add_action( 'kbs_ticket_metabox_standard_fields', 'kbs_ticket_metabox_customer_section', 10 );
+add_action( 'kbs_ticket_metabox_header_fields', 'kbs_ticket_metabox_customer_section', 10 );
 
 /**
  * Display the original ticket content section.

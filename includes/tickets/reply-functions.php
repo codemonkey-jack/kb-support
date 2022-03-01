@@ -270,9 +270,13 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 				?>
 			</ul>
         </span>
-        <span class="kbs-replies-row-title">
+		<span class="kbs-ticket-avatar">
+			<?php echo get_avatar( kbs_get_reply_author_mail( $reply ), 60 ); ?>
+		</span>
+        <span class="kbs-replies-row-title">  
 			<?php echo '<h4><b>' . esc_html( $author ) . '</b> ' . esc_html__( 'replied', 'kb-support' ) . '</h4>'; ?>
         </span>
+		<hr>
     </div>
 
     <div class="kbs-replies-content-wrap <?php echo esc_attr($_is_support); ?>" expanded="true">
@@ -319,6 +323,21 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
     return ob_get_clean();
 
 } // kbs_get_reply_html
+
+
+/**
+ * Retrieve the email of the person who replied to the ticket.
+ *
+ * @since	1.5.5
+ * @param	obj|int	$reply		The reply object or ID
+ * @return	str		The email of the person who authored the reply.
+ */
+
+function kbs_get_reply_author_mail( $reply ){
+    $author_email = get_the_author_meta( 'email', $reply->post_author );
+
+	return apply_filters( 'kbs_reply_author_mail', $author_email, $reply );
+}
 
 /**
  * Retrieve the name of the person who replied to the ticket.

@@ -773,6 +773,7 @@ a.kbs_ticket_form_data {
 .kbs-customer-ticket-contact {
 	float: right;
 	padding-left: 5px;
+	margin-left: 15px;
 }
 
 .kbs-customer-ticket-attr {
@@ -2091,6 +2092,7 @@ End Tooltips
 	color: #253642;
 	line-height: 1.45em;
 	overflow-y: hidden;
+	font-weight: 600;
 }
 
 .kbs-ticket-content pre,
@@ -2108,6 +2110,9 @@ End Tooltips
 }
 
 .kbs-replies-row-title {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 15px;
 }
 
 .kbs-replies-row-title h4 {
@@ -2259,3 +2264,19 @@ End Tooltips
 /**
 ** End toggles
  */
+
+.kbs-ticket-avatar {
+    display: inline-block;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 60px;
+    height: 60px;
+}
+.kbs-ticket-content-row-title {
+    float: right;
+}
+.kbs-ticket-content-row-header .kbs-ticket-content-row-actions {
+    position: relative;
+    top: 3px;
+}
+
