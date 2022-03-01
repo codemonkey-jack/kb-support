@@ -41,7 +41,7 @@ function kbs_article_remove_metaboxes()    {
     $remove_metaboxes = apply_filters( 'kbs_article_remove_metaboxes', $remove_metaboxes );
 
     foreach( $remove_metaboxes as $metabox => $priority )   {
-        remove_meta_box( $metabox, 'article', $priority );
+        remove_meta_box( $metabox, 'kbs_article', $priority );
     }
 } // kbs_form_remove_metaboxes
 add_action( 'admin_head', 'kbs_article_remove_metaboxes', PHP_INT_MAX );

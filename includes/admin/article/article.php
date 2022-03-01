@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	bool	True to use block editor, or false
  */
 function kbs_article_remove_block_editor( $block_editor, $post_type )	{
-	if ( 'article' == $post_type )	{
+	if ( 'kbs_article' == $post_type )	{
 		$block_editor = false;
 	}
 
@@ -193,7 +193,7 @@ add_filter( 'post_row_actions', 'kbs_add_article_row_actions', 10, 2 );
 function kbs_add_article_filters() {
 	global $typenow;
 
-	if ( 'article' == $typenow ) {
+	if ( 'kbs_article' == $typenow ) {
 		$terms = get_terms( 'article_category' );
 
 		if ( is_array( $terms ) && count( $terms ) > 0 )	{

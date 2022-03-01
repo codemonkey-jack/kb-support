@@ -133,7 +133,7 @@ function kbs_articles_exclude_restricted( $query )	{
 		return;
 	}
 
-	if ( is_admin() || ! is_post_type_archive( 'article' ) || ! $query->is_main_query() )	{
+	if ( is_admin() || ! is_post_type_archive( 'kbs_article' ) || ! $query->is_main_query() )	{
 		return;
 	}
 

@@ -467,7 +467,7 @@ class KBS_Welcome {
 
 						<p><?php printf(
 								__( 'Select <span class="return-to-dashboard"><a href="%s">%s</a></span>from the menu to start writing.', 'kb-support' ),
-								add_query_arg( 'post_type', 'article', admin_url( 'edit.php' ) ),
+								add_query_arg( 'post_type', 'kbs_article', admin_url( 'edit.php' ) ),
 								$this->article_plural
 							); ?></p>
 

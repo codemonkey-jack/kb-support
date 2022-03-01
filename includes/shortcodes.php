@@ -231,7 +231,7 @@ function kbs_articles_shortcode( $atts )	{
 		$args['orderby']  = 'meta_value_num';
 	}
 
-	$args['post_type'] = 'article';
+	$args['post_type'] = 'kbs_article';
 
 	// Cleanup non WP_Query args
 	unset( $args['tax_relation'] );

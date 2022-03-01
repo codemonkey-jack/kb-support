@@ -1375,7 +1375,7 @@ class KBS_Articles_API extends KBS_API {
 			'custom-fields',
 		);
 		$fixed_schemas        = array(
-			'article' => array(
+			'kbs_article' => array(
 				'title',
 				'editor',
 				'author',

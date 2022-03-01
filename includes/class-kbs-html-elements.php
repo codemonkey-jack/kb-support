@@ -154,7 +154,7 @@ class KBS_HTML_Elements {
 			'placeholder'      => sprintf( __( 'Select a %s', 'kb-support' ), kbs_get_article_label_singular() ),
 			'selected'         => 0,
 			'data'        => array(
-				'search-type'        => 'article',
+				'search-type'        => 'kbs_article',
 				'search-placeholder' => sprintf( __( 'Type to search all %s', 'kb-support' ), kbs_get_article_label_plural() )
 			),
 			'key'              => 'id',

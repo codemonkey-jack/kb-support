@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) )
 function kbs_article_contextual_help() {
 	$screen = get_current_screen();
 
-	if ( 'article' != $screen->id )	{
+	if ( 'kbs_article' != $screen->id )	{
 		return;
 	}
 

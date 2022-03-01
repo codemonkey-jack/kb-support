@@ -320,7 +320,7 @@ function kbs_change_default_title( $title ) {
 	 if ( 'kbs_ticket' == $screen->post_type ) {
 		$label = kbs_get_ticket_label_singular();
 		$title = sprintf( __( 'Enter %s title here', 'kb-support' ), $label );
-	 } elseif ( 'article' == $screen->post_type ) {
+	 } elseif ( 'kbs_article' == $screen->post_type ) {
 		$label = kbs_get_article_label_singular();
 		$title = sprintf( __( 'Enter %s title here', 'kb-support' ), $label );
 	 } elseif ( 'kbs_form' == $screen->post_type )	{
@@ -454,7 +454,7 @@ function kbs_updated_messages( $messages ) {
 	);
 
 	if ( KBS()->KB->default_kb )	{
-		$messages['article'] = array(
+		$messages['kbs_article'] = array(
 			1  => sprintf( __( '%2$s updated. %1$sView %2$s%3$s.', 'kb-support'   ), $url1, $url3, $url4 ),
 			4  => sprintf( __( '%2$s updated. %1$sView %2$s%3$s.', 'kb-support'   ), $url1, $url3, $url4 ),
 			6  => sprintf( __( '%2$s published. %1$sView %2$s%3$s.', 'kb-support' ), $url1, $url3, $url4 ),
@@ -510,7 +510,7 @@ function kbs_bulk_updated_messages( $bulk_messages, $bulk_counts ) {
 		'untrashed' => sprintf( _n( '%1$s %2$s restored from the Trash.', '%1$s %3$s restored from the Trash.', $bulk_counts['untrashed'], 'kb-support' ), $bulk_counts['untrashed'], $ticket_singular, $ticket_plural )
 	);
 	
-	$bulk_messages['article'] = array(
+	$bulk_messages['kbs_article'] = array(
 		'updated'   => sprintf( _n( '%1$s %2$s updated.', '%1$s %3$s updated.', $bulk_counts['updated'], 'kb-support' ), $bulk_counts['updated'], $article_singular, $article_plural ),
 		'locked'    => sprintf( _n( '%1$s %2$s not updated, somebody is editing it.', '%1$s %3$s not updated, somebody is editing them.', $bulk_counts['locked'], 'kb-support' ), $bulk_counts['locked'], $article_singular, $article_plural ),
 		'deleted'   => sprintf( _n( '%1$s %2$s permanently deleted.', '%1$s %3$s permanently deleted.', $bulk_counts['deleted'], 'kb-support' ), $bulk_counts['deleted'], $article_singular, $article_plural ),

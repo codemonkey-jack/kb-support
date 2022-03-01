@@ -297,7 +297,7 @@ function kbs_is_admin_page( $passed_page = '', $passed_view = '' ) {
 			global $kbs_settings_page;
 
 			$admin_pages = apply_filters( 'kbs_admin_pages', array( $kbs_settings_page ) );
-            $post_types  = array( 'kbs_ticket', 'article', 'kbs_form', 'kbs_form_field', 'kbs_company' );
+            $post_types  = array( 'kbs_ticket', 'kbs_article', 'kbs_form', 'kbs_form_field', 'kbs_company' );
 
 			if ( in_array( $typenow, $post_types ) || 'index.php' == $pagenow || 'post-new.php' == $pagenow || 'post.php' == $pagenow ) {
 				$found = true;

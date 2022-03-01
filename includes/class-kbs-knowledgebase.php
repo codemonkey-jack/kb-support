@@ -41,7 +41,7 @@ class KBS_Knowledgebase {
 	 *
 	 * @since	1.0.8
 	 */
-	public $post_type = 'article';
+	public $post_type = 'kbs_article';
 
 	/**
 	 * The active knowledgebase
@@ -160,7 +160,7 @@ class KBS_Knowledgebase {
 			'rest_controller_class' => 'KBS_Articles_API'
 		);
 
-		register_post_type( 'article', $article_args );
+		register_post_type( 'kbs_article', $article_args );
 	} // register_post_type
 
 	/**
@@ -201,8 +201,8 @@ class KBS_Knowledgebase {
 			'show_in_rest' => true
 		) );
 
-		register_taxonomy( 'article_category', array( 'article' ), $article_category_args );
-		register_taxonomy_for_object_type( 'article_category', 'article' );
+		register_taxonomy( 'article_category', array( 'kbs_article' ), $article_category_args );
+		register_taxonomy_for_object_type( 'article_category', 'kbs_article' );
 
 		/** Article Tags */
 		$article_tag_labels = array(
@@ -235,8 +235,8 @@ class KBS_Knowledgebase {
 			'show_in_rest' => true
 		) );
 
-		register_taxonomy( 'article_tag', array( 'article' ), $article_tag_args );
-		register_taxonomy_for_object_type( 'article_tag', 'article' );
+		register_taxonomy( 'article_tag', array( 'kbs_article' ), $article_tag_args );
+		register_taxonomy_for_object_type( 'article_tag', 'kbs_article' );
 	} // register_taxonomies
 
 	/**

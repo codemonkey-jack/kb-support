@@ -53,7 +53,7 @@ function kbs_uninstall()    {
 
         // Delete the Custom Post Types
         $kbs_taxonomies = array( 'ticket_category', 'ticket_tag', 'article_category', 'article_tag', 'kbs_log_type', 'ticket_source', 'department' );
-        $kbs_post_types = array( 'kbs_ticket', 'kbs_ticket_reply', 'article', 'kbs_form', 'kbs_form_field', 'kbs_company', 'kbs_log' );
+        $kbs_post_types = array( 'kbs_ticket', 'kbs_ticket_reply', 'kbs_article', 'kbs_form', 'kbs_form_field', 'kbs_company', 'kbs_log' );
 
         foreach ( $kbs_post_types as $post_type ) {
 
