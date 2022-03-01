@@ -1139,3 +1139,49 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 
 } // kbs_ticket_post_save
 add_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
+
+function add_extensions_tab( $views ) {
+	display_extension_tab();
+	return $views;
+}
+
+function display_extension_tab() {
+	?>
+	<h2 class="nav-tab-wrapper">
+		<?php
+
+		$tabs[ 'downloads' ] = array(
+			'name'     => esc_html__('Tickets','kb-support'),
+			'url'      => admin_url( 'edit.php?post_type=kbs_ticket' ),
+		); 
+
+		if ( current_user_can( 'install_plugins' ) ) {
+			$tabs[ 'extensions' ] = array(
+				'name'     => esc_html__( 'Manage Extensions', 'kb-support' ),
+				'url'      => admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-settings&tab=licenses' ),
+				'priority' => '5',
+			); 
+		}	
+
+		$tabs[ 'suggest_feature' ] = array(
+			'name'     => esc_html__('Suggest a feature','kb-support'),
+			'url'      => admin_url( 'edit.php?post_type=kbs_ticket' ),
+			'icon'     => 'dashicons-external',
+			'url'      => 'https://forms.gle/GsCvf83e5o2k1pnU7',
+			'target'   => '_blank',
+		); 
+
+		/**
+		 * Hook for KB Support CPT table view tabs
+		 *
+		 */
+		$tabs = apply_filters( 'kb_add_edit_tabs', $tabs );
+
+		kbs_tab_navigation($tabs,'downloads');
+		?>
+	</h2>
+	<br/>
+	<?php
+}
+
+add_filter( 'views_edit-kbs_ticket', 'add_extensions_tab', 10, 1 );
