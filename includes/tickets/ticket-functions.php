@@ -202,9 +202,10 @@ function kbs_set_ticket_flag_status( $ticket, $user_id = 0, $flag = true )    {
  */
 function kbs_get_ticket_orderby_options()	{
 	$options = array(
-		'ID'       => __( 'ID', 'kb-support' ),
-		'title'    => __( 'Subject', 'kb-support' ),
-		'date'     => __( 'Date Modified', 'kb-support' ),
+		'ID'         => __( 'ID', 'kb-support' ),
+		'title'      => __( 'Subject', 'kb-support' ),
+		'date'       => __( 'Date Modified', 'kb-support' ),
+		'menu_order' => __( 'Menu Order', 'kb-support' ),
 	);
 
 	$options = apply_filters( 'kbs_ticket_orderby_options', $options );

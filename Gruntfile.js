@@ -174,6 +174,7 @@ module.exports = function( grunt ) {
 			build:	{
 				files: {
 					'<%= dirs.main.css %>/admin/kbs-admin.min.css': ['<%= dirs.main.css %>/admin/kbs-admin.css'],
+					'<%= dirs.main.css %>/admin/kbs-admin-reorder.min.css': ['<%= dirs.main.css %>/admin/kbs-admin-reorder.css'],
                     '<%= dirs.main.css %>/admin/kbs-admin-bar.min.css': ['<%= dirs.main.css %>/admin/kbs-admin-bar.css'],
 					'<%= dirs.templates.css %>/kbs.min.css': ['<%= dirs.templates.css %>/kbs.css']
 				}
@@ -185,6 +186,7 @@ module.exports = function( grunt ) {
 			dist: {
 				files: {
 					'<%= dirs.main.js %>/admin/admin-scripts.min.js': ['<%= dirs.main.js %>/admin/admin-scripts.js'],
+					'<%= dirs.main.js %>/admin/admin-reorder-scripts.min.js': ['<%= dirs.main.js %>/admin/admin-reorder-scripts.js'],
 					'<%= dirs.main.js %>/admin/ticket-actions.min.js': ['<%= dirs.main.js %>/admin/ticket-actions.js'],
 					'<%= dirs.main.js %>/kbs-ajax.min.js': ['<%= dirs.main.js %>/kbs-ajax.js'],
 					'<%= dirs.main.js %>/kbs-live-search.min.js': ['<%= dirs.main.js %>/kbs-live-search.js']

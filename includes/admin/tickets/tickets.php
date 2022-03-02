@@ -444,6 +444,10 @@ function kbs_order_admin_tickets( $query )	{
 			$query->set( 'orderby',  'title' );
 			$query->set( 'order',  $order );
 			break;
+		case 'menu_order':
+			$query->set( 'orderby',  'menu_order' );
+			$query->set( 'order',  $order );
+			break;
 	}
 } // kbs_order_admin_tickets
 add_action( 'pre_get_posts', 'kbs_order_admin_tickets' );

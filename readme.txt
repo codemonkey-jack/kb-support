@@ -134,6 +134,9 @@ This plugin uses the following svg icon files from https://fontawesome.com/ lice
 
 == Changelog ==
 
+= 1.5.7 - TBA =
+Added: Reorder capability for tickets in admin. ( https://github.com/WPChill/kb-support/issues/203 )
+
 = 1.5.6 - 25.05.2021 =
 Added: Front hidden option for form fields
 Added: Floating widget
