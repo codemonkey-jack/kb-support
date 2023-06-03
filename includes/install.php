@@ -373,6 +373,10 @@ add_action( 'admin_init', 'kbs_after_install' );
  */
 function kbs_install_roles_on_network() {
 
+	if( ! is_multisite() ) {
+		return;
+	}
+
 	global $wp_roles;
 
 	if ( ! is_object( $wp_roles ) ) {
