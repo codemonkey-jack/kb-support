@@ -202,7 +202,6 @@ function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
 			break;
 
 		default:
-			echo esc_html__( 'No callback found for post column', 'kb-support' );
 			break;
 	}
 } // kbs_set_kbs_ticket_column_data
