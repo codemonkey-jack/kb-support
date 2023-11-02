@@ -173,18 +173,6 @@ final class KB_Support {
 	} // __clone
 
 	/**
-	 * Disable unserializing of the class.
-	 *
-	 * @since	1.0
-	 * @access	protected
-	 * @return	void
-	 */
-	public function __wakeup() {
-		// Unserializing instances of the class is forbidden.
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'kb-support' ), '1.0' );
-	} // __wakeup
-
-	/**
 	 * Setup plugin constants.
 	 *
 	 * @access	private
