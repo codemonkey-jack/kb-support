@@ -1167,7 +1167,7 @@ class KBS_Tickets_API extends KBS_API {
 			);
 		}
 
-		if ( ! empty( $ticket->customer_id ) )	{
+		if ( ! empty( $ticket->customer_id ) && $ticket->customer_id > 0 )	{
 			$links['customer'] = array(
 				'href'       => rest_url( 'kbs/v1/customers/' . $ticket->customer_id ),
 				'embeddable' => true
