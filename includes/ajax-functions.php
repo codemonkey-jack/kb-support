@@ -1034,3 +1034,27 @@ function kbs_ajax_article_search()	{
 } // kbs_ajax_article_search
 add_action( 'wp_ajax_kbs_ajax_article_search', 'kbs_ajax_article_search' );
 add_action( 'wp_ajax_nopriv_kbs_ajax_article_search', 'kbs_ajax_article_search' );
+
+add_action( 'wp_ajax_kbs_update_article_cpt', 'kbs_update_article_cpt' );
+function kbs_update_article_cpt() {
+	if ( ! current_user_can( 'manage_ticket_settings' ) ) {
+		wp_die( esc_html__( 'You do not have permission to do perform KBS upgrades', 'kb-support' ), esc_html__( 'Error', 'kb-support' ), array( 'response' => 403 ) );
+	}
+	var_dump(123);
+	$nonce = $_POST['kbs_ajax_nonce'] ?? '';
+	if ( empty( $nonce ) ) {
+		return;
+	}
+
+	if ( !wp_verify_nonce( $nonce, 'kbs_ajax_update_article_cpt' ) ) {
+		return;
+	}
+
+	global $wpdb;
+	$wpdb->update( $wpdb->base_prefix . 'posts', [
+		'post_type' => 'kbs_article'
+	], [
+		'post_type' => 'article'
+	] );
+	kbs_set_upgrade_complete( 'upgrade_article_cpt' );
+}

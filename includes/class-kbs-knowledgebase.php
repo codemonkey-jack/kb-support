@@ -165,7 +165,7 @@ class KBS_Knowledgebase {
 			'rest_controller_class' => 'WP_REST_Posts_Controller'
 		);
 
-		register_post_type( 'article', $article_args );
+		register_post_type( 'kbs_article', $article_args );
 	} // register_post_type
 
 	/**
@@ -245,8 +245,8 @@ class KBS_Knowledgebase {
 			'show_in_rest' => true
 		) );
 
-		register_taxonomy( 'article_tag', array( 'article' ), $article_tag_args );
-		register_taxonomy_for_object_type( 'article_tag', 'article' );
+		register_taxonomy( 'article_tag', array( 'kbs_article' ), $article_tag_args );
+		register_taxonomy_for_object_type( 'article_tag', 'kbs_article' );
 	} // register_taxonomies
 
 	/**

@@ -230,6 +230,20 @@ function kbs_show_upgrade_notice()	{
             );
         }
 
+		if ( version_compare( $kbs_version, '1.5.92', '<' ) || ! kbs_has_upgrade_completed( 'upgrade_article_cpt' ) ) {
+			$upgrades_needed[] = array(
+				'name'        => sprintf(
+					esc_html__( 'KB Support needs to update existing %s.', 'kb-support' ),
+					kbs_get_article_label_plural()
+				),
+				'description' => sprintf(
+					esc_html__( 'This upgrade process will update all %s to migrate to new custom post type.', 'kb-support' ),
+					kbs_get_article_label_plural()
+				),
+				'action'      => 'upgrade_article_cpt'
+			);
+		}
+
         $upgrades_needed = apply_filters( 'kbs_upgrades_needed', $upgrades_needed, $kbs_version );
 
         if ( ! empty( $upgrades_needed ) )  {
@@ -824,6 +838,112 @@ function kbs_v15_upgrades()	{
 	);
 
 } // kbs_v15_upgrades
+
+function kbs_upgrade_render_upgrade_article_cpt() {
+	$migration_complete = kbs_has_upgrade_completed( 'upgrade_article_cpt' );
+
+	if ( $migration_complete ) : ?>
+		<div id="kbs-migration-complete" class="notice notice-success">
+			<p>
+				<?php echo wp_kses_post( sprintf( __( '<strong>Migration complete:</strong> You have already completed the update to %s sources.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ) ); ?>
+			</p>
+			<p class="return-to-dashboard">
+				<a href="<?php echo esc_url( admin_url() ); ?>">
+					<?php esc_html_e( 'WordPress Dashboard', 'kb-support' ); ?>
+				</a>&nbsp;&#124;&nbsp;
+				<a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=kbs_ticket' ) ); ?>">
+					<?php printf( esc_html__( 'KBS %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?>
+				</a>
+			</p>
+		</div>
+		<?php return; ?>
+	<?php endif; ?>
+	<div id="kbs-migration-ready" class="notice notice-success" style="display: none;">
+		<p>
+			<?php echo wp_kses_post( sprintf( __( '<strong>%s Upgrade Complete:</strong> All database upgrades have been completed.', 'kb-support' ), kbs_get_ticket_label_singular() ) ); ?>
+			<br /><br />
+			<?php esc_html_e( 'You may now leave this page.', 'kb-support' ); ?>
+		</p>
+		<p class="return-to-dashboard">
+			<a href="<?php echo esc_url( admin_url() ); ?>">
+				<?php esc_html_e( 'WordPress Dashboard', 'kb-support' ); ?>
+			</a>&nbsp;&nbsp;&#124;&nbsp;&nbsp;
+			<a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=kbs_ticket' ) ); ?>">
+				<?php printf( esc_html__( 'KBS %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?>
+			</a>
+		</p>
+	</div>
+
+	<div id="kbs-migration-nav-warn" class="notice notice-info">
+		<h3><?php esc_html_e( 'Important', 'kb-support' ); ?></h3>
+		<p>
+			<?php esc_html_e( 'Please leave this screen open and do not navigate away until the process completes.', 'kb-support' ); ?>
+		</p>
+	</div>
+
+	<style>
+		.dashicons.dashicons-yes { display: none; color: rgb(0, 128, 0); vertical-align: middle; }
+	</style>
+
+	<div class="metabox-holder">
+		<div class="postbox">
+			<h2 class="hndle">
+				<span><?php printf( esc_html__( 'Update %s data', 'kb-support' ), kbs_get_article_label_plural( true ) ); ?></span>
+				<span class="dashicons dashicons-yes"></span>
+			</h2>
+			<div class="inside migrate-ticket-sources-control">
+				<p>
+					<?php printf( esc_html__( 'This will update each %s and use the new CPT.', 'kb-support' ), kbs_get_article_label_singular( true ), kbs_get_article_label_singular() ); ?>
+				</p>
+				<form method="post" id="kbs-update-article-cpt" class="kbs-export-form kbs-import-export-form">
+			<span class="step-instructions-wrapper">
+
+				<?php wp_nonce_field( 'kbs_ajax_update_article_cpt', 'kbs_ajax_nonce' ); ?>
+
+				<?php if ( ! $migration_complete ) : ?>
+					<span class="kbs-migration allowed">
+						<input type="submit" id="update-article-cpt-submit"
+							   value="<?php printf( esc_attr__( 'Update %s CPT', 'kb-support' ), kbs_get_article_label_plural() ); ?>"
+							   class="button-primary"/>
+					</span>
+					<input type="hidden" name="action" value="kbs_update_article_cpt">
+				<?php else: ?>
+					<input type="submit" disabled="disabled" id="update-article-cpt-submit"
+						   value="<?php printf( esc_attr__( 'Update %s Sources', 'kb-support' ), kbs_get_article_label_singular() ); ?>"
+						   class="button-secondary"/>
+					&mdash; <?php printf( esc_html__( '%s Sources have already been updated.', 'kb-support' ), kbs_get_article_label_singular() ); ?>
+				<?php endif; ?>
+
+				<span class="spinner"></span>
+
+			</span>
+				</form>
+			</div><!-- .inside -->
+		</div><!-- .postbox -->
+	</div>
+	<script type="text/javascript">
+		jQuery(function ($) {
+			$('#kbs-update-article-cpt').on('submit', function (e) {
+				e.preventDefault();
+				let that = $(this)
+				$.ajax({
+					type: 'POST',
+					url: ajaxurl,
+					data: $(this).serialize(),
+					beforeSend: function () {
+						$('.spinner').css('visibility', 'visible')
+						that.find('input[type="submit"]').attr('disabled', 'disabled')
+					},
+					success:function(){
+						location.reload()
+					}
+				})
+				return false;
+			})
+		})
+	</script>
+	<?php
+}
 
 /**
  * Update sequential ticket numbers.
