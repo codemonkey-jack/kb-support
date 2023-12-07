@@ -268,6 +268,10 @@ add_action( 'wp_ajax_kbs_insert_ticket_reply', 'kbs_ajax_insert_ticket_reply' );
  * @return	str
  */
 function kbs_ajax_display_ticket_replies()	{
+	// Verify nonce
+    if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'kbs_ajax_nonce' ) ) {
+        wp_die( 'Nonce verification failed', 'Nonce Verification', array( 'response' => 403 ) );
+    }
 	$output = '';
 
 	if ( ! empty( $_POST['kbs_reply_id'] ) && ! empty( $_POST['kbs_ticket_id'] ) )	{

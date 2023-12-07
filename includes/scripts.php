@@ -62,6 +62,7 @@ function kbs_load_scripts() {
 		'max_files'             => kbs_get_max_file_uploads(),
 		'max_files_exceeded'    => kbs_get_notices( 'max_files', true ),
 		'needs_bs4'             => $needs_bs4,
+		'nonce' => wp_create_nonce( 'kbs_ajax_nonce' ), // Add nonce for verification
         'one_option'            => esc_html__( 'Choose an option', 'kb-support' ),
 		'one_or_more_option'    => esc_html__( 'Choose one or more options', 'kb-support' ),
         'permalinks'            => get_option( 'permalink_structure' ) ? '1' : '0',

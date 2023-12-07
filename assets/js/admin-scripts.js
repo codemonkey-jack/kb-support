@@ -474,7 +474,8 @@ jQuery(document).ready(function ($) {
 					status       : ticketStatus,
 					close_ticket : ( 'kbs-reply-close' === event.target.id ? 1 : 0 ),
 					form_data    : formData,
-					action       : 'kbs_insert_ticket_reply'
+					action       : 'kbs_insert_ticket_reply',
+					nonce        : kbs_vars.nonce // Include nonce here
 				};
 
 				$.ajax({
@@ -1336,23 +1337,21 @@ jQuery(document).ready(function ($) {
 });
 
 // Retrieve ticket replies
-function kbs_load_ticket_replies( ticket_id, reply_id, page )	{
+function kbs_load_ticket_replies(ticket_id, reply_id, page) {
+    jQuery('#kbs-replies-loader').html('<img src="' + kbs_vars.ajax_loader + '" />');
 
-	jQuery('#kbs-replies-loader').html('<img src="' + kbs_vars.ajax_loader + '" />');
-
-	jQuery.post(ajaxurl,
-		{
-			action: 'kbs_display_ticket_replies',
-			kbs_ticket_id: ticket_id,
-			kbs_reply_id: reply_id,
-			kbs_page: page
-		},
-		function(response)	{
-			jQuery('.kbs-historic-reply-option-fields').append(response);
-			jQuery('#kbs-replies-loader').html('');
-		}
-	);
+    jQuery.post(ajaxurl, {
+        action: 'kbs_display_ticket_replies',
+        kbs_ticket_id: ticket_id,
+        kbs_reply_id: reply_id,
+        nonce: kbs_scripts.nonce, // Include nonce here
+        kbs_page: page
+    }, function(response) {
+        jQuery('.kbs-historic-reply-option-fields').append(response);
+        jQuery('#kbs-replies-loader').html('');
+    });
 }
+
 
 // Retrieve ticket notes
 function kbs_load_ticket_notes( ticket_id, note_id )	{
