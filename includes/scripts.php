@@ -471,7 +471,9 @@ function kbs_load_admin_scripts( $hook ) {
         'view_reply'              => esc_html__( 'View Reply', 'kb-support' ),
 		'view_note'               => esc_html__( 'View Note', 'kb-support' ),
 		'view_participants'       => esc_html__( 'View participants', 'kb-support' ),
-        'view_submission'         => esc_html__( 'View submission data', 'kb-support' )
+        'view_submission'         => esc_html__( 'View submission data', 'kb-support' ),
+		'nonce' => wp_create_nonce( 'kbs_ajax_nonce' ), // Add nonce for verification
+
 	) );
 
 	if ( function_exists( 'wp_enqueue_media' ) && version_compare( $wp_version, '3.5', '>=' ) ) {
