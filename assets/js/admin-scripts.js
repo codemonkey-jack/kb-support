@@ -475,7 +475,7 @@ jQuery(document).ready(function ($) {
 					close_ticket : ( 'kbs-reply-close' === event.target.id ? 1 : 0 ),
 					form_data    : formData,
 					action       : 'kbs_insert_ticket_reply',
-					nonce        : kbs_vars.nonce // Include nonce here
+					nonce: kbs_vars.nonce, // Corrected to use kbs_vars
 				};
 
 				$.ajax({
@@ -1344,7 +1344,7 @@ function kbs_load_ticket_replies(ticket_id, reply_id, page) {
         action: 'kbs_display_ticket_replies',
         kbs_ticket_id: ticket_id,
         kbs_reply_id: reply_id,
-        nonce: kbs_scripts.nonce, // Include nonce here
+		nonce: kbs_vars.nonce, // Corrected to use kbs_vars
         kbs_page: page
     }, function(response) {
         jQuery('.kbs-historic-reply-option-fields').append(response);
