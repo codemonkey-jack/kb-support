@@ -2412,8 +2412,10 @@ function kbs_settings_for_status_colours( $settings )   {
 	$status_options   = array();
 
 	foreach( $default_statuses as $default_status )	{
-		$status_options[ $default_status ] = $all_statuses[ $default_status ];
-		unset( $all_statuses[ $default_status ] );
+		if( isset( $all_statuses[ $default_status ] ) ) {
+			$status_options[ $default_status ] = $all_statuses[ $default_status ];
+			unset( $all_statuses[ $default_status ] );
+		}
 	}
 
 	$status_options = array_merge( $status_options, $all_statuses );

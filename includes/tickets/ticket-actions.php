@@ -19,18 +19,25 @@ if ( ! defined( 'ABSPATH' ) )
  * Forces 'Open' to first in the list and 'Closed' to last.
  *
  * @since	1.4.2
- * @param	array	$statuses	Array of ticket statuses
- * @return	array	Array of ticket statuses
+ * @param	string[] $statuses Array of ticket statuses
+ * @return	string[] Array of ticket statuses
  */
-function kbs_sort_ticket_status_array_action( $statuses )	{
-    asort( $statuses );
+function kbs_sort_ticket_status_array_action( $statuses ) {
+	usort( $statuses, function( $lhs,  $rhs ) {
+		$lhs_cmp = strtoupper( $lhs );
+		$rhs_cmp = strtoupper( $rhs );
 
-    $statuses = array( 'open' => $statuses['open'] ) + $statuses;
-    $closed   = $statuses['closed'];
-
-    unset( $statuses['closed'] );
-
-    $statuses = $statuses + array( 'closed' => $closed );
+		switch( true ) {
+			case 'OPEN' === $lhs_cmp:
+			case 'CLOSED' === $rhs_cmp:
+				return -1;
+			case 'CLOSED' === $lhs_cmp:
+			case 'OPEN' === $rhs_cmp:
+				return 1;
+			default:
+				return strcmp( $lhs_cmp, $rhs_cmp );
+		}
+	});
 
 	return $statuses;
 } // kbs_sort_ticket_status_array_action
