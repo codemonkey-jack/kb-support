@@ -2259,6 +2259,7 @@ function kbs_get_pages( $force = false ) {
  */
 function kbs_get_user_role_options()	{
 	$roles     = array();
+	require_once ABSPATH . '/wp-admin/includes/user.php'; // Required for `get_editable_roles()`.
     $all_roles = array_reverse( get_editable_roles() );
 
     foreach( $all_roles as $role => $data ) {
